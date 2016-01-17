@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Agner VS Bamberger</title>
+
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="jquery-ui/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="css/agnervsbamberger.css">
+
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+    <script src="jquery-ui/jquery-ui.min.js"></script>
+    <script src="js/setup.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+            init();
+        });
+    </script>
+</head>
+<body class="larkspur">
+    <div id="title">
+        <div id="agner-text" class="ui-widget font-size-60">
+            AGNER
+        </div>
+        <div id="vs-text" class="ui-widget font-size-80">
+            VS
+        </div>
+        <div id="bamberger-text" class="ui-widget font-size-60">
+            BAMBERGER
+        </div>
+    </div>
+    <div id="side-menu">
+        <button id="rsvp-button" class="side-menu-button">
+            RSVP
+        </button>
+        <button id="location-button" class="side-menu-button">
+            Ceremony/Reception Location
+        </button>
+        <button id="hotel-button" class="side-menu-button">
+            Hotel
+        </button>
+        <button id="registry-button" class="side-menu-button">
+            Registry <br>(Coming Soon!)
+        </button>
+        <button id="faq-button" class="side-menu-button">
+            FAQ <br>(Click me!)
+        </button>
+        <button id="contact-button" class="side-menu-button">
+            Contact
+        </button>
+    </div>
+    <div id="home">
+
+    </div>
+    <div id="rsvp-content">
+        <!-- Accordion -->
+        <h2 class="demoHeaders">RSVP</h2>
+        <div id="accordion">
+            <h3 id="1-person-name">First Person</h3>
+            <div id="1-person-info" class="person-info">
+                <div id="1-person-address">
+
+                </div>
+                <div id="1-person-food">
+
+                </div>
+                <div id="1-person-allergies">
+
+                </div>
+            </div>
+            <h3>Second</h3>
+            <div>Phasellus mattis tincidunt nibh.</div>
+
+        </div>
+        <button id="add-plus-one-button">Add Plus One</button>
+        <div id="music-suggestions-content">
+            <div id="music-suggestions-title">Suggest Music</div>
+            <div id="1-song" class="song">What's Hannenin?</div>
+            <button id="add-music-button">Add a Music Suggestion</button>
+        </div>
+    </div>
+    <div id="location-content">
+
+    </div>
+    <div id="hotel-content">
+
+    </div>
+    <div id="registry-content">
+
+    </div>
+    <div id="faq-content">
+
+    </div>
+    <div id="contact-content">
+
+    </div>
+</body>
+</html>
