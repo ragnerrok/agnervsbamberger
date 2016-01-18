@@ -30,6 +30,8 @@
 		// Generate the login token
 		$return_value["login_token"] = generate_login_token($party_id, $db_conn);
 		
+		$return_value["party_id"] = $party_id;
+		
 		// Get party data
 		$return_value["party_info"] = get_party_data($party_id, $db_conn);
 		
