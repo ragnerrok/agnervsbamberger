@@ -85,6 +85,10 @@
     font-family: centuryGothic;
     src: url(ufonts.com_century-gothic.ttf);
 }
+@font-face {
+    font-family: Astrud;
+    src: url(astrud/Astrud.ttf);
+}
 .font-size-80{
     font-size: 80px;
 }
