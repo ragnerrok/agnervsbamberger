@@ -44,9 +44,7 @@ function init() {
     //RSVP Content
     $("#login-form").submit(function(event){
         var formData = $(this).serialize();
-        $.post("php/login.php", formData, function(){
-            console.log("WE DID THINGS");
-        });
+        $.post("php/login.php", formData, setUpRSVPContent);
         event.preventDefault();
     });
     $( "#log-in-button" ).button().click(function() {
