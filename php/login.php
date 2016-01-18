@@ -27,6 +27,9 @@
 	if ($login_successful) {
 		$return_value["login_successful"] = true;
 		
+		// Generate the login token
+		$return_value["login_token"] = generate_login_token($party_id, $db_conn);
+		
 		// Get party data
 		$return_value["party_info"] = get_party_data($party_id, $db_conn);
 		
