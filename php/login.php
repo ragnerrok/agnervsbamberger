@@ -8,21 +8,6 @@
 		return $music_query->fetchAll(PDO::FETCH_ASSOC);
 	}
 	
-	function get_allergies($people, $db_conn) {
-		$allergy_query = $db_conn->prepare("CALL get_allergies(:person_id)");
-		$results = array();
-		for ($i = 0; $i < count($people); ++$i) {
-			$allergy_entry = array();
-			$allergy_entry["person"] = $people[$i]["first_name"] . " " . $people[$i]["last_name"];
-			$allergy_query->bindParam(":person_id", $people[$i]["person_id"]);
-			$allergy_query->execute();
-			$allergy_entry["allergies"] = $allergy_query->fetchAll(PDO::FETCH_ASSOC);
-			$allergy_query->closeCursor();
-			array_push($results, $allergy_entry);
-		}
-		return $results;
-	}
-	
 	function get_party_data($party_id, $db_conn) {
 		$party_data_query = $db_conn->prepare("CALL get_single_party(:party_id)");
 		$party_data_query->bindParam(":party_id", $party_id);
@@ -32,28 +17,48 @@
 	}
 	
 	function get_party_people($party_id, $db_conn) {
+		// First, get all of the people
 		$party_people_query = $db_conn->prepare("CALL get_people_in_party(:party_id)");
 		$party_people_query->bindParam(":party_id", $party_id);
 		$party_people_query->execute();
-		return $party_people_query->fetchAll(PDO::FETCH_ASSOC);
+		$people = $party_people_query->fetchAll(PDO::FETCH_ASSOC);
+		$party_people_query->closeCursor();
+		
+		// Next, get the allergy information for each person
+		$allergy_query = $db_conn->prepare("CALL get_allergies(:person_id)");
+		for ($i = 0; $i < count($people); ++$i) {
+			$allergy_query->bindParam(":person_id", $people[$i]["person_id"]);
+			$allergy_query->execute();
+			$allergies = array();
+			while ($allergy = $allergy_query->fetch(PDO::FETCH_ASSOC)) {
+				array_push($allergies, $allergy["food_allergy"]);
+			}
+			$people[$i]["allergies"] = $allergies;
+			$allergy_query->closeCursor();
+		}
+		
+		return $people;
 	}
 	
-	$db_conn = open_db_conn();
-	
-	$login_code = $_POST["login_code"];
-	$login_hash = md5($login_code);
-	
-	$login_query = $db_conn->prepare("CALL lookup_party_id(:login_hash)");
-	$login_query->bindParam(":login_hash", $login_hash);
-	$login_query->execute();
-	$results = $login_query->fetchAll(PDO::FETCH_ASSOC);
 	$login_successful = false;
 	$party_id = -1;
-	if (count($results) > 0) {
-		$login_successful = true;
-		$party_id = $results[0]["party_id"];
+	if (isset($_POST["login_code"])) {
+		$db_conn = open_db_conn();
+	
+		$login_code = $_POST["login_code"];
+		$login_hash = md5($login_code);
+		
+		$login_query = $db_conn->prepare("CALL lookup_party_id(:login_hash)");
+		$login_query->bindParam(":login_hash", $login_hash);
+		$login_query->execute();
+		$results = $login_query->fetchAll(PDO::FETCH_ASSOC);
+		
+		if (count($results) > 0) {
+			$login_successful = true;
+			$party_id = $results[0]["party_id"];
+		}
+		$login_query = null;
 	}
-	$login_query = null;
 	
 	$return_value = array();
 	
@@ -64,17 +69,12 @@
 		$return_value["party_info"] = get_party_data($party_id, $db_conn);
 		
 		// Get people in party
-		$people = get_party_people($party_id, $db_conn);
-		$return_value["party_people"] = $people;
+		$return_value["party_people"] = get_party_people($party_id, $db_conn);
 		
 		// Get music suggestions
 		$return_value["music_suggestions"] = get_music_suggestions($party_id, $db_conn);
-		
-		// Get allergy information
-		$return_value["allergy_info"] = get_allergies($people, $db_conn);
 	} else {
-		$return_value["login_successful"] = false;
-		
+		$return_value["login_successful"] = false;		
 	}
 	
 	header("Content-type: application/json");
