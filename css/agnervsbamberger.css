@@ -58,6 +58,15 @@
 .person-info{
     outline-color: #2f3a4c;
 }
+.form-input{
+
+}
+#guest-content{
+
+}
+#send-email-button{
+    margin-top: 10px;
+}
 /* Music Suggestions*/
 #music-suggestions-content{
     position: absolute;
@@ -91,7 +100,9 @@
 .centuryGothicFont{
     font-family: centuryGothic;
 }
-
+.astrudFont{
+    font-family: Astrud;
+}
 /* Colors */
 .larkspur{
     background-color: #6e7e99;

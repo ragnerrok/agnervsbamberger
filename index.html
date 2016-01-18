@@ -12,6 +12,8 @@
     <script src="jquery-ui/external/jquery/jquery.js"></script>
     <script src="jquery-ui/jquery-ui.min.js"></script>
 
+
+
     <script src="js/setup.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
@@ -57,79 +59,87 @@
     <div id="rsvp-content" class="content-container" style="display: none">
         <!-- People Accordion -->
         <div class="ui-widget font-size-60">RSVP</div>
-        <div id="people-accordion">
-            <h3 id="1-person-name" class="person-label">Ash Ketchem</h3>
-            <div id="1-person-info" class="person-info">
-                <div class="address-label label">
-                    Address
-                </div>
-                <div id="1-person-address" class="centuryGothicFont">
-                    123 Pokemans Ave.
-                    Palet Town, KT 10203
-                </div>
-                <div class="food-label label">
-                    Food Choice
-                </div>
-                <div id="1-person-food" class="centuryGothicFont">
-                    Pidgey
-                </div>
-                <div class="allergies-label label">
-                    Allergies
-                </div>
-                <div id="1-person-allergies" class="centuryGothicFont">
-                    Paka Berries
-                </div>
-                <div class="attending-label label">
-                    Are you joining us?
-                </div>
-                <div id="1-person-attending" class="centuryGothicFont">
-                    Yes
-                </div>
-            </div>
-            <h3 id="2-person-name" class="person-label">Misty Ketchum</h3>
-            <div id="2-person-info" class="person-info">
-                <div class="address-label label">
-                    Address
-                </div>
-                <div id="2-person-address"  class="centuryGothicFont">
-                    123 Pokemans Ave.
-                    Palet Town, KT 10203
-                </div>
-                <div class="food-label label">
-                    Food Choice
-                </div>
-                <div id="2-person-food" class="centuryGothicFont">
-                    Magikarp
-                </div>
-                <div class="allergies-label label">
-                    Allergies
-                </div>
-                <div id="2-person-allergies" class="centuryGothicFont">
-                    Bugs
-                </div>
-                <div class="attending-label label">
-                    Are you joining us?
-                </div>
-                <div id="2-person-attending" class="centuryGothicFont">
-                    Yes
-                </div>
-            </div>
-
+        <div id="guest-not-logged-in">
+            <div id="guest-log-in-label">Type in your assigned RSVP Log In Code</div>
+            <form id="login-form">
+                <input  type="text" id="guest-login-code" class="form-input"/>
+                <input  type="submit" id="log-in-button" class="form-input" value="Log In"/>
+            </form>
         </div>
-        <button id="add-plus-one-button">Add Plus One</button>
-        <div id="music-suggestions-content">
-            <div id="music-suggestions-title" class="ui-widget font-size-40">Suggest Music</div>
-            <table id="song-table">
-                <tr>
-                    <td class="song-name font-size-25 ui-widget">NAME</td>
-                    <td class="song-band font-size-25 ui-widget">ARTIST</td>
-                </tr>
-                <tr>
-                    <td id="1-song-name" class="song-name centuryGothicFont">What's Hannenin?</td>
-                    <td id="1-song-band" class="song-band centuryGothicFont">NaN</td>
-                </tr>
-            </table>
-            <button id="add-music-button">Add a Music Suggestion</button>
+        <div id="guest-logged-in" style="display: none">
+            <div id="people-accordion">
+                <h3 id="1-person-name" class="person-label">Ash Ketchem</h3>
+                <div id="1-person-info" class="person-info">
+                    <div class="address-label label">
+                        Address
+                    </div>
+                    <div id="1-person-address" class="centuryGothicFont">
+                        123 Pokemans Ave.
+                        Palet Town, KT 10203
+                    </div>
+                    <div class="food-label label">
+                        Food Choice
+                    </div>
+                    <div id="1-person-food" class="centuryGothicFont">
+                        Pidgey
+                    </div>
+                    <div class="allergies-label label">
+                        Allergies
+                    </div>
+                    <div id="1-person-allergies" class="centuryGothicFont">
+                        Paka Berries
+                    </div>
+                    <div class="attending-label label">
+                        Are you joining us?
+                    </div>
+                    <div id="1-person-attending" class="centuryGothicFont">
+                        Yes
+                    </div>
+                </div>
+                <h3 id="2-person-name" class="person-label">Misty Ketchum</h3>
+                <div id="2-person-info" class="person-info">
+                    <div class="address-label label">
+                        Address
+                    </div>
+                    <div id="2-person-address"  class="centuryGothicFont">
+                        123 Pokemans Ave.
+                        Palet Town, KT 10203
+                    </div>
+                    <div class="food-label label">
+                        Food Choice
+                    </div>
+                    <div id="2-person-food" class="centuryGothicFont">
+                        Magikarp
+                    </div>
+                    <div class="allergies-label label">
+                        Allergies
+                    </div>
+                    <div id="2-person-allergies" class="centuryGothicFont">
+                        Bugs
+                    </div>
+                    <div class="attending-label label">
+                        Are you joining us?
+                    </div>
+                    <div id="2-person-attending" class="centuryGothicFont">
+                        Yes
+                    </div>
+                </div>
+            </div>
+            <button id="add-plus-one-button">Add Plus One</button>
+            <div id="music-suggestions-content">
+                <div id="music-suggestions-title" class="ui-widget font-size-40">Suggest Music</div>
+                <table id="song-table">
+                    <tr>
+                        <td class="song-name font-size-25 ui-widget">NAME</td>
+                        <td class="song-band font-size-25 ui-widget">ARTIST</td>
+                    </tr>
+                    <tr>
+                        <td id="1-song-name" class="song-name centuryGothicFont">What's Hannenin?</td>
+                        <td id="1-song-band" class="song-band centuryGothicFont">NaN</td>
+                    </tr>
+                </table>
+                <button id="add-music-button">Add a Music Suggestion</button>
+            </div>
         </div>
     </div>
     <div id="location-content" class="content-container" style="display: none">
@@ -143,6 +153,10 @@
     </div>
     <div id="faq-content" class="content-container" style="display: none">
         <div class="ui-widget font-size-60">FREQUENTLY ASKED QUESTIONS</div>
+
+        <div id="">
+
+        </div>
     </div>
     <div id="contact-content" class="content-container" style="display: none">
         <div class="ui-widget font-size-60">CONTACT INFORMATION</div>
@@ -151,20 +165,20 @@
         </div>
         <div id="contact-form">
             <div id="guest-name-form">
-                <div class="form-label">
-                    NAME:
+                <div class="form-label font-size-25 astrudFont">
+                    NAME
                 </div>
                 <input type="text" id="guest-name" class="form-input"/>
             </div>
             <div id="guest-email-form">
-                <div class="form-label">
-                    EMAIL:
+                <div class="form-label font-size-25 astrudFont">
+                    EMAIL
                 </div>
                 <input type="text" id="guest-email" class="form-input"/>
             </div>
             <div id="guest-content-form">
-                <div class="form-label">
-                    CONTENT:
+                <div class="form-label font-size-25 astrudFont">
+                    CONTENT
                 </div>
                 <input type="text" id="guest-content" class="form-input"/>
             </div>

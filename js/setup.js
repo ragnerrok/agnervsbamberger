@@ -42,6 +42,18 @@ function init() {
 
 
     //RSVP Content
+    $("#login-form").submit(function(event){
+        var formData = $(this).serialize();
+        $.post("php/login.php", formData, function(){
+            console.log("WE DID THINGS");
+        });
+        event.preventDefault();
+    });
+    $( "#log-in-button" ).button().click(function() {
+        console.log("Clicked Log In");
+        $("#guest-not-logged-in").hide();
+        $("#guest-logged-in").show();
+    });
     $( "#add-plus-one-button" ).button().click(function() {
         console.log("Clicked plus one");
     });
@@ -70,4 +82,9 @@ function switchContent(newSelectedContent){
 function sendMessageToEmail(){
     var guestName = $("#guest-name");
     var questEmail = $("#")
+}
+
+function setUpRSVPContent(jsonObject){
+    console.log("Json Object");
+    console.log(jsonObject);
 }
