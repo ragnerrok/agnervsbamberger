@@ -11,6 +11,7 @@
 
     <script src="jquery-ui/external/jquery/jquery.js"></script>
     <script src="jquery-ui/jquery-ui.min.js"></script>
+
     <script src="js/setup.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
@@ -30,70 +31,145 @@
             BAMBERGER
         </div>
     </div>
-    <div id="side-menu">
-        <button id="rsvp-button" class="side-menu-button">
+    <div id="menu-bar" class="dark-brown">
+        <button id="rsvp-button" class="menu-bar-button">
             RSVP
         </button>
-        <button id="location-button" class="side-menu-button">
-            Ceremony/Reception Location
+        <button id="location-button" class="menu-bar-button">
+            Location
         </button>
-        <button id="hotel-button" class="side-menu-button">
+        <button id="hotel-button" class="menu-bar-button">
             Hotel
         </button>
-        <button id="registry-button" class="side-menu-button">
-            Registry <br>(Coming Soon!)
+        <button id="registry-button" class="menu-bar-button">
+            Registry
         </button>
-        <button id="faq-button" class="side-menu-button">
-            FAQ <br>(Click me!)
+        <button id="faq-button" class="menu-bar-button">
+            FAQ
         </button>
-        <button id="contact-button" class="side-menu-button">
+        <button id="contact-button" class="menu-bar-button">
             Contact
         </button>
     </div>
-    <div id="home">
-
+    <div id="home-content" class="content-container">
+        <div class="ui-widget font-size-60">WELCOME!</div>
     </div>
-    <div id="rsvp-content">
-        <!-- Accordion -->
-        <h2 class="demoHeaders">RSVP</h2>
-        <div id="accordion">
-            <h3 id="1-person-name">First Person</h3>
+    <div id="rsvp-content" class="content-container" style="display: none">
+        <!-- People Accordion -->
+        <div class="ui-widget font-size-60">RSVP</div>
+        <div id="people-accordion">
+            <h3 id="1-person-name" class="person-label">Ash Ketchem</h3>
             <div id="1-person-info" class="person-info">
-                <div id="1-person-address">
-
+                <div class="address-label label">
+                    Address
                 </div>
-                <div id="1-person-food">
-
+                <div id="1-person-address" class="centuryGothicFont">
+                    123 Pokemans Ave.
+                    Palet Town, KT 10203
                 </div>
-                <div id="1-person-allergies">
-
+                <div class="food-label label">
+                    Food Choice
+                </div>
+                <div id="1-person-food" class="centuryGothicFont">
+                    Pidgey
+                </div>
+                <div class="allergies-label label">
+                    Allergies
+                </div>
+                <div id="1-person-allergies" class="centuryGothicFont">
+                    Paka Berries
+                </div>
+                <div class="attending-label label">
+                    Are you joining us?
+                </div>
+                <div id="1-person-attending" class="centuryGothicFont">
+                    Yes
                 </div>
             </div>
-            <h3>Second</h3>
-            <div>Phasellus mattis tincidunt nibh.</div>
+            <h3 id="2-person-name" class="person-label">Misty Ketchum</h3>
+            <div id="2-person-info" class="person-info">
+                <div class="address-label label">
+                    Address
+                </div>
+                <div id="2-person-address"  class="centuryGothicFont">
+                    123 Pokemans Ave.
+                    Palet Town, KT 10203
+                </div>
+                <div class="food-label label">
+                    Food Choice
+                </div>
+                <div id="2-person-food" class="centuryGothicFont">
+                    Magikarp
+                </div>
+                <div class="allergies-label label">
+                    Allergies
+                </div>
+                <div id="2-person-allergies" class="centuryGothicFont">
+                    Bugs
+                </div>
+                <div class="attending-label label">
+                    Are you joining us?
+                </div>
+                <div id="2-person-attending" class="centuryGothicFont">
+                    Yes
+                </div>
+            </div>
 
         </div>
         <button id="add-plus-one-button">Add Plus One</button>
         <div id="music-suggestions-content">
-            <div id="music-suggestions-title">Suggest Music</div>
-            <div id="1-song" class="song">What's Hannenin?</div>
+            <div id="music-suggestions-title" class="ui-widget font-size-40">Suggest Music</div>
+            <table id="song-table">
+                <tr>
+                    <td class="song-name font-size-25 ui-widget">NAME</td>
+                    <td class="song-band font-size-25 ui-widget">ARTIST</td>
+                </tr>
+                <tr>
+                    <td id="1-song-name" class="song-name centuryGothicFont">What's Hannenin?</td>
+                    <td id="1-song-band" class="song-band centuryGothicFont">NaN</td>
+                </tr>
+            </table>
             <button id="add-music-button">Add a Music Suggestion</button>
         </div>
     </div>
-    <div id="location-content">
-
+    <div id="location-content" class="content-container" style="display: none">
+        <div class="ui-widget font-size-60">CEREMONY/RECEPTION LOCATION</div>
     </div>
-    <div id="hotel-content">
-
+    <div id="hotel-content" class="content-container" style="display: none">
+        <div class="ui-widget font-size-60">HOTEL INFORMATION</div>
     </div>
-    <div id="registry-content">
-
+    <div id="registry-content" class="content-container" style="display: none">
+        <div class="ui-widget font-size-60">REGISTRY (Coming Soon!...ish)</div>
     </div>
-    <div id="faq-content">
-
+    <div id="faq-content" class="content-container" style="display: none">
+        <div class="ui-widget font-size-60">FREQUENTLY ASKED QUESTIONS</div>
     </div>
-    <div id="contact-content">
-
+    <div id="contact-content" class="content-container" style="display: none">
+        <div class="ui-widget font-size-60">CONTACT INFORMATION</div>
+        <div class="contact-label ui-widget">
+            Have a question? Send use a message!
+        </div>
+        <div id="contact-form">
+            <div id="guest-name-form">
+                <div class="form-label">
+                    NAME:
+                </div>
+                <input type="text" id="guest-name" class="form-input"/>
+            </div>
+            <div id="guest-email-form">
+                <div class="form-label">
+                    EMAIL:
+                </div>
+                <input type="text" id="guest-email" class="form-input"/>
+            </div>
+            <div id="guest-content-form">
+                <div class="form-label">
+                    CONTENT:
+                </div>
+                <input type="text" id="guest-content" class="form-input"/>
+            </div>
+            <button id="send-email-button">SEND MESSAGE</button>
+        </div>
     </div>
 </body>
 </html>
