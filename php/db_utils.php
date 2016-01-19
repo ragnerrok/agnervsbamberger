@@ -38,8 +38,12 @@
 		return $people;
 	}
 	
+	function new_token_exp_time() {
+		return time() + (30 * 60); // 30 minutes
+	}
+	
 	function generate_login_token($party_id, $db_conn) {
-		$token_exp_time = time() + (30 * 60); // 30 minutes
+		$token_exp_time = new_token_exp_time();
 		$token = md5(mt_rand());
 		$set_token_query = $db_conn->prepare("CALL set_login_token(:party_id, :token, :token_exp_time)");
 		$set_token_query->bindParam(":party_id", $party_id);
@@ -47,5 +51,41 @@
 		$set_token_query->bindParam(":token_exp_time", $token_exp_time);
 		$set_token_query->execute();
 		return $token;
+	}
+	
+	class LoginStatus extends SplEnum {
+		const __default = self::NOT_LOGGED_IN;
+		
+		const NOT_LOGGED_IN = 1;
+		const TOKEN_EXPIRED = 2;
+		const LOGGED_IN = 3;
+	}
+	
+	function check_login_status($party_id, $token, $db_conn) {
+		$token_query = $db_conn->prepare("CALL get_token_info(:party_id)");
+		$token_query->bindParam(":party_id", $party_id);
+		$token_query->execute();
+		$results = $token_query->fetch(PDO::FETCH_ASSOC);
+		$token_query->closeCursor();
+		if (is_null($results["current_login_token"]) || is_null($results["token_expiration_time"])) {
+			return new LoginStatus(LoginStatus::NOT_LOGGED_IN);
+		}
+		
+		if ($results["current_login_token"] != $token) {
+			return new LoginStatus(LoginStatus::NOT_LOGGED_IN);
+		}
+		
+		if (time() > $results["token_expiration_time"]) {
+			return new LoginStatus(LoginStatus::TOKEN_EXPIRED);
+		}
+		
+		// If we're here, the user is logged in
+		// Go ahead and update the token expiration time
+		$token_update_query = $db_conn->prepare("CALL update_login_token_exp_time(:party_id, :new_exp_time)");
+		$token_update_query->bindParam(":party_id", $party_id);
+		$token_update_query->bindParam(":new_exp_time", new_token_exp_time());
+		$token_update_query->execute();
+		
+		return new LoginStatus(LoginStatus::LOGGED_IN);
 	}
 ?>
