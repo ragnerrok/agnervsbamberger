@@ -1,6 +1,6 @@
 <?php
 	include("create_db_conn.php");
-	include("db_utils.php");
+	include_once("db_utils.php");
 	
 	$login_successful = false;
 	$party_id = -1;
@@ -28,7 +28,7 @@
 		$return_value["login_successful"] = true;
 		
 		// Generate the login token
-		$return_value["login_token"] = generate_login_token($party_id, $db_conn);
+		$return_value["auth_token"] = generate_login_token($party_id, $db_conn);
 		
 		$return_value["party_id"] = $party_id;
 		

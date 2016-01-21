@@ -53,13 +53,9 @@
 		return $token;
 	}
 	
-	class LoginStatus extends SplEnum {
-		const __default = self::NOT_LOGGED_IN;
-		
-		const NOT_LOGGED_IN = 1;
-		const TOKEN_EXPIRED = 2;
-		const LOGGED_IN = 3;
-	}
+	define("NOT_LOGGED_IN", 1);
+	define("TOKEN_EXPIRED", 2);
+	define("LOGGED_IN", 3);
 	
 	function check_login_status($party_id, $token, $db_conn) {
 		$token_query = $db_conn->prepare("CALL get_token_info(:party_id)");
@@ -68,24 +64,67 @@
 		$results = $token_query->fetch(PDO::FETCH_ASSOC);
 		$token_query->closeCursor();
 		if (is_null($results["current_login_token"]) || is_null($results["token_expiration_time"])) {
-			return new LoginStatus(LoginStatus::NOT_LOGGED_IN);
+			return NOT_LOGGED_IN;
 		}
 		
 		if ($results["current_login_token"] != $token) {
-			return new LoginStatus(LoginStatus::NOT_LOGGED_IN);
+			return NOT_LOGGED_IN;
 		}
 		
 		if (time() > $results["token_expiration_time"]) {
-			return new LoginStatus(LoginStatus::TOKEN_EXPIRED);
+			return TOKEN_EXPIRED;
 		}
 		
 		// If we're here, the user is logged in
 		// Go ahead and update the token expiration time
 		$token_update_query = $db_conn->prepare("CALL update_login_token_exp_time(:party_id, :new_exp_time)");
 		$token_update_query->bindParam(":party_id", $party_id);
-		$token_update_query->bindParam(":new_exp_time", new_token_exp_time());
+		$new_exp_time = new_token_exp_time();
+		$token_update_query->bindParam(":new_exp_time", $new_exp_time);
 		$token_update_query->execute();
 		
-		return new LoginStatus(LoginStatus::LOGGED_IN);
+		return LOGGED_IN;
+	}
+	
+	function music_suggestion_count($party_id, $db_conn) {
+		$suggestion_query = $db_conn->prepare("SELECT music_suggestion_count(:party_id)");
+		$suggestion_query->bindParam(":party_id", $party_id);
+		$suggestion_query->execute();
+		
+		return $suggestion_query->fetch(PDO::FETCH_NUM)[0];
+	}
+	
+	function add_music_suggestion($party_id, $artist_name, $song_title, $db_conn) {
+		$add_music_query = $db_conn->prepare("CALL add_music_suggestion(:party_id, :artist_name, :song_title)");
+		$add_music_query->bindParam(":party_id", $party_id);
+		$add_music_query->bindParam(":artist_name", $artist_name);
+		$add_music_query->bindParam(":song_title", $song_title);
+		
+		return $add_music_query->execute();
+	}
+	
+	function remove_music_suggestion($party_id, $artist_name, $song_title, $db_conn) {
+		$remove_music_query = $db_conn->prepare("CALL remove_music_suggestion(:party_id, :artist_name, :song_title)");
+		$remove_music_query->bindParam(":party_id", $party_id);
+		$remove_music_query->bindParam(":artist_name", $artist_name);
+		$remove_music_query->bindParam(":song_title", $song_title);
+		
+		return $remove_music_query->execute();
+	}
+	
+	function add_allergy($person_id, $allergy, $db_conn) {
+		$add_allergy_query = $db_conn->prepare("CALL add_allergy(:person_id, :allergy)");
+		$add_allergy_query->bindParam(":person_id", $person_id);
+		$add_allergy_query->bindParam(":allergy", $allergy);
+		
+		return $add_allergy_query->execute();
+	}
+	
+	function remove_allergy($person_id, $allergy, $db_conn) {
+		$remove_allergy_query = $db_conn->prepare("CALL remove_allergy(:person_id, :allergy)");
+		$remove_allergy_query->bindParam(":person_id", $person_id);
+		$remove_allergy_query->bindParam(":allergy", $allergy);
+		
+		return $remove_allergy_query->execute();
 	}
 ?>
