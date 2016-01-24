@@ -127,4 +127,17 @@
 		
 		return $remove_allergy_query->execute();
 	}
+	
+	function update_address($party_id, $addr_house_num, $addr_street, $addr_apt, $addr_city, $addr_state, $addr_zip, $db_conn) {
+		$update_address_query = $db_conn->prepare("CALL update_address(:party_id, :addr_house_num, :addr_street, :addr_apt, :addr_city, :addr_state, :addr_zip)");
+		$update_address_query->bindParam(":party_id", $party_id);
+		$update_address_query->bindParam(":addr_house_num", $addr_house_num);
+		$update_address_query->bindParam(":addr_street", $addr_street);
+		$update_address_query->bindParam(":addr_apt", $addr_apt);
+		$update_address_query->bindParam(":addr_city", $addr_city);
+		$update_address_query->bindParam(":addr_state", $addr_state);
+		$update_address_query->bindParam(":addr_zip", $addr_zip);
+		
+		return $update_address_query->execute();
+	}
 ?>
