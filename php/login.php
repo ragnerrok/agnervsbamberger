@@ -1,6 +1,6 @@
 <?php
 	include("create_db_conn.php");
-	include("db_utils.php");
+	include_once("db_utils.php");
 	
 	$login_successful = false;
 	$party_id = -1;
@@ -28,7 +28,9 @@
 		$return_value["login_successful"] = true;
 		
 		// Generate the login token
-		$return_value["login_token"] = generate_login_token($party_id, $db_conn);
+		$return_value["auth_token"] = generate_login_token($party_id, $db_conn);
+		
+		$return_value["party_id"] = $party_id;
 		
 		// Get party data
 		$return_value["party_info"] = get_party_data($party_id, $db_conn);
@@ -38,6 +40,9 @@
 		
 		// Get music suggestions
 		$return_value["music_suggestions"] = get_music_suggestions($party_id, $db_conn);
+		
+		// Get the food choices
+		$return_value["food_choices"] = get_food_choices($db_conn);
 	} else {
 		$return_value["login_successful"] = false;		
 	}
