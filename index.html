@@ -21,19 +21,19 @@
         });
     </script>
 </head>
-<body class="larkspur">
+<body class="larkspur-background">
     <div id="title">
-        <div id="agner-text" class="ui-widget font-size-60">
+        <div id="agner-text" class="astrudFont font-size-60 dark-larkspur-text">
             AGNER
         </div>
-        <div id="vs-text" class="ui-widget font-size-80">
+        <div id="vs-text" class="astrudFont font-size-80 dark-larkspur-text">
             VS
         </div>
-        <div id="bamberger-text" class="ui-widget font-size-60">
+        <div id="bamberger-text" class="astrudFont font-size-60 dark-larkspur-text">
             BAMBERGER
         </div>
     </div>
-    <div id="menu-bar" class="dark-brown">
+    <div id="menu-bar" class="dark-brown-background">
         <button id="rsvp-button" class="menu-bar-button">
             RSVP
         </button>
@@ -54,88 +54,50 @@
         </button>
     </div>
     <div id="home-content" class="content-container">
-        <div class="ui-widget font-size-60">WELCOME!</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">WELCOME!</div>
     </div>
     <div id="rsvp-content" class="content-container" style="display: none">
         <!-- People Accordion -->
-        <div class="ui-widget font-size-60">RSVP</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">RSVP</div>
         <div id="guest-not-logged-in">
-            <div id="guest-log-in-label">Type in your assigned RSVP Log In Code</div>
+            <div id="guest-log-in-label dark-larkspur-text">Type in your assigned RSVP Log In Code</div>
             <form id="login-form">
-                <input  type="text" id="guest-login-code" class="form-input" name="login_code"/>
-                <input  type="submit" id="log-in-button" class="form-input" value="Log In"/>
+                <!--<input  type="text" id="guest-login-code" class="form-input" name="login_code"/>-->
+                <textarea id="guest-login-code" class="form-input" name="login_code">
+
+                </textarea>
+                <input  type="submit" id="log-in-button" class="form-button" value="Log In"/>
             </form>
         </div>
         <div id="guest-logged-in" style="display: none">
-            <div id="people-accordion">
-                <h3 id="1-person-name" class="person-label">Ash Ketchem</h3>
-                <div id="1-person-info" class="person-info">
-                    <div class="address-label label">
-                        Address
-                    </div>
-                    <div id="1-person-address" class="centuryGothicFont">
-                        123 Pokemans Ave.
-                        Palet Town, KT 10203
-                    </div>
-                    <div class="food-label label">
-                        Food Choice
-                    </div>
-                    <div id="1-person-food" class="centuryGothicFont">
-                        Pidgey
-                    </div>
-                    <div class="allergies-label label">
-                        Allergies
-                    </div>
-                    <div id="1-person-allergies" class="centuryGothicFont">
-                        Paka Berries
-                    </div>
-                    <div class="attending-label label">
-                        Are you joining us?
-                    </div>
-                    <div id="1-person-attending" class="centuryGothicFont">
-                        Yes
-                    </div>
+            <div id="people-in-party">
+                <div id="people-accordion">
+
                 </div>
-                <h3 id="2-person-name" class="person-label">Misty Ketchum</h3>
-                <div id="2-person-info" class="person-info">
-                    <div class="address-label label">
-                        Address
-                    </div>
-                    <div id="2-person-address"  class="centuryGothicFont">
-                        123 Pokemans Ave.
-                        Palet Town, KT 10203
-                    </div>
-                    <div class="food-label label">
-                        Food Choice
-                    </div>
-                    <div id="2-person-food" class="centuryGothicFont">
-                        Magikarp
-                    </div>
-                    <div class="allergies-label label">
-                        Allergies
-                    </div>
-                    <div id="2-person-allergies" class="centuryGothicFont">
-                        Bugs
-                    </div>
-                    <div class="attending-label label">
-                        Are you joining us?
-                    </div>
-                    <div id="2-person-attending" class="centuryGothicFont">
-                        Yes
-                    </div>
-                </div>
+                <button id="add-plus-one-button">Add Plus One</button>
             </div>
-            <button id="add-plus-one-button">Add Plus One</button>
+            <div id="party-info-content">
+                <div id="party-info-label" class="astrudFont dark-larkspur-text">Your Information
+                    <input  type="submit" id="party-info-edit-button" class="form-button form-edit-button" value="edit"/>
+                </div>
+                <div class="address-label label astrudFont font-size-25 dark-larkspur-text">
+                    Address
+                </div>
+                <form>
+                    <textarea id="party-info-address" class="form-input larkspur-background centuryGothicFont" disabled>123 Pokemans Ave. Palet Town, KT 10203</textarea>
+                </form>
+            </div>
+
             <div id="music-suggestions-content">
-                <div id="music-suggestions-title" class="ui-widget font-size-40">Suggest Music</div>
+                <div id="music-suggestions-title" class="astrudFont font-size-40 dark-larkspur-text">Suggest Music</div>
                 <table id="song-table">
                     <tr>
-                        <td class="song-name font-size-25 ui-widget">NAME</td>
-                        <td class="song-band font-size-25 ui-widget">ARTIST</td>
+                        <td class="song-name font-size-25 astrudFont dark-larkspur-text">NAME</td>
+                        <td class="song-band font-size-25 astrudFont dark-larkspur-text">ARTIST</td>
                     </tr>
                     <tr>
-                        <td id="1-song-name" class="song-name centuryGothicFont">What's Hannenin?</td>
-                        <td id="1-song-band" class="song-band centuryGothicFont">NaN</td>
+                        <td id="1-song-name" class="song-name centuryGothicFont dark-larkspur-text">What's Hannenin?</td>
+                        <td id="1-song-band" class="song-band centuryGothicFont dark-larkspur-text">NaN</td>
                     </tr>
                 </table>
                 <button id="add-music-button">Add a Music Suggestion</button>
@@ -143,24 +105,24 @@
         </div>
     </div>
     <div id="location-content" class="content-container" style="display: none">
-        <div class="ui-widget font-size-60">CEREMONY/RECEPTION LOCATION</div>
+        <div class="astrudFont font-size-60">CEREMONY/RECEPTION LOCATION</div>
     </div>
     <div id="hotel-content" class="content-container" style="display: none">
-        <div class="ui-widget font-size-60">HOTEL INFORMATION</div>
+        <div class="astrudFont font-size-60">HOTEL INFORMATION</div>
     </div>
     <div id="registry-content" class="content-container" style="display: none">
-        <div class="ui-widget font-size-60">REGISTRY (Coming Soon!...ish)</div>
+        <div class="astrudFont font-size-60">REGISTRY (Coming Soon!...ish)</div>
     </div>
     <div id="faq-content" class="content-container" style="display: none">
-        <div class="ui-widget font-size-60">FREQUENTLY ASKED QUESTIONS</div>
+        <div class="astrudFont font-size-60">FREQUENTLY ASKED QUESTIONS</div>
 
         <div id="">
 
         </div>
     </div>
     <div id="contact-content" class="content-container" style="display: none">
-        <div class="ui-widget font-size-60">CONTACT INFORMATION</div>
-        <div class="contact-label ui-widget">
+        <div class="astrudFont font-size-60">CONTACT INFORMATION</div>
+        <div class="contact-label astrudFont">
             Have a question? Send use a message!
         </div>
         <div id="contact-form">

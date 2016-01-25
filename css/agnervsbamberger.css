@@ -7,18 +7,15 @@
     position: absolute;
     left: 5%;
     margin-top: 10px;
-    color: #2f3a4c;
 }
 #vs-text{
     position: absolute;
     left: 40%;
-    color: #2f3a4c;
 }
 #bamberger-text{
     position: absolute;
     right: 5%;
     margin-top: 10px;
-    color: #2f3a4c;
 }
 .content-container{
     position: absolute;
@@ -27,11 +24,12 @@
     width: 80%;
     /*border: #2f3a4c solid;*/
 }
-
 .label{
     font-weight: bold;
 }
-
+.address-label{
+    padding-top: 5px;
+}
 /* Side Menu */
 #menu-bar{
     position: absolute;
@@ -52,14 +50,89 @@
 #rsvp-content{
 
 }
-#people-accordion{
-    width: 60%;
+.ui-widget textarea.person-label{
+    font-size: 28px;
+}
+.ui-accordion .ui-accordion-header.person-label{
+    padding: 10px 0px 0px 40px;
+}
+.first-name{
+    width: 100px;
+    height: 35px;
+}
+.last-name{
+    width: 100px;
+    height: 35px;
+}
+#people-in-party{
+    width: 40%;
 }
 .person-info{
     outline-color: #2f3a4c;
 }
-.form-input{
+/* Food Selection */
+.ui-selectmenu-button span.ui-selectmenu-text{
+    padding: 2px 5px;
+}
+.ui-selectmenu-button span.ui-icon{
+    right: 5px;
+}
+/* Allergies */
+li.allergy{
+    padding-right: 10px;
+    display: inline-block;
+}
+ul.allergy-list{
+    padding: 0px;
+    margin-top: 0px;
+}
+/* Group Information */
+#party-info-label{
+    border-bottom: #2f3a4c solid 1px;
+    height: 30px;
+    padding: 5px 10px;
+}
+#party-info-content{
+    position: absolute;
+    width: 25%;
+    right: 30%;
+    top: 75px;
+    border: #2f3a4c solid 1px;
+    border-radius: 3px;
+}
+#party-info-address{
+    width: 150px;
+    height: 70px;
+}
+textarea{
+    resize: none;
+}
+input:enabled, textarea:enabled{
+    font-weight: bold;
+    color: #2f3a4c;
+    background-color: #bccbe5;
+}
+input:disabled, textarea:disabled{
+    font-weight: bold;
+    color: #2f3a4c;
+    border: none;
+}
 
+/* Edit Buttons */
+.ui-state-active.person-label{
+    outline-color: #2f3a4c;
+}
+.person-label{
+
+}
+input.ui-button.form-edit-button{
+    padding: 2px 5px;
+    position: absolute;
+    right: 10px;
+}
+.form-input{
+    border: 0px;
+    border-radius: 3px;
 }
 #guest-content{
 
@@ -67,6 +140,7 @@
 #send-email-button{
     margin-top: 10px;
 }
+
 /* Music Suggestions*/
 #music-suggestions-content{
     position: absolute;
@@ -107,19 +181,35 @@
 .astrudFont{
     font-family: Astrud;
 }
-/* Colors */
-.larkspur{
+/* TextColors */
+.larkspur-text{
+    color: #6e7e99;
+}
+.light-larkspur-text{
+    color: #bccbe5;
+}
+.dark-larkspur-text{
+    color: #2f3a4c;
+}
+.dark-brown-text{
+    color: #4c4128;
+}
+.light-brown-text{
+    color: #998b6e;
+}
+/* Background Colors */
+.larkspur-background{
     background-color: #6e7e99;
 }
-.light-larkspur{
+.light-larkspur-background{
     background-color: #bccbe5;
 }
-.dark-larkspur{
+.dark-larkspur-background{
     background-color: #2f3a4c;
 }
-.dark-brown{
+.dark-brown-background{
     background-color: #4c4128;
 }
-.light-brown{
+.light-brown-background{
     background-color: #998b6e;
 }
