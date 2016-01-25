@@ -157,7 +157,7 @@
 		$add_plus_one_query->bindParam(":party_id", $party_id);
 		
 		if (!$add_plus_one_query->execute()) {
-			return 0;
+			return -1;
 		} else {
 			return $db_conn->lastInsertId();
 		}
@@ -188,5 +188,19 @@
 		}
 		
 		return $selected_index;
+	}
+	
+	function get_max_plus_ones($party_id, $db_conn) {
+		$max_plus_ones_query = $db_conn->prepare("SELECT max_plus_ones(:party_id) AS max_plus_ones");
+		$max_plus_ones_query->bindParam(":party_id", $party_id);
+		$max_plus_ones_query->execute();
+		return $max_plus_ones_query->fetch(PDO::FETCH_ASSOC)["max_plus_ones"];
+	}
+	
+	function get_current_plus_ones($party_id, $db_conn) {
+		$current_plus_ones_query = $db_conn->prepare("SELECT current_plus_ones(:party_id) AS current_plus_ones");
+		$current_plus_ones_query->bindParam(":party_id", $party_id);
+		$current_plus_ones_query->execute();
+		return $current_plus_ones_query->fetch(PDO::FETCH_ASSOC)["current_plus_ones"];
 	}
 ?>
