@@ -22,6 +22,9 @@
 		$people = $party_people_query->fetchAll(PDO::FETCH_ASSOC);
 		$party_people_query->closeCursor();
 		
+		// Get the available food choices
+		$food_choices = get_food_choices($db_conn);
+		
 		// Next, get the allergy information for each person
 		$allergy_query = $db_conn->prepare("CALL get_allergies(:person_id)");
 		for ($i = 0; $i < count($people); ++$i) {
@@ -33,6 +36,9 @@
 			}
 			$people[$i]["allergies"] = $allergies;
 			$allergy_query->closeCursor();
+			
+			// Determine the index of the selected food choice
+			$people[$i]["selected_food_choice"] = food_choice_index($food_choices, $people[$i]["food_pref"]);
 		}
 		
 		return $people;
@@ -139,5 +145,48 @@
 		$update_address_query->bindParam(":addr_zip", $addr_zip);
 		
 		return $update_address_query->execute();
+	}
+	
+	function add_plus_one($first_name, $last_name, $food_pref, $over_21, $is_attending, $party_id, $db_conn) {
+		$add_plus_one_query = $db_conn->prepare("CALL add_plus_one(:first_name, :last_name, :food_pref, :over_21, :is_attending, :party_id)");
+		$add_plus_one_query->bindParam(":first_name", $first_name);
+		$add_plus_one_query->bindParam(":last_name", $last_name);
+		$add_plus_one_query->bindParam(":food_pref", $food_pref);
+		$add_plus_one_query->bindParam(":over_21", $over_21);
+		$add_plus_one_query->bindParam(":is_attending", $is_attending);
+		$add_plus_one_query->bindParam(":party_id", $party_id);
+		
+		if (!$add_plus_one_query->execute()) {
+			return 0;
+		} else {
+			return $db_conn->lastInsertId();
+		}
+	}
+	
+	function get_food_choices($db_conn) {
+		$food_choices_query = $db_conn->prepare("CALL get_food_choices()");
+		$food_choices_query->execute();
+		$food_choices_string = $food_choices_query->fetch(PDO::FETCH_ASSOC)["Type"];
+		$food_choices = array();
+		preg_match("/enum\((.*)\)/", $food_choices_string, $food_choices);
+		$food_choices_array = explode(",", $food_choices[1]);
+		
+		// Remove the quotes from the array entries
+		for ($i = 0; $i < count($food_choices_array); ++$i) {
+			$food_choices_array[$i] = substr($food_choices_array[$i], 1, -1);
+		}
+		return $food_choices_array;
+	}
+	
+	function food_choice_index($choices, $selected_choice) {
+		$selected_index = -1;
+		for ($i = 0; $i < count($choices); ++$i) {
+			if ($selected_choice == $choices[$i]) {
+				$selected_index = $i;
+				break;
+			}
+		}
+		
+		return $selected_index;
 	}
 ?>

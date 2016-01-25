@@ -40,6 +40,9 @@
 		
 		// Get music suggestions
 		$return_value["music_suggestions"] = get_music_suggestions($party_id, $db_conn);
+		
+		// Get the food choices
+		$return_value["food_choices"] = get_food_choices($db_conn);
 	} else {
 		$return_value["login_successful"] = false;		
 	}
