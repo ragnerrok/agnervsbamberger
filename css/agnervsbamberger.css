@@ -95,15 +95,45 @@ ul.allergy-list{
 #party-info-content{
     position: absolute;
     width: 25%;
+    height: 150px;
     right: 30%;
     top: 75px;
     border: #2f3a4c solid 1px;
     border-radius: 3px;
 }
-#party-info-address{
-    width: 150px;
-    height: 70px;
+.party-info-address{
+    position: absolute;
 }
+.party-info-address-first-row{
+    top: 100px;
+    left: 150px;
+    height: 20px;
+}
+.party-info-address-second-row{
+    top: 100px;
+    left: 150px;
+    height: 20px;
+}
+#party-address-house-num{
+    width: 50px;
+}
+#party-address-street{
+    width: 50px;
+}
+#party-address-apt{
+    width: 50px;
+}
+#party-address-city{
+    width: 50px;
+}
+#party-address-state{
+    width: 50px;
+}
+#party-address-zip{
+    width: 50px;
+}
+
+
 textarea{
     resize: none;
 }
@@ -118,6 +148,7 @@ input:disabled, textarea:disabled{
     border: none;
 }
 
+
 /* Edit Buttons */
 .ui-state-active.person-label{
     outline-color: #2f3a4c;
@@ -129,6 +160,19 @@ input.ui-button.form-edit-button{
     padding: 2px 5px;
     position: absolute;
     right: 10px;
+    top: 12px;
+}
+input.ui-button.form-save-button{
+    padding: 2px 5px;
+    position: absolute;
+    right: 60px;
+    top: 12px;
+}
+input.ui-button.form-cancel-button{
+    padding: 2px 5px;
+    position: absolute;
+    right: 10px;
+    top: 12px;
 }
 .form-input{
     border: 0px;
