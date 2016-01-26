@@ -34,6 +34,7 @@
 		
 		// Get party data
 		$return_value["party_info"] = get_party_data($party_id, $db_conn);
+		$return_value["party_info"]["current_plus_ones"] = get_current_plus_ones($party_id, $db_conn);
 		
 		// Get people in party
 		$return_value["party_people"] = get_party_people($party_id, $db_conn);
