@@ -44,10 +44,9 @@ function init() {
 
 
     //RSVP Content
-    $("#login-form").submit(function(event){
-        var formData = $(this).serialize();
+    $("#log-in-button").click(function(event){
+		var formData = serializeFormData(['guest-login-code']);
         $.post("php/login.php", formData, setUpRSVPContent);
-        event.preventDefault();
     });
     $("#log-in-button" ).button();
     $("#add-plus-one-button" ).button().click(function() {
@@ -98,6 +97,10 @@ function setUpRSVPContent(jsonObject){
 }
 
 function generatePartyInfo(jsonObject){
+	var partyContainer = $('#rsvp-content');
+	partyContainer.append('<input type="hidden" name="party_id" id="party_id" value="' + jsonObject.party_id + '" />');
+	partyContainer.append('<input type="hidden" name="auth_token" id="auth_token" value="' + jsonObject.auth_token + '" />');
+	
     var partyAccordion = $('#people-accordion');
 
     var partyPeople = jsonObject.party_people;
@@ -108,11 +111,11 @@ function generatePartyInfo(jsonObject){
         var partyPersonLastName = partyPerson.last_name;
         partyAccordion.append('<h3 id="'+ i + '-person-name-container" class="person-label">' + '</h3>');
         var partyPersonH3 = $('#' + i + '-person-name-container');
-        partyPersonH3.append('<textarea id="'+ i +'-person-first-name" class="person-label first-name larkspur-background" disabled>' + partyPersonFirstName + '</textarea>');
-        partyPersonH3.append('<textarea id="'+ i +'-person-last-name" class="person-label last-name larkspur-background" disabled>' + partyPersonLastName + '</textarea>');
-        partyPersonH3.append('<input  type="submit" id="' + i + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
-        partyPersonH3.append('<input  type="submit" id="' + i + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
-        partyPersonH3.append('<input  type="submit" id="' + i + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
+        partyPersonH3.append('<textarea name="first_name" id="'+ i +'-person-first-name" class="person-label first-name larkspur-background" disabled>' + partyPersonFirstName + '</textarea>');
+        partyPersonH3.append('<textarea name="last_name" id="'+ i +'-person-last-name" class="person-label last-name larkspur-background" disabled>' + partyPersonLastName + '</textarea>');
+        partyPersonH3.append('<input  type="button" id="' + i + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
+        partyPersonH3.append('<input  type="button" id="' + i + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
+        partyPersonH3.append('<input  type="button" id="' + i + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
 
         $('#' + i+ '-person-name-edit-button').button().click(setUpEditButton(i));
         $('#' + i+ '-person-name-save-button').button().click(setUpSaveButton(i));
@@ -131,7 +134,7 @@ function generatePartyInfo(jsonObject){
         //Party Person Food Preference
         var partyPersonFood = partyPerson.food_pref;
         partyPersonInfoDiv.append('<div class="food-label label">Food Choice' + '</div>');
-        partyPersonInfoDiv.append('<select id="' + i + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
+        partyPersonInfoDiv.append('<select name="food_pref" id="' + i + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
         var foodMenu = $('#' + i + '-person-food');
         var foodArray = jsonObject.food_choices;
         for(var k = 0; k < foodArray.length; k++){
@@ -155,8 +158,6 @@ function generatePartyInfo(jsonObject){
         for(var k = 0; k < partyPersonAllergies.length; k++){
             allergiesList.append('<li class="allergy">' + partyPersonAllergies[k] + '</li>');
         }
-
-
     }
 
     //Initialize Accordion
@@ -209,6 +210,13 @@ function setUpSaveButton(id){
         editButton.show();
         saveButton.hide();
         cancelButton.hide();
+		
+		// Serialize all of the form data
+		var formData = serializeFormData(['party_id', 'auth_token', id + '-person-first-name', id + '-person-last-name'])
+		$.post("php/update_person.php", formData, function(returnData) {
+			console.log("Update person received:");
+			console.log(returnData);
+		});
     };
 }
 
@@ -227,4 +235,15 @@ function setUpCancelButton(id){
         saveButton.hide();
         cancelButton.hide();
     };
+}
+
+function serializeFormData(ids) {
+	var formData = "";
+	for (var i = 0; i < ids.length; ++i) {
+		var element = $('#' + ids[i])[0];
+		formData += (element.name + '=' + encodeURI(element.value) + '&');
+	}
+	
+	// Remove the last & from the form data
+	return formData.substring(0, formData.length - 1);
 }
