@@ -56,7 +56,12 @@ function init() {
 
     $("#party-info-edit-button").button().click(function(){
         disablePartyInfo = !disablePartyInfo;
-       $("#party-info-address").prop("disabled", disablePartyInfo);
+        $("#party-address-house-num").prop("disabled", disablePartyInfo);
+        $("#party-address-street").prop("disabled", disablePartyInfo);
+        $("#party-address-apt").prop("disabled", disablePartyInfo);
+        $("#party-address-city").prop("disabled", disablePartyInfo);
+        $("#party-address-state").prop("disabled", disablePartyInfo);
+        $("#party-address-zip").prop("disabled", disablePartyInfo);
     });
 
     //Music Suggestion
@@ -101,6 +106,9 @@ function generatePartyInfo(jsonObject){
     var partyAccordion = $('#people-accordion');
 
     var partyPeople = jsonObject.party_people;
+    var partyId = jsonObject.party_id;
+    var partyAuthToken = jsonObject.auth_token;
+
     for(var i = 0; i < jsonObject.party_people.length; i++){
         var partyPerson = partyPeople[i];
         //Party Person Name
@@ -144,6 +152,7 @@ function generatePartyInfo(jsonObject){
         foodMenu.selectmenu({
             change: function(event, data){
                 console.log(data.item.index);
+                console.log(data.item.value);
             }
         });
 
@@ -168,13 +177,28 @@ function generatePartyInfo(jsonObject){
     //Group Info
     var partyInfoContainer = $('#party-info-content');
     var partyInfo = jsonObject.party_info;
-    partyInfoContainer.append('<form><textarea id="party-address-house-num" class="party-info-address form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_house_num + '</textarea>');
-    partyInfoContainer.append('<textarea id="party-address-street" class="party-info-address form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_street + '</textarea>');
-    partyInfoContainer.append('<textarea id="party-address-apt" class="party-info-address form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_apt + '</textarea>');
-    partyInfoContainer.append('<textarea id="party-address-city" class="party-info-address form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_city + '</textarea>');
-    partyInfoContainer.append('<textarea id="party-address-state" class="party-info-address form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_state + '</textarea>');
-    partyInfoContainer.append('<textarea id="party-address-zip" class="party-info-address form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_zip + '</textarea></form>');
 
+    partyInfoContainer.append('<form id="party-info-form"><input type="hidden" value="' + partyId +'" />' + '<input type="hidden" value="' + partyId +'" />' + '</form>');
+    var partyInfoForm = $('#party-info-form');
+    partyInfoForm.append('<textarea name="addr_house_num" id="party-address-house-num" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_house_num + '</textarea>');
+    partyInfoForm.append('<textarea name="addr_street" id="party-address-street" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_street + '</textarea>');
+    partyInfoForm.append('<textarea name="addr_apt" id="party-address-apt" class="party-info-address party-info-address-second-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_apt + '</textarea>');
+    partyInfoForm.append('<textarea name="addr_city" id="party-address-city" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_city + '</textarea>');
+    partyInfoForm.append('<textarea name="addr_state" id="party-address-state" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_state + '</textarea>');
+    partyInfoForm.append('<textarea name="addr_zip" id="party-address-zip" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_zip + '</textarea>');
+
+
+    //Music Suggestions
+    var musicSuggestions = jsonObject.music_suggestions;
+    var songTable = $('#song-table');
+
+    for(var k = 0; k < musicSuggestions.length; k++){
+        console.log(musicSuggestions[k]);
+        songTable.append('<tr id="' + k + '-song">' + '</tr>');
+        var songRow = $('#' + k + '-song');
+        songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text">' + musicSuggestions[k].song_title + '</td>');
+        songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text">' + musicSuggestions[k].artist_name + '</td>');
+    }
 
 }
 
