@@ -203,4 +203,14 @@
 		$current_plus_ones_query->execute();
 		return $current_plus_ones_query->fetch(PDO::FETCH_ASSOC)["current_plus_ones"];
 	}
+	
+	function update_person($person_id, $first_name, $last_name, $food_pref, $over_21, $is_attending, $db_conn) {
+		$update_person_query = $db_conn->prepare("CALL update_person(:person_id, :first_name, :last_name, :food_pref, :over_21, :is_attending)");
+		$update_person_query->bindParam(":person_id", $person_id);
+		$update_person_query->bindParam(":first_name", $first_name);
+		$update_person_query->bindParam(":food_pref", $food_pref);
+		$update_person_query->bindParam(":over_21", $over_21);
+		$update_person_query->bindParam(":is_attending", $is_attending);
+		return $update_person_query->execute();
+	}
 ?>
