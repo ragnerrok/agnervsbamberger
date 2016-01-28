@@ -394,7 +394,13 @@ function serializeFormData(ids) {
 	var formData = "";
 	for (var i = 0; i < ids.length; ++i) {
 		var element = $('#' + ids[i])[0];
-		formData += (element.name + '=' + encodeURI(element.value) + '&');
+		var value;
+		if (element.value == "") {
+			value = null;
+		} else {
+			value = encodeURI(element.value);
+		}
+		formData += (element.name + '=' + value + '&');
 	}
 	
 	// Remove the last & from the form data
