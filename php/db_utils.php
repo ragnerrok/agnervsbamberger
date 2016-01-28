@@ -30,19 +30,19 @@
 		$people = $party_people_query->fetchAll(PDO::FETCH_ASSOC);
 		$party_people_query->closeCursor();
 		
-		// Map all boolean results to actual booleans (for javascript)
-		$people["is_attending"] = map_to_boolean($people["is_attending"]);
-		$people["is_invited_to_movie"] = map_to_boolean($people["is_invited_to_movie"]);
-		$people["is_invited_to_rehearsal"] = map_to_boolean($people["is_invited_to_rehearsal"]);
-		$people["is_plus_one"] = map_to_boolean($people["is_plus_one"]);
-		$people["over_21"] = map_to_boolean($people["over_21"]);
-		
 		// Get the available food choices
 		$food_choices = get_food_choices($db_conn);
 		
 		// Next, get the allergy information for each person
 		$allergy_query = $db_conn->prepare("CALL get_allergies(:person_id)");
 		for ($i = 0; $i < count($people); ++$i) {
+			// Map all boolean results to actual booleans (for javascript)
+			$people[$i]["is_attending"] = map_to_boolean($people[$i]["is_attending"]);
+			$people[$i]["is_invited_to_movie"] = map_to_boolean($people[$i]["is_invited_to_movie"]);
+			$people[$i]["is_invited_to_rehearsal"] = map_to_boolean($people[$i]["is_invited_to_rehearsal"]);
+			$people[$i]["is_plus_one"] = map_to_boolean($people[$i]["is_plus_one"]);
+			$people[$i]["over_21"] = map_to_boolean($people[$i]["over_21"]);
+			
 			$allergy_query->bindParam(":person_id", $people[$i]["person_id"]);
 			$allergy_query->execute();
 			$allergies = array();
