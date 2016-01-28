@@ -52,16 +52,16 @@
 }
 .left-info-side{
     float: left;
-    width: 40%;
+    width: 45%;
     height: 100%;
-    padding: 5px 10px;
+    padding: 5px 0px 5px 10px;
 }
 .right-info-side{
     float: right;
-    width: 45%;
+    width: 47%;
     height: 100%;
     border-left: #2f3a4c solid 1px;
-    padding: 5px 10px;
+    padding: 5px 5px 5px 10px;
 }
 .ui-widget textarea.person-label{
     font-size: 28px;
@@ -74,7 +74,7 @@
     height: 35px;
 }
 .last-name{
-    width: 100px;
+    width: 140px;
     height: 35px;
 }
 #people-in-party{
@@ -189,7 +189,7 @@ input:disabled, textarea:disabled{
 input.ui-button.form-edit-button{
     padding: 2px 5px;
     position: absolute;
-    right: 10px;
+    right: 5px;
     top: 12px;
 }
 input.ui-button.form-save-button{
@@ -203,6 +203,19 @@ input.ui-button.form-cancel-button{
     position: absolute;
     right: 10px;
     top: 12px;
+}
+
+input.ui-button.form-edit-float-button{
+    padding: 2px 5px;
+    float: right;
+}
+input.ui-button.form-save-float-button{
+    padding: 2px 5px;
+    float: right;
+}
+input.ui-button.form-cancel-float-button{
+    padding: 2px 5px;
+    float: right;
 }
 .form-input{
     border: 0px;

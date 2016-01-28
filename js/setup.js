@@ -13,6 +13,8 @@ var ContentEnum = Object.freeze({
 var selectedContent = ContentEnum.HOME_CONTENT;
 var disablePartyInfo = true;
 var disableNameInfo = true;
+var disableLeftInfo = true;
+var disableRightInfo = true;
 var userLoggedIn = false;
 function init() {
 
@@ -53,48 +55,16 @@ function init() {
         console.log("Clicked plus one");
     });
 
-    var editButton = $('#party-info-edit-button');
-    var saveButton = $('#party-info-save-button');
-    var cancelButton = $('#party-info-cancel-button');
 
-    editButton.button().click(function(){
-        disablePartyInfo = !disablePartyInfo;
-        $("#party-address-house-num").prop("disabled", disablePartyInfo);
-        $("#party-address-street").prop("disabled", disablePartyInfo);
-        $("#party-address-apt").prop("disabled", disablePartyInfo);
-        $("#party-address-city").prop("disabled", disablePartyInfo);
-        $("#party-address-state").prop("disabled", disablePartyInfo);
-        $("#party-address-zip").prop("disabled", disablePartyInfo);
+    $('#party-info-edit-button').button().click(function(){
 
-        editButton.hide();
-        saveButton.show();
-        cancelButton.show();
+        setUpPartyInfoEditButton("", 'party-info');
     });
-    saveButton.button().click(function(){
-        disablePartyInfo = !disablePartyInfo;
-        $("#party-address-house-num").prop("disabled", disablePartyInfo);
-        $("#party-address-street").prop("disabled", disablePartyInfo);
-        $("#party-address-apt").prop("disabled", disablePartyInfo);
-        $("#party-address-city").prop("disabled", disablePartyInfo);
-        $("#party-address-state").prop("disabled", disablePartyInfo);
-        $("#party-address-zip").prop("disabled", disablePartyInfo);
-
-        editButton.show();
-        saveButton.hide();
-        cancelButton.hide();
+    $('#party-info-save-button').button().click(function(){
+        setUpPartyInfoSaveButton("", 'party-info');
     });
-    cancelButton.button().click(function(){
-        disablePartyInfo = !disablePartyInfo;
-        $("#party-address-house-num").prop("disabled", disablePartyInfo);
-        $("#party-address-street").prop("disabled", disablePartyInfo);
-        $("#party-address-apt").prop("disabled", disablePartyInfo);
-        $("#party-address-city").prop("disabled", disablePartyInfo);
-        $("#party-address-state").prop("disabled", disablePartyInfo);
-        $("#party-address-zip").prop("disabled", disablePartyInfo);
-
-        editButton.show();
-        saveButton.hide();
-        cancelButton.hide();
+    $('#party-info-cancel-button').button().click(function(){
+        setUpPartyInfoCancelButton("", 'party-info');
     });
 
     //Music Suggestion
@@ -146,7 +116,8 @@ function generatePartyInfo(jsonObject){
     var partyId = jsonObject.party_id;
     var partyAuthToken = jsonObject.auth_token;
 
-    for(var i = 0; i < jsonObject.party_people.length; i++){
+    for(var i = 0; i < partyPeople.length; i++){
+        partyContainer.append('<input type="hidden" name="person_id" id="'+ i + '_person_id'  +'" value="' + partyPeople[i].person_id + '" />');
         var partyPerson = partyPeople[i];
         //Party Person Name
         var partyPersonFirstName = partyPerson.first_name;
@@ -172,29 +143,50 @@ function generatePartyInfo(jsonObject){
         var leftInfoDiv = $('#' + i + '-person-info-left');
         var rightInfoDiv = $('#' + i + '-person-info-right');
 
-        leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-edit-button" class="form-button form-edit-button" value="edit"/>');
-        leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
-        leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
+        leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-edit-button" class="form-button form-edit-float-button" value="edit"/>');
+        leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
+        leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
 
-        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-edit-button" class="form-button form-edit-button" value="edit"/>');
-        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
-        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
+        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-edit-button" class="form-button form-edit-float-button" value="edit"/>');
+        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
+        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
 
-        $('#' + i+ '-info-left-edit-button').button().click(setUpInfoLeftEditButton('#' + i+ '-info-left-edit-button'));
-        $('#' + i+ '-info-left-save-button').button().click(setUpInfoLeftSaveButton('#' + i+ '-info-left-save-button'));
-        $('#' + i+ '-info-left-cancel-button').button().click(setUpInfoLeftCancelButton('#' + i+ '-info-left-cancel-button'));
+        $('#' + i+ '-info-left-edit-button').button().click(setUpInfoLeftEditButton(i,'-info-left'));
+        $('#' + i+ '-info-left-save-button').button().click(setUpInfoLeftSaveButton(i, '-info-left'));
+        $('#' + i+ '-info-left-cancel-button').button().click(setUpInfoLeftCancelButton(i, '-info-left'));
 
-        $('#' + i+ '-info-right-edit-button').button().click(setUpInfoRightEditButton('#' + i+ '-info-right-edit-button'));
-        $('#' + i+ '-info-right-save-button').button().click(setUpInfoRightSaveButton('#' + i+ '-info-right-save-button'));
-        $('#' + i+ '-info-right-cancel-button').button().click(setUpInfoRightCancelButton('#' + i+ '-info-right-cancel-button'));
+        $('#' + i+ '-info-right-edit-button').button().click(setUpInfoRightEditButton(i, '-info-right'));
+        $('#' + i+ '-info-right-save-button').button().click(setUpInfoRightSaveButton(i, '-info-right'));
+        $('#' + i+ '-info-right-cancel-button').button().click(setUpInfoRightCancelButton(i, '-info-right'));
 
         //TODO: Party Person Attending?
         var partyPersonComing = partyPerson.is_attending;
-        leftInfoDiv.append('<div class="attending-label label">Are you joining us?' + '</div>');
-        leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
+        leftInfoDiv.append('<div class="attending-label label">Are you joining us?</div>');
+        //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
+        leftInfoDiv.append('<select name="is_attending" id="' + i + '-person-attending" class="centuryGothicFont" disabled>' +  '</select>');
+        var isAttending = $('#' + i + '-person-attending');
+        if(partyPersonComing == null){
+            isAttending.append('<option selected="selected">Select an Option</option>');
+            isAttending.append('<option>Yes</option>');
+            isAttending.append('<option>No</option>');
+        }else if(partyPersonComing){
+            isAttending.append('<option selected="selected">Yes</option>');
+            isAttending.append('<option>No</option>');
+        }else{
+            isAttending.append('<option>Yes</option>');
+            isAttending.append('<option selected="selected">No</option>');
+        }
+
+        isAttending.selectmenu({
+            change: function(event, data){
+                console.log(data.item.index);
+                console.log(data.item.value);
+            }
+        });
+
 
         //Party Person Food Preference
-        var partyPersonFood = partyPerson.food_pref;
+        var partyPersonFood = partyPerson.selected_food_choice;
         leftInfoDiv.append('<div class="food-label label">Food Choice' + '</div>');
         leftInfoDiv.append('<select name="food_pref" id="' + i + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
         var foodMenu = $('#' + i + '-person-food');
@@ -214,16 +206,43 @@ function generatePartyInfo(jsonObject){
         });
 
         //TODO: Is 21
+        var partyPerson21 = partyPerson.over_21;
+        leftInfoDiv.append('<div class="over-21-label label">Are you over 21?</div>');
+        //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
+        leftInfoDiv.append('<select name="over_21" id="' + i + '-person-over-21" class="centuryGothicFont" disabled></select>');
+        var over21 = $('#' + i + '-person-over-21');
+        if(partyPerson21 == null){
+            over21.append('<option selected="selected" disabled>Select an Option</option>');
+            over21.append('<option>Yes</option>');
+            over21.append('<option>No</option>');
+        }else if(partyPerson21){
+            over21.append('<option selected="selected">Yes</option>');
+            over21.append('<option>No</option>');
+        }else{
+            over21.append('<option>Yes</option>');
+            over21.append('<option selected="selected">No</option>');
+        }
 
+        over21.selectmenu({
+            change: function(event, data){
+                console.log(data.item.index);
+                console.log(data.item.value);
+            }
+        });
 
         //Party Person Allergies
         var partyPersonAllergies = partyPerson.allergies;
         rightInfoDiv.append('<div class="allergies-label label">Allergies' + '</div>');
         rightInfoDiv.append('<ul id="' + i +'-person-allergies" class="centuryGothicFont allergy-list">' + '</ul>');
         var allergiesList = $('#' + i + '-person-allergies');
+        if(partyPersonAllergies.length == 0){
+            allergiesList.append('<li class="allergy">None</li>');
+        }
         for(var k = 0; k < partyPersonAllergies.length; k++){
             allergiesList.append('<li class="allergy">' + partyPersonAllergies[k] + '</li>');
         }
+        rightInfoDiv.append('<input type="text" id="' + i + '-new-allergy" />');
+        rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
     }
 
     //Initialize Accordion
@@ -280,36 +299,39 @@ function setUpSaveOrCancelButton(id, buttonType){
 }
 function setUpInfoLeftEditButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
+        disableLeftInfo = !disableLeftInfo;
         console.log(id + ' editButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
+        $('#' + id + '-person-attending').selectmenu("enable");
+        $('#' + id + '-person-food').selectmenu("enable");
+        $('#' + id + '-person-over-21').selectmenu("enable");
 
         setUpEditButton(id, buttonType);
     };
 }
 function setUpInfoLeftCancelButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
+        disableLeftInfo = !disableLeftInfo;
         console.log(id + ' editButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
+        $('#' + id + '-person-attending').selectmenu("disable");
+        $('#' + id + '-person-food').selectmenu("disable");
+        $('#' + id + '-person-over-21').selectmenu("disable");
 
         setUpSaveOrCancelButton(id, buttonType);
     };
 }
 function setUpInfoLeftSaveButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
-        console.log(id + ' saveButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
+        disableLeftInfo = !disableLeftInfo;
+        console.log(id + ' editButton');
+        $('#' + id + '-person-attending').selectmenu("disable");
+        $('#' + id + '-person-food').selectmenu("disable");
+        $('#' + id + '-person-over-21').selectmenu("disable");
 
         setUpSaveOrCancelButton(id, buttonType);
 
         // Serialize all of the form data
-        var formData = serializeFormData(['party_id', 'auth_token', id + '-person-first-name', id + '-person-last-name'])
-        $.post("php/update_person.php", formData, function(returnData) {
+        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21'])
+        $.post("php/update_person_info.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(returnData);
         });
@@ -317,30 +339,26 @@ function setUpInfoLeftSaveButton(id, buttonType){
 }
 function setUpInfoRightEditButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
+        disableRightInfo = !disableRightInfo;
         console.log(id + ' editButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
 
         setUpEditButton(id, buttonType);
     };
 }
 function setUpInfoRightCancelButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
+        disableRightInfo = !disableRightInfo;
         console.log(id + ' editButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
+
 
         setUpSaveOrCancelButton(id, buttonType);
     };
 }
 function setUpInfoRightSaveButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
+        disableRightInfo = !disableRightInfo;
         console.log(id + ' saveButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
+
 
         setUpSaveOrCancelButton(id, buttonType);
 
@@ -382,18 +400,62 @@ function setUpPersonNameSaveButton(id, buttonType){
         setUpSaveOrCancelButton(id, buttonType);
 
         // Serialize all of the form data
-        var formData = serializeFormData(['party_id', 'auth_token', id + '-person-first-name', id + '-person-last-name'])
-        $.post("php/update_person.php", formData, function(returnData) {
+        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id',id + '-person-first-name', id + '-person-last-name'])
+        $.post("php/update_person_name.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(returnData);
+
         });
     };
 }
 
+function setUpPartyInfoEditButton(id, buttonType){
+    disablePartyInfo = !disablePartyInfo;
+    $("#party-address-house-num").prop("disabled", disablePartyInfo);
+    $("#party-address-street").prop("disabled", disablePartyInfo);
+    $("#party-address-apt").prop("disabled", disablePartyInfo);
+    $("#party-address-city").prop("disabled", disablePartyInfo);
+    $("#party-address-state").prop("disabled", disablePartyInfo);
+    $("#party-address-zip").prop("disabled", disablePartyInfo);
+
+    setUpEditButton(id, buttonType);
+}
+function setUpPartyInfoCancelButton(id, buttonType){
+
+    disablePartyInfo = !disablePartyInfo;
+    $("#party-address-house-num").prop("disabled", disablePartyInfo);
+    $("#party-address-street").prop("disabled", disablePartyInfo);
+    $("#party-address-apt").prop("disabled", disablePartyInfo);
+    $("#party-address-city").prop("disabled", disablePartyInfo);
+    $("#party-address-state").prop("disabled", disablePartyInfo);
+    $("#party-address-zip").prop("disabled", disablePartyInfo);
+
+    setUpSaveOrCancelButton(id, buttonType);
+}
+function setUpPartyInfoSaveButton(id, buttonType){
+    disablePartyInfo = !disablePartyInfo;
+    $("#party-address-house-num").prop("disabled", disablePartyInfo);
+    $("#party-address-street").prop("disabled", disablePartyInfo);
+    $("#party-address-apt").prop("disabled", disablePartyInfo);
+    $("#party-address-city").prop("disabled", disablePartyInfo);
+    $("#party-address-state").prop("disabled", disablePartyInfo);
+    $("#party-address-zip").prop("disabled", disablePartyInfo);
+
+    setUpSaveOrCancelButton(id, buttonType);
+
+    // Serialize all of the form data
+    var formData = serializeFormData(['party_id', 'auth_token', 'party-address-house-num', 'party-address-street', 'party-address-apt', 'party-address-city', 'party-address-state', 'party-address-zip'])
+    $.post("php/update_address.php", formData, function(returnData) {
+        console.log("Update address received:");
+        console.log(returnData);
+    });
+}
 function serializeFormData(ids) {
 	var formData = "";
 	for (var i = 0; i < ids.length; ++i) {
 		var element = $('#' + ids[i])[0];
+        console.log(ids[i]);
+        console.log(element);
 		formData += (element.name + '=' + encodeURI(element.value) + '&');
 	}
 	
