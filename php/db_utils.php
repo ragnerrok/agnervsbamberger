@@ -213,4 +213,21 @@
 		$update_person_query->bindParam(":is_attending", $is_attending);
 		return $update_person_query->execute();
 	}
+	
+	function update_person_name($person_id, $first_name, $last_name, $db_conn) {
+		$update_person_name_query = $db_conn->prepare("CALL update_person_name(:person_id, :first_name, :last_name)");
+		$update_person_name_query->bindParam(":person_id", $person_id);
+		$update_person_name_query->bindParam(":first_name", $first_name);
+		$update_person_name_query->bindParam(":last_name", $last_name);
+		return $update_person_name_query->execute();
+	}
+	
+	function update_person_info($person_id, $is_attending, $food_pref, $over_21, $db_conn) {
+		$update_person_info_query = $db_conn->prepare("CALL update_person_info(:person_id, :is_attending, :food_pref, :over_21)");
+		$update_person_info_query->bindParam(":person_id", $person_id);
+		$update_person_info_query->bindParam(":is_attending", $is_attending);
+		$update_person_info_query->bindParam(":food_pref", $food_pref);
+		$update_person_info_query->bindParam(":over_21", $over_21);
+		return $update_person_info_query->execute();
+	}
 ?>
