@@ -1,4 +1,12 @@
 <?php
+	function map_to_boolean($value) {
+		if ($value == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	function get_music_suggestions($party_id, $db_conn) {
 		$music_query = $db_conn->prepare("CALL get_music_suggestions(:party_id)");
 		$music_query->bindParam(":party_id", $party_id);
@@ -21,6 +29,13 @@
 		$party_people_query->execute();
 		$people = $party_people_query->fetchAll(PDO::FETCH_ASSOC);
 		$party_people_query->closeCursor();
+		
+		// Map all boolean results to actual booleans (for javascript)
+		$people["is_attending"] = map_to_boolean($people["is_attending"]);
+		$people["is_invited_to_movie"] = map_to_boolean($people["is_invited_to_movie"]);
+		$people["is_invited_to_rehearsal"] = map_to_boolean($people["is_invited_to_rehearsal"]);
+		$people["is_plus_one"] = map_to_boolean($people["is_plus_one"]);
+		$people["over_21"] = map_to_boolean($people["over_21"]);
 		
 		// Get the available food choices
 		$food_choices = get_food_choices($db_conn);
