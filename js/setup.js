@@ -142,22 +142,23 @@ function generatePartyInfo(jsonObject){
         partyPersonInfoDiv.append('<div id="' + i + '-person-info-right" class="right-info-side">' + '</div>');
         var leftInfoDiv = $('#' + i + '-person-info-left');
         var rightInfoDiv = $('#' + i + '-person-info-right');
+        var partyPersonAllergies = partyPerson.allergies;
 
         leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-edit-button" class="form-button form-edit-float-button" value="edit"/>');
-        leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
         leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
+        leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
 
         rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-edit-button" class="form-button form-edit-float-button" value="edit"/>');
-        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
         rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
+        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
 
         $('#' + i+ '-info-left-edit-button').button().click(setUpInfoLeftEditButton(i,'-info-left'));
         $('#' + i+ '-info-left-save-button').button().click(setUpInfoLeftSaveButton(i, '-info-left'));
         $('#' + i+ '-info-left-cancel-button').button().click(setUpInfoLeftCancelButton(i, '-info-left'));
 
-        $('#' + i+ '-info-right-edit-button').button().click(setUpInfoRightEditButton(i, '-info-right'));
-        $('#' + i+ '-info-right-save-button').button().click(setUpInfoRightSaveButton(i, '-info-right'));
-        $('#' + i+ '-info-right-cancel-button').button().click(setUpInfoRightCancelButton(i, '-info-right'));
+        $('#' + i+ '-info-right-edit-button').button().click(setUpInfoRightEditButton(i, '-info-right', partyPersonAllergies));
+        $('#' + i+ '-info-right-save-button').button().click(setUpInfoRightSaveButton(i, '-info-right', partyPersonAllergies));
+        $('#' + i+ '-info-right-cancel-button').button().click(setUpInfoRightCancelButton(i, '-info-right', partyPersonAllergies));
 
         //TODO: Party Person Attending?
         var partyPersonComing = partyPerson.is_attending;
@@ -231,7 +232,7 @@ function generatePartyInfo(jsonObject){
         });
 
         //Party Person Allergies
-        var partyPersonAllergies = partyPerson.allergies;
+
         rightInfoDiv.append('<div class="allergies-label label">Allergies' + '</div>');
         rightInfoDiv.append('<ul id="' + i +'-person-allergies" class="centuryGothicFont allergy-list">' + '</ul>');
         var allergiesList = $('#' + i + '-person-allergies');
@@ -240,9 +241,12 @@ function generatePartyInfo(jsonObject){
         }
         for(var k = 0; k < partyPersonAllergies.length; k++){
             allergiesList.append('<li class="allergy">' + partyPersonAllergies[k] + '</li>');
+            rightInfoDiv.append('<input  type="button" id="' + k + '-allergy-button" class="form-button form-delete-button" value="x" style="display: none;"/>');
+            $('#' + k + '-allergy-button').button().click(deleteAllergy(i, k));
         }
-        rightInfoDiv.append('<input type="text" id="' + i + '-new-allergy" />');
+        rightInfoDiv.append('<input type="text" id="' + i + '-new-allergy" class="larkspur-background" style="display: none;"/>');
         rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
+        $('#' + i + '-new-allergy-button').button().click(addAllergy(i));
     }
 
     //Initialize Accordion
@@ -278,7 +282,12 @@ function generatePartyInfo(jsonObject){
     }
 
 }
+function addAllergy(personId){
 
+}
+function deleteAllergy(personId, allergyId){
+    console.log("DELETE");
+}
 function setUpEditButton(id, buttonType){
     var editButton = $('#'+ id + buttonType + '-edit-button');
     var saveButton = $('#'+ id + buttonType + '-save-button');
@@ -297,6 +306,8 @@ function setUpSaveOrCancelButton(id, buttonType){
     saveButton.hide();
     cancelButton.hide();
 }
+
+//Left Side Info
 function setUpInfoLeftEditButton(id, buttonType){
     return function(){
         disableLeftInfo = !disableLeftInfo;
@@ -337,28 +348,57 @@ function setUpInfoLeftSaveButton(id, buttonType){
         });
     };
 }
-function setUpInfoRightEditButton(id, buttonType){
+
+//RIGHT SIDE INFO
+function setUpInfoRightEditButton(id, buttonType, allergies){
     return function(){
         disableRightInfo = !disableRightInfo;
         console.log(id + ' editButton');
+        $('#' + id + '-new-allergy').prop("disabled", disableRightInfo);
+        $('#' + id + '-new-allergy-button').prop("disabled", disableRightInfo);
+
+
+            $('#' + id + '-new-allergy').show();
+            $('#' + id + '-new-allergy-button').show();
+
+
+        for(var k = 0; k < allergies.length; k++){
+            $('#' + k + '-allergy-button').prop("disabled", disableRightInfo);
+        }
 
         setUpEditButton(id, buttonType);
     };
 }
-function setUpInfoRightCancelButton(id, buttonType){
+function setUpInfoRightCancelButton(id, buttonType, allergies){
     return function(){
         disableRightInfo = !disableRightInfo;
         console.log(id + ' editButton');
+        $('#' + id + '-new-allergy').prop("disabled", disableRightInfo);
+        $('#' + id + '-new-allergy-button').prop("disabled", disableRightInfo);
 
+        $('#' + id + '-new-allergy').hide();
+        $('#' + id + '-new-allergy-button').hide();
+
+        for(var k = 0; k < allergies.length; k++){
+            $('#' + k + '-allergy-button').prop("disabled", disableRightInfo);
+        }
 
         setUpSaveOrCancelButton(id, buttonType);
     };
 }
-function setUpInfoRightSaveButton(id, buttonType){
+function setUpInfoRightSaveButton(id, buttonType, allergies){
     return function(){
         disableRightInfo = !disableRightInfo;
         console.log(id + ' saveButton');
+        $('#' + id + '-new-allergy').prop("disabled", disableRightInfo);
+        $('#' + id + '-new-allergy-button').prop("disabled", disableRightInfo);
 
+        $('#' + id + '-new-allergy').hide();
+        $('#' + id + '-new-allergy-button').hide();
+
+        for(var k = 0; k < allergies.length; k++){
+            $('#' + k + '-allergy-button').prop("disabled", disableRightInfo);
+        }
 
         setUpSaveOrCancelButton(id, buttonType);
 
