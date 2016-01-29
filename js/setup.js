@@ -18,6 +18,9 @@ var disableNameInfo = true;
 var disableLeftInfo = true;
 var disableRightInfo = true;
 var userLoggedIn = false;
+
+var globalPartyInfo;
+
 function init() {
 
     //Side Menu
@@ -108,6 +111,8 @@ function setUpRSVPContent(jsonObject){
 }
 
 function generatePartyInfo(jsonObject){
+	globalPartyInfo = jsonObject;
+	
 	var partyContainer = $('#rsvp-content');
 	partyContainer.append('<input type="hidden" name="party_id" id="party_id" value="' + jsonObject.party_id + '" />');
 	partyContainer.append('<input type="hidden" name="auth_token" id="auth_token" value="' + jsonObject.auth_token + '" />');
@@ -166,14 +171,14 @@ function generatePartyInfo(jsonObject){
         var isAttending = $('#' + i + '-person-attending');
         if(partyPersonComing == null){
             isAttending.append('<option selected="selected">Select an Option</option>');
-            isAttending.append('<option>Yes</option>');
-            isAttending.append('<option>No</option>');
+            isAttending.append('<option value="1">Yes</option>');
+            isAttending.append('<option value="0">No</option>');
         }else if(partyPersonComing){
-            isAttending.append('<option selected="selected">Yes</option>');
-            isAttending.append('<option>No</option>');
+            isAttending.append('<option value="1" selected="selected">Yes</option>');
+            isAttending.append('<option value="0">No</option>');
         }else{
-            isAttending.append('<option>Yes</option>');
-            isAttending.append('<option selected="selected">No</option>');
+            isAttending.append('<option value="1">Yes</option>');
+            isAttending.append('<option value="0" selected="selected">No</option>');
         }
 
         isAttending.selectmenu({
@@ -212,14 +217,14 @@ function generatePartyInfo(jsonObject){
         var over21 = $('#' + i + '-person-over-21');
         if(partyPerson21 == null){
             over21.append('<option selected="selected" disabled>Select an Option</option>');
-            over21.append('<option>Yes</option>');
-            over21.append('<option>No</option>');
+            over21.append('<option value="1">Yes</option>');
+            over21.append('<option value="0">No</option>');
         }else if(partyPerson21){
-            over21.append('<option selected="selected">Yes</option>');
-            over21.append('<option>No</option>');
+            over21.append('<option value="1" selected="selected">Yes</option>');
+            over21.append('<option value="0">No</option>');
         }else{
-            over21.append('<option>Yes</option>');
-            over21.append('<option selected="selected">No</option>');
+            over21.append('<option value="1">Yes</option>');
+            over21.append('<option value="0" selected="selected">No</option>');
         }
 
         over21.selectmenu({
@@ -229,7 +234,58 @@ function generatePartyInfo(jsonObject){
             }
         });
 
-        //Party Person Allergies
+		isAttending.selectmenu({
+			change: function(event, data){
+				console.log(data.item.index);
+				console.log(data.item.value);
+			}
+		});
+
+
+		//Party Person Food Preference
+		var partyPersonFood = partyPerson.selected_food_choice;
+		leftInfoDiv.append('<div class="food-label label">Food Choice' + '</div>');
+		leftInfoDiv.append('<select name="food_pref" id="' + i + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
+		var foodMenu = $('#' + i + '-person-food');
+		var foodArray = jsonObject.food_choices;
+		for(var k = 0; k < foodArray.length; k++){
+			if(k == partyPersonFood){
+				foodMenu.append('<option selected="selected">' + foodArray[k] + '</option>');
+			}else{
+				foodMenu.append('<option>' + foodArray[k] + '</option>');
+			}
+		}
+		foodMenu.selectmenu({
+			change: function(event, data){
+				console.log(data.item.index);
+				console.log(data.item.value);
+			}
+		});
+
+		//TODO: Is 21
+		var partyPerson21 = partyPerson.over_21;
+		leftInfoDiv.append('<div class="over-21-label label">Are you over 21?</div>');
+		//leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
+		leftInfoDiv.append('<select name="over_21" id="' + i + '-person-over-21" class="centuryGothicFont" disabled></select>');
+		var over21 = $('#' + i + '-person-over-21');
+		if(partyPerson21 == null){
+			over21.append('<option selected="selected" disabled>Select an Option</option>');
+			over21.append('<option value="1">Yes</option>');
+			over21.append('<option value="0">No</option>');
+		}else if(partyPerson21){
+			over21.append('<option value="1" selected="selected">Yes</option>');
+			over21.append('<option value="0">No</option>');
+		}else{
+			over21.append('<option value="1">Yes</option>');
+			over21.append('<option value="0" selected="selected">No</option>');
+		}
+
+        over21.selectmenu({
+            change: function(event, data){
+                console.log(data.item.index);
+                console.log(data.item.value);
+            }
+        });
 
         rightInfoDiv.append('<div class="allergies-label label">Allergies' + '</div>');
         rightInfoDiv.append('<ul id="' + i +'-person-allergies" class="centuryGothicFont allergy-list">' + '</ul>');
@@ -246,6 +302,7 @@ function generatePartyInfo(jsonObject){
         rightInfoDiv.append('<input name="allergy" type="text" id="' + i + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
         rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
         $('#' + i + '-new-allergy-button').button().click(addAllergy(i, partyPersonAllergies));
+
     }
 
     //Initialize Accordion
@@ -377,10 +434,7 @@ function setUpInfoLeftSaveButton(id, buttonType){
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21']);
-        $.post("php/update_person_info.php", formData, function(returnData) {
-            console.log("Update person received:");
-            console.log(returnData);
-        });
+        $.post("php/update_person_info.php", formData, createUpdatePersonInfoCallback(globalPartyInfo, id));
     };
 }
 
@@ -450,11 +504,7 @@ function setUpPersonNameSaveButton(id, buttonType){
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id',id + '-person-first-name', id + '-person-last-name']);
-        $.post("php/update_person_name.php", formData, function(returnData) {
-            console.log("Update person received:");
-            console.log(returnData);
-
-        });
+        $.post("php/update_person_name.php", formData, createUpdatePersonNameCallback(globalPartyInfo, id));
     };
 }
 
@@ -494,22 +544,82 @@ function setUpPartyInfoSaveButton(id, buttonType){
 
     // Serialize all of the form data
     var formData = serializeFormData(['party_id', 'auth_token', 'party-address-house-num', 'party-address-street', 'party-address-apt', 'party-address-city', 'party-address-state', 'party-address-zip']);
-    $.post("php/update_address.php", formData, function(returnData) {
-        console.log("Update address received:");
-        console.log(returnData);
-    });
+    $.post("php/update_address.php", formData, createUpdateAddressCallback(globalPartyInfo));
+
 }
+
+function createUpdatePersonNameCallback(partyInfo, personContainerID) {
+	return function(returnData) {
+		console.log(returnData);
+		if (!returnData.status) {
+			// Restore the old values
+			$('#' + personContainerID + '-person-first-name').val(partyInfo.party_people[personContainerID].first_name);
+			$('#' + personContainerID + '-person-last-name').val(partyInfo.party_people[personContainerID].last_name);
+		} else {
+			// Remember the new values
+			partyInfo.party_people[personContainerID].first_name = $('#' + personContainerID + '-person-first_name').val();
+			partyInfo.party_people[personContainerID].last_name = $('#' + personContainerID + '-person-last-name').val();
+		}
+	};
+}
+
+function createUpdatePersonInfoCallback(partyInfo, personContainerID) {
+	return function(returnData) {
+		console.log(returnData);
+		if (!returnData.status) {
+			// Restore the old values
+			$('#' + personContainerID + '-person-attending').val(partyInfo.party_people[personContainerID].is_attending).selectmenu('refresh', true);
+			$('#' + personContainerID + '-person-food').val(partyInfo.party_people[personContainerID].food_pref).selectmenu('refresh', true);
+			$('#' + personContainerID + '-person-over-21').val(partyInfo.party_people[personContainerID].over_21).selectmenu('refresh', true);
+			// TODO: alert the user to the error
+		} else {
+			// Remember the new values
+			partyInfo.party_people[personContainerID].is_attending = $('#' + personContainerID + '-person-attending').val();
+			partyInfo.party_people[personContainerID].food_pref = $('#' + personContainerID + '-person-food').val();
+			partyInfo.party_people[personContainerID].over_21 = $('#' + personContainerID + '-person-over-21').val();
+		}
+	};
+}
+
+function createUpdateAddressCallback(partyInfo) {
+	return function(returnData) {
+		console.log(returnData);
+		if (!returnData.status) {
+			// Restore the old values
+			$('#party-address-house-num').val(partyInfo.party_info.addr_house_num);
+			$('#party-address-street').val(partyInfo.party_info.addr_street);
+			$('#party-address-apt').val(partyInfo.party_info.addr_apt);
+			$('#party-address-city').val(partyInfo.party_info.addr_city);
+			$('#party-address-state').val(partyInfo.party_info.addr_state);
+			$('#party-address-zip').val(partyInfo.party_info.addr_zip);
+			// TODO: alert the user to the error
+		} else {
+			// Remember the new values
+			partyInfo.party_info.addr_house_num = $('#party-address-house-num').val();
+			partyInfo.party_info.addr_street = $('#party-address-street').val();
+			partyInfo.party_info.addr_apt = $('#party-address-apt').val();
+			partyInfo.party_info.addr_city = $('#party-address-city').val();
+			partyInfo.party_info.addr_state = $('#party-address-state').val();
+			partyInfo.party_info.addr_zip = $('#party-address-zip').val();
+		}
+	};
+}
+
 function serializeFormData(ids) {
 	var formData = "";
 	for (var i = 0; i < ids.length; ++i) {
 		var element = $('#' + ids[i])[0];
 		var value;
-		if (element.value == "") {
-			value = null;
+		if (element.tagName.toLowerCase() == "li") {
+			value = encodeURI(element.innerHTML);
 		} else {
-			value = encodeURI(element.value);
+			if (element.value == "") {
+				value = null;
+			} else {
+				value = encodeURI(element.value);
+			}
+			formData += (element.name + '=' + value + '&');
 		}
-		formData += (element.name + '=' + value + '&');
 	}
 	
 	// Remove the last & from the form data
