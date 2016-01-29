@@ -122,8 +122,8 @@ function generatePartyInfo(jsonObject){
     var partyAuthToken = jsonObject.auth_token;
 
     for(var i = 0; i < partyPeople.length; i++){
-		partyContainer.append('<input type="hidden" name="person_id" id="'+ i + '_person_id'  +'" value="' + i + '" />');
 		var partyPerson = partyPeople[i];
+		partyContainer.append('<input type="hidden" name="person_id" id="'+ i + '_person_id'  +'" value="' + partyPerson.person_id + '" />');
 		//Party Person Name
 		var partyPersonFirstName = partyPerson.first_name;
 		var partyPersonLastName = partyPerson.last_name;
@@ -173,14 +173,14 @@ function generatePartyInfo(jsonObject){
 		var isAttending = $('#' + i + '-person-attending');
 		if(partyPersonComing == null){
 			isAttending.append('<option selected="selected">Select an Option</option>');
-			isAttending.append('<option>Yes</option>');
-			isAttending.append('<option>No</option>');
+			isAttending.append('<option value="1">Yes</option>');
+			isAttending.append('<option value="0">No</option>');
 		}else if(partyPersonComing){
-			isAttending.append('<option selected="selected">Yes</option>');
-			isAttending.append('<option>No</option>');
+			isAttending.append('<option selected="selected" value="1">Yes</option>');
+			isAttending.append('<option value="0">No</option>');
 		}else{
-			isAttending.append('<option>Yes</option>');
-			isAttending.append('<option selected="selected">No</option>');
+			isAttending.append('<option value="1">Yes</option>');
+			isAttending.append('<option selected="selected" value="0">No</option>');
 		}
 
 		isAttending.selectmenu({
@@ -219,14 +219,14 @@ function generatePartyInfo(jsonObject){
 		var over21 = $('#' + i + '-person-over-21');
 		if(partyPerson21 == null){
 			over21.append('<option selected="selected" disabled>Select an Option</option>');
-			over21.append('<option>Yes</option>');
-			over21.append('<option>No</option>');
+			over21.append('<option value="1">Yes</option>');
+			over21.append('<option value="0">No</option>');
 		}else if(partyPerson21){
-			over21.append('<option selected="selected">Yes</option>');
-			over21.append('<option>No</option>');
+			over21.append('<option value="1" selected="selected">Yes</option>');
+			over21.append('<option value="0">No</option>');
 		}else{
-			over21.append('<option>Yes</option>');
-			over21.append('<option selected="selected">No</option>');
+			over21.append('<option value="1">Yes</option>');
+			over21.append('<option value="0" selected="selected">No</option>');
 		}
 
 		over21.selectmenu({
@@ -345,7 +345,8 @@ function setUpInfoLeftSaveButton(id, buttonType){
         setUpSaveOrCancelButton(id, buttonType);
 
         // Serialize all of the form data
-        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21'])
+        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21']);
+		console.log(formData);
         $.post("php/update_person_info.php", formData, createUpdatePersonInfoCallback(globalPartyInfo, id));
     };
 }
@@ -442,7 +443,8 @@ function setUpPersonNameSaveButton(id, buttonType){
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id',id + '-person-first-name', id + '-person-last-name'])
-        $.post("php/update_person_name.php", formData, createUpdatePersonNameCallback(globalPartyInfo));
+		console.log(formData);
+        $.post("php/update_person_name.php", formData, createUpdatePersonNameCallback(globalPartyInfo, id));
     };
 }
 
@@ -487,14 +489,23 @@ function setUpPartyInfoSaveButton(id, buttonType){
 
 function createUpdatePersonNameCallback(partyInfo, personContainerID) {
 	return function(returnData) {
-		
+		console.log(returnData);
+		if (!returnData.status) {
+			// Restore the old values
+			$('#' + personContainerID + '-person-first-name').val(partyInfo.party_people[personContainerID].first_name);
+			$('#' + personContainerID + '-person-last-name').val(partyInfo.party_people[personContainerID].last_name);
+		} else {
+			// Remember the new values
+			partyInfo.party_people[personContainerID].first_name = $('#' + personContainerID + '-person-first_name').val();
+			partyInfo.party_people[personContainerID].last_name = $('#' + personContainerID + '-person-last-name').val();
+		}
 	};
 }
 
 function createUpdatePersonInfoCallback(partyInfo, personContainerID) {
 	return function(returnData) {
 		console.log(returnData);
-		if (!returnData.result) {
+		if (!returnData.status) {
 			// Restore the old values
 			$('#' + personContainerID + '-person-attending').val(partyInfo.party_people[personContainerID].is_attending).selectmenu('refresh', true);
 			$('#' + personContainerID + '-person-food').val(partyInfo.party_people[personContainerID].food_pref).selectmenu('refresh', true);
@@ -511,7 +522,8 @@ function createUpdatePersonInfoCallback(partyInfo, personContainerID) {
 
 function createUpdateAddressCallback(partyInfo) {
 	return function(returnData) {
-		if (!returnData.result) {
+		console.log(returnData);
+		if (!returnData.status) {
 			// Restore the old values
 			$('#party-address-house-num').val(partyInfo.party_info.addr_house_num);
 			$('#party-address-street').val(partyInfo.party_info.addr_street);
