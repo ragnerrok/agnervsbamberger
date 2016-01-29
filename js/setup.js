@@ -11,7 +11,9 @@ var ContentEnum = Object.freeze({
     HOME_CONTENT: "home-content"
 });
 var selectedContent = ContentEnum.HOME_CONTENT;
+
 var disablePartyInfo = true;
+//TODO: Each person needs there own booleans
 var disableNameInfo = true;
 var disableLeftInfo = true;
 var disableRightInfo = true;
@@ -149,16 +151,12 @@ function generatePartyInfo(jsonObject){
         leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
 
         rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-edit-button" class="form-button form-edit-float-button" value="edit"/>');
-        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
-        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
 
         $('#' + i+ '-info-left-edit-button').button().click(setUpInfoLeftEditButton(i,'-info-left'));
         $('#' + i+ '-info-left-save-button').button().click(setUpInfoLeftSaveButton(i, '-info-left'));
         $('#' + i+ '-info-left-cancel-button').button().click(setUpInfoLeftCancelButton(i, '-info-left'));
 
         $('#' + i+ '-info-right-edit-button').button().click(setUpInfoRightEditButton(i, '-info-right', partyPersonAllergies));
-        $('#' + i+ '-info-right-save-button').button().click(setUpInfoRightSaveButton(i, '-info-right', partyPersonAllergies));
-        $('#' + i+ '-info-right-cancel-button').button().click(setUpInfoRightCancelButton(i, '-info-right', partyPersonAllergies));
 
         //TODO: Party Person Attending?
         var partyPersonComing = partyPerson.is_attending;
@@ -206,7 +204,7 @@ function generatePartyInfo(jsonObject){
             }
         });
 
-        //TODO: Is 21
+        //Is 21
         var partyPerson21 = partyPerson.over_21;
         leftInfoDiv.append('<div class="over-21-label label">Are you over 21?</div>');
         //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
@@ -237,16 +235,17 @@ function generatePartyInfo(jsonObject){
         rightInfoDiv.append('<ul id="' + i +'-person-allergies" class="centuryGothicFont allergy-list">' + '</ul>');
         var allergiesList = $('#' + i + '-person-allergies');
         if(partyPersonAllergies.length == 0){
-            allergiesList.append('<li class="allergy">None</li>');
+            allergiesList.append('<li id="' + i + '-no-allergies" class="allergy">None</li>');
         }
         for(var k = 0; k < partyPersonAllergies.length; k++){
-            allergiesList.append('<li class="allergy">' + partyPersonAllergies[k] + '</li>');
-            rightInfoDiv.append('<input  type="button" id="' + k + '-allergy-button" class="form-button form-delete-button" value="x" style="display: none;"/>');
-            $('#' + k + '-allergy-button').button().click(deleteAllergy(i, k));
+            allergiesList.append('<li name="allergy" id="'+ i + k +'-allergy-list" class="allergy">' + partyPersonAllergies[k] + '</li>');
+            var allergy = $('#' + i + k + '-allergy-list');
+            allergy.append('<input  type="button" id="' + i + k + '-allergy-button" class="form-button form-delete-button" value="X" style="display: none;"/>');
+            $('#' + i + k + '-allergy-button').button().click(deleteAllergy(i, k));
         }
-        rightInfoDiv.append('<input type="text" id="' + i + '-new-allergy" class="larkspur-background" style="display: none;"/>');
+        rightInfoDiv.append('<input name="allergy" type="text" id="' + i + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
         rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
-        $('#' + i + '-new-allergy-button').button().click(addAllergy(i));
+        $('#' + i + '-new-allergy-button').button().click(addAllergy(i, partyPersonAllergies));
     }
 
     //Initialize Accordion
@@ -282,11 +281,47 @@ function generatePartyInfo(jsonObject){
     }
 
 }
-function addAllergy(personId){
+function addAllergy(personContainerId, allergyArray){
+    return function(){
+        console.log("ADD");
+        //var allergy = $('#' + personId + '-new-allergy');
+        var allergiesList = $('#' + personContainerId + '-person-allergies');
+        var k = allergyArray.length;
 
+        // Serialize all of the form data
+        var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId + '-new-allergy']);
+        $.post("php/add_allergy.php", formData, function(returnData) {
+            console.log("Update person received:");
+            console.log(returnData);
+
+            if(returnData.status){
+                allergiesList.append('<li id="'+ personContainerId + k +'-allergy-list" class="allergy">'+ returnData.allergy +'</li>');
+                var allergy = $('#' + personContainerId + k + '-allergy-list');
+                allergy.append('<input  type="button" id="' + personContainerId + k + '-allergy-button" class="form-button form-delete-button" value="X"/>');
+                $('#' + personContainerId + k + '-allergy-button').button().click(deleteAllergy(personContainerId, k));
+
+                $('#' + personContainerId + '-new-allergy').val("");
+
+                if(k == 0){
+                    $('#' + personContainerId +'-no-allergies').remove();
+                }
+            }
+        });
+    };
 }
-function deleteAllergy(personId, allergyId){
-    console.log("DELETE");
+function deleteAllergy(personContainerId, allergyId){
+    return function(){
+        console.log("DELETE");
+        var allergy = $('#' + personContainerId + allergyId +'-allergy-list');
+        allergy.addClass('strike-out');
+
+        // Serialize all of the form data
+        var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId + allergyId + '-allergy-list']);
+        $.post("php/remove_allergy.php", formData, function(returnData) {
+            console.log("Update person received:");
+            console.log(returnData);
+        });
+    };
 }
 function setUpEditButton(id, buttonType){
     var editButton = $('#'+ id + buttonType + '-edit-button');
@@ -341,7 +376,7 @@ function setUpInfoLeftSaveButton(id, buttonType){
         setUpSaveOrCancelButton(id, buttonType);
 
         // Serialize all of the form data
-        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21'])
+        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21']);
         $.post("php/update_person_info.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(returnData);
@@ -354,62 +389,36 @@ function setUpInfoRightEditButton(id, buttonType, allergies){
     return function(){
         disableRightInfo = !disableRightInfo;
         console.log(id + ' editButton');
-        $('#' + id + '-new-allergy').prop("disabled", disableRightInfo);
-        $('#' + id + '-new-allergy-button').prop("disabled", disableRightInfo);
 
+        var newAllergy = $('#' + id + '-new-allergy');
+        var newAllergyButton = $('#' + id + '-new-allergy-button');
+        newAllergy.prop("disabled", disableRightInfo);
+        newAllergyButton.prop("disabled", disableRightInfo);
 
-            $('#' + id + '-new-allergy').show();
-            $('#' + id + '-new-allergy-button').show();
-
-
-        for(var k = 0; k < allergies.length; k++){
-            $('#' + k + '-allergy-button').prop("disabled", disableRightInfo);
+        if(disableRightInfo){
+            newAllergyButton.hide();
+            newAllergy.hide();
+        }else{
+            newAllergyButton.show();
+            newAllergy.show();
         }
 
-        setUpEditButton(id, buttonType);
-    };
-}
-function setUpInfoRightCancelButton(id, buttonType, allergies){
-    return function(){
-        disableRightInfo = !disableRightInfo;
-        console.log(id + ' editButton');
-        $('#' + id + '-new-allergy').prop("disabled", disableRightInfo);
-        $('#' + id + '-new-allergy-button').prop("disabled", disableRightInfo);
-
-        $('#' + id + '-new-allergy').hide();
-        $('#' + id + '-new-allergy-button').hide();
-
+        console.log(allergies.length);
+        //TODO: Grab the current person's allergies. DONT pass it in.
         for(var k = 0; k < allergies.length; k++){
-            $('#' + k + '-allergy-button').prop("disabled", disableRightInfo);
+            var currentButton = $('#' + id + k + '-allergy-button');
+            currentButton.prop("disabled", disableRightInfo);
+            if(disableRightInfo){
+                currentButton.hide();
+            }else{
+                currentButton.show();
+            }
         }
 
-        setUpSaveOrCancelButton(id, buttonType);
+        //setUpEditButton(id, buttonType);
     };
 }
-function setUpInfoRightSaveButton(id, buttonType, allergies){
-    return function(){
-        disableRightInfo = !disableRightInfo;
-        console.log(id + ' saveButton');
-        $('#' + id + '-new-allergy').prop("disabled", disableRightInfo);
-        $('#' + id + '-new-allergy-button').prop("disabled", disableRightInfo);
 
-        $('#' + id + '-new-allergy').hide();
-        $('#' + id + '-new-allergy-button').hide();
-
-        for(var k = 0; k < allergies.length; k++){
-            $('#' + k + '-allergy-button').prop("disabled", disableRightInfo);
-        }
-
-        setUpSaveOrCancelButton(id, buttonType);
-
-        // Serialize all of the form data
-        var formData = serializeFormData(['party_id', 'auth_token', id + '-person-first-name', id + '-person-last-name'])
-        $.post("php/update_person.php", formData, function(returnData) {
-            console.log("Update person received:");
-            console.log(returnData);
-        });
-    };
-}
 function setUpPersonNameEditButton(id, buttonType){
     return function(){
         disableNameInfo = !disableNameInfo;
@@ -440,7 +449,7 @@ function setUpPersonNameSaveButton(id, buttonType){
         setUpSaveOrCancelButton(id, buttonType);
 
         // Serialize all of the form data
-        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id',id + '-person-first-name', id + '-person-last-name'])
+        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id',id + '-person-first-name', id + '-person-last-name']);
         $.post("php/update_person_name.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(returnData);
@@ -484,7 +493,7 @@ function setUpPartyInfoSaveButton(id, buttonType){
     setUpSaveOrCancelButton(id, buttonType);
 
     // Serialize all of the form data
-    var formData = serializeFormData(['party_id', 'auth_token', 'party-address-house-num', 'party-address-street', 'party-address-apt', 'party-address-city', 'party-address-state', 'party-address-zip'])
+    var formData = serializeFormData(['party_id', 'auth_token', 'party-address-house-num', 'party-address-street', 'party-address-apt', 'party-address-city', 'party-address-state', 'party-address-zip']);
     $.post("php/update_address.php", formData, function(returnData) {
         console.log("Update address received:");
         console.log(returnData);

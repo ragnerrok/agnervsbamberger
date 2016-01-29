@@ -26,6 +26,7 @@
 }
 .label{
     font-weight: bold;
+    padding-bottom: 10px;
 }
 .address-label{
     padding-top: 5px;
@@ -93,6 +94,13 @@
     right: 5px;
 }
 /* Allergies */
+.strike-out{
+    text-decoration: line-through;
+}
+.form-add-allergy{
+    border: none;
+    border-radius: 3px;
+}
 li.allergy{
     padding-right: 10px;
     display: block;
@@ -216,6 +224,24 @@ input.ui-button.form-save-float-button{
 input.ui-button.form-cancel-float-button{
     padding: 2px 5px;
     float: right;
+}
+input.ui-widget.form-delete-button{
+    width: 15px;
+    height: 15px;
+    padding: 0px 0px 0px 0px;
+    margin-top: 6px;
+    margin-left: 10px;
+    font-size: 10px;
+    font-family: centuryGothic;
+    float: right;
+}
+input.ui-widget.form-add-button{
+    width: 20px;
+    height: 20px;
+    padding: 0px 0px 0px 0px;
+    margin-left: 10px;
+    font-size: 15px;
+    font-family: centuryGothic;
 }
 .form-input{
     border: 0px;
