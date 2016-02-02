@@ -242,7 +242,7 @@ function generatePartyInfo(jsonObject){
             allergiesList.append('<li id="' + i + '-no-allergies" class="allergy">None</li>');
         }
         for(var k = 0; k < partyPersonAllergies.length; k++){
-            allergiesList.append('<li name="allergy" id="'+ i + k +'-allergy-list-box" class="allergy"><span id="'+ i + k +'-allergy-list">' + partyPersonAllergies[k] + '</span></li>');
+            allergiesList.append('<li id="'+ i + k +'-allergy-list-box" class="allergy"><span name="allergy" id="'+ i + k +'-allergy-list">' + partyPersonAllergies[k] + '</span></li>');
             var allergy = $('#' + i + k + '-allergy-list-box');
             allergy.append('<input  type="button" id="' + i + k + '-allergy-button" class="form-button form-delete-button" value="X" style="display: none;"/>');
             $('#' + i + k + '-allergy-button').button().click(deleteAllergy(i, k));
