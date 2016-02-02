@@ -242,7 +242,7 @@ function generatePartyInfo(jsonObject){
             allergiesList.append('<li id="' + i + '-no-allergies" class="allergy">None</li>');
         }
         for(var k = 0; k < partyPersonAllergies.length; k++){
-            allergiesList.append('<li id="'+ i + k +'-allergy-list-box" class="allergy"><span name="allergy" id="'+ i + k +'-allergy-list">' + partyPersonAllergies[k] + '</span></li>');
+            allergiesList.append('<li id="'+ i + k +'-allergy-list-box" class="allergy"><span data-name="allergy" id="'+ i + k +'-allergy-list">' + partyPersonAllergies[k] + '</span></li>');
             var allergy = $('#' + i + k + '-allergy-list-box');
             allergy.append('<input  type="button" id="' + i + k + '-allergy-button" class="form-button form-delete-button" value="X" style="display: none;"/>');
             $('#' + i + k + '-allergy-button').button().click(deleteAllergy(i, k));
@@ -557,12 +557,10 @@ function serializeFormData(ids) {
 	var formData = "";
 	for (var i = 0; i < ids.length; ++i) {
 		var element = $('#' + ids[i])[0];
-		console.log("ID: " + ids[i]);
-		console.log(element);
 		var value;
 		if (element.tagName.toLowerCase() == "span") {
 			value = encodeURI(element.innerHTML);
-			console.log(value);
+			formData += (element.dataset.name + '=' + value + '&');
 		} else {
 			if (element.value == "") {
 				value = null;
@@ -572,8 +570,6 @@ function serializeFormData(ids) {
 			formData += (element.name + '=' + value + '&');
 		}
 	}
-	
-	console.log(formData);
 	
 	// Remove the last & from the form data
 	return formData.substring(0, formData.length - 1);
