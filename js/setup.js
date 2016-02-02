@@ -234,59 +234,7 @@ function generatePartyInfo(jsonObject){
             }
         });
 
-		isAttending.selectmenu({
-			change: function(event, data){
-				console.log(data.item.index);
-				console.log(data.item.value);
-			}
-		});
-
-
-		//Party Person Food Preference
-		var partyPersonFood = partyPerson.selected_food_choice;
-		leftInfoDiv.append('<div class="food-label label">Food Choice' + '</div>');
-		leftInfoDiv.append('<select name="food_pref" id="' + i + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
-		var foodMenu = $('#' + i + '-person-food');
-		var foodArray = jsonObject.food_choices;
-		for(var k = 0; k < foodArray.length; k++){
-			if(k == partyPersonFood){
-				foodMenu.append('<option selected="selected">' + foodArray[k] + '</option>');
-			}else{
-				foodMenu.append('<option>' + foodArray[k] + '</option>');
-			}
-		}
-		foodMenu.selectmenu({
-			change: function(event, data){
-				console.log(data.item.index);
-				console.log(data.item.value);
-			}
-		});
-
-		//TODO: Is 21
-		var partyPerson21 = partyPerson.over_21;
-		leftInfoDiv.append('<div class="over-21-label label">Are you over 21?</div>');
-		//leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
-		leftInfoDiv.append('<select name="over_21" id="' + i + '-person-over-21" class="centuryGothicFont" disabled></select>');
-		var over21 = $('#' + i + '-person-over-21');
-		if(partyPerson21 == null){
-			over21.append('<option selected="selected" disabled>Select an Option</option>');
-			over21.append('<option value="1">Yes</option>');
-			over21.append('<option value="0">No</option>');
-		}else if(partyPerson21){
-			over21.append('<option value="1" selected="selected">Yes</option>');
-			over21.append('<option value="0">No</option>');
-		}else{
-			over21.append('<option value="1">Yes</option>');
-			over21.append('<option value="0" selected="selected">No</option>');
-		}
-
-        over21.selectmenu({
-            change: function(event, data){
-                console.log(data.item.index);
-                console.log(data.item.value);
-            }
-        });
-
+		//Allergies
         rightInfoDiv.append('<div class="allergies-label label">Allergies' + '</div>');
         rightInfoDiv.append('<ul id="' + i +'-person-allergies" class="centuryGothicFont allergy-list">' + '</ul>');
         var allergiesList = $('#' + i + '-person-allergies');
@@ -373,7 +321,7 @@ function deleteAllergy(personContainerId, allergyId){
         allergy.addClass('strike-out');
 
         // Serialize all of the form data
-        var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId + allergyId + '-allergy-list']);
+        var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId +''+ allergyId + '-allergy-list']);
         $.post("php/remove_allergy.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(returnData);
@@ -610,6 +558,8 @@ function serializeFormData(ids) {
 	for (var i = 0; i < ids.length; ++i) {
 		var element = $('#' + ids[i])[0];
 		var value;
+        console.log(ids[i]);
+        console.log(element);
 		if (element.tagName.toLowerCase() == "li") {
 			value = encodeURI(element.innerHTML);
 		} else {
