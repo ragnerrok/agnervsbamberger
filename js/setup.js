@@ -557,11 +557,12 @@ function serializeFormData(ids) {
 	var formData = "";
 	for (var i = 0; i < ids.length; ++i) {
 		var element = $('#' + ids[i])[0];
+		console.log("ID: " + ids[i]);
+		console.log(element);
 		var value;
-        console.log(ids[i]);
-        console.log(element);
-		if (element.tagName.toLowerCase() == "li") {
+		if (element.tagName.toLowerCase() == "span") {
 			value = encodeURI(element.innerHTML);
+			console.log(value);
 		} else {
 			if (element.value == "") {
 				value = null;
@@ -571,6 +572,8 @@ function serializeFormData(ids) {
 			formData += (element.name + '=' + value + '&');
 		}
 	}
+	
+	console.log(formData);
 	
 	// Remove the last & from the form data
 	return formData.substring(0, formData.length - 1);
