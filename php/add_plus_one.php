@@ -18,11 +18,11 @@
 		$db_conn = open_db_conn();
 		
 		// Validate data from client
-		if ($first_name.length <= 0) {
+		if (strlen($first_name) <= 0) {
 			// Make sure they have a first name
 			$return_value["status"] = false;
 			$return_value["reason"] = "Must enter a first name";
-		} else if ($last_name.length <= 0) {
+		} else if (strlen($last_name) <= 0) {
 			// And a last name
 			$return_value["status"] = false;
 			$return_value["reason"] = "Must enter a last name";
