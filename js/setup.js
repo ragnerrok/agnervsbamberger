@@ -654,11 +654,7 @@ function serializeFormData(ids) {
 			value = encodeURI(element.innerHTML);
 			formData += (element.dataset.name + '=' + value + '&');
 		} else {
-			if (element.value == "") {
-				value = null;
-			} else {
-				value = encodeURI(element.value);
-			}
+			value = encodeURI(element.value);
 			formData += (element.name + '=' + value + '&');
 		}
 	}
