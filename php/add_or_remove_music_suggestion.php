@@ -19,10 +19,10 @@
 			$db_conn = open_db_conn();
 			
 			// Validate client data (just make sure artist and song are non-empty)
-			if ($artist_name.length <= 0) {
+			if (strlen($artist_name) <= 0) {
 				$return_value["status"] = false;
 				$return_value["reason"] = "Must enter an artist name";
-			} else if ($song_title.length <= 0) {
+			} else if (strlen($song_title) <= 0) {
 				$return_value["status"] = false;
 				$return_value["reason"] = "Must enter a song title";
 			} else {
