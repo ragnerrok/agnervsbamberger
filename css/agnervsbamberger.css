@@ -26,7 +26,8 @@
 }
 .label{
     font-weight: bold;
-    padding-bottom: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 .address-label{
     padding-top: 5px;
@@ -46,13 +47,62 @@
     outline-color: #2f3a4c;
     margin: 0px -5px 0px 0px;
 }
-
-/* RSVP Content */
+/* Pop Ups */
+.pop-up-on{
+    z-index: 20;
+}
+#pop-ups{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+#hide-everything-else{
+    height: 100%;
+    width: 100%;
+    background: white;
+    opacity: 0.4;
+}
+#add-plus-one-box{
+    height: 330px;
+}
+#add-song-suggestion-box{
+    height: 180px;
+}
 .pop-up-box{
     position: absolute;
-    left: 50%;
-    top: 50px;
+    left: 20%;
+    top: 250px;
+    border: #2f3a4c solid 1px;
+    border-radius: 3px;
+    padding: 10px;
+    z-index: 10;
 }
+#plus-one-food{
+    width: 110px;
+}
+#plus-one-over-21{
+    width: 110px;
+}
+input.ui-button.form-pop-up-add-button{
+    padding: 2px 5px;
+    position: absolute;
+    right: 60px;
+}
+input.ui-button.form-pop-up-cancel-button{
+    padding: 2px 5px;
+    position: absolute;
+    right: 10px;
+}
+input.ui-button.form-add-person{
+    top: 308px;
+}
+input.ui-button.form-add-song{
+    top: 160px;
+}
+
+/* RSVP Content */
 #rsvp-content{
 
 }
@@ -272,16 +322,6 @@ input.ui-widget.form-add-button{
 .song-band{
 
 }
-/* Pop ups*/
-#pop-up{
-
-}
-#add-plus-one{
-
-}
-#add-song-suggestion{
-
-}
 /* Fonts and Font Sizes */
 @font-face {
     font-family: centuryGothic;
@@ -302,6 +342,9 @@ input.ui-widget.form-add-button{
 }
 .font-size-25{
     font-size: 25px;
+}
+.font-size-20{
+    font-size: 20px;
 }
 .centuryGothicFont{
     font-family: centuryGothic;

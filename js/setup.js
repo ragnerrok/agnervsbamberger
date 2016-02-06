@@ -56,21 +56,6 @@ function init() {
         $.post("php/login.php", formData, setUpRSVPContent);
     });
     $("#log-in-button" ).button();
-
-    var addPlusOneBox = $("#add-plus-one-box");
-    $("#add-plus-one-button" ).button().click(function() {
-        addPlusOneBox.show();
-        console.log("Clicked plus one");
-    });
-    $("#plus-one-cancel-button").button().click(function(){
-        addPlusOneBox.hide();
-        console.log("Clicked cancel plus one");
-    });
-    $("#plus-one-save-button").button().click(function(){
-        addPlusOneBox.hide();
-        console.log("Clicked save plus one");
-    });
-
     $('#party-info-edit-button').button().click(function(){
 
         setUpPartyInfoEditButton("", 'party-info');
@@ -81,20 +66,87 @@ function init() {
     $('#party-info-cancel-button').button().click(function(){
         setUpPartyInfoCancelButton("", 'party-info');
     });
+    $('#plus-one-food').selectmenu({
+        change: function(event, data){
+            console.log(data.item.index);
+            console.log(data.item.value);
+        }
+    });
+
+
+    //POP UPS
+    var hideEverythingElseBox = $('#hide-everything-else');
+    var addPlusOneBox = $("#add-plus-one-box");
+    var popUpBox = $('#pop-ups');
+    $("#add-plus-one-button" ).button().click(function() {
+        hideEverythingElseBox.show();
+        addPlusOneBox.show();
+        popUpBox.addClass('pop-up-on');
+        console.log("Clicked plus one");
+    });
+    $("#plus-one-cancel-button").button().click(function(){
+        addPlusOneBox.hide();
+        hideEverythingElseBox.hide();
+        popUpBox.removeClass('pop-up-on');
+        console.log("Clicked cancel plus one");
+    });
+    $("#plus-one-add-button").button().click(function(){
+        addPlusOneBox.hide();
+        hideEverythingElseBox.hide();
+        popUpBox.removeClass('pop-up-on');
+        console.log("Clicked save plus one");
+
+        // Serialize all of the form data
+        var formData = serializeFormData(['party_id', 'auth_token', 'plus-one-first-name', 'plus-one-last-name', 'plus-one-food', 'plus-one-over-21']);
+        $.post("php/add_plus_one.php", formData, function(returnData) {
+            console.log("Add plus one received:");
+            console.log(returnData);
+
+            if(returnData.status){
+                populatePlusOne();
+            }else{
+                populateErrorMessage();
+            }
+        });
+    });
 
     //Music Suggestion
     var musicBox = $("#add-song-suggestion-box");
     $("#add-music-button" ).button().click(function() {
         musicBox.show();
+        hideEverythingElseBox.show();
+        popUpBox.addClass('pop-up-on');
         console.log("Clicked add music");
     });
     $("#song-suggestion-cancel-button").button().click(function(){
         musicBox.hide();
+        hideEverythingElseBox.hide();
+        popUpBox.removeClass('pop-up-on');
         console.log("Clicked cancel music");
     });
-    $("#song-suggestion-save-button").button().click(function(){
+    $('#song-suggestion-add-button').button().click(function(){
         musicBox.hide();
+        hideEverythingElseBox.hide();
+        popUpBox.removeClass('pop-up-on');
         console.log("Clicked save music");
+        // Serialize all of the form data
+        var formData = serializeFormData(['party_id', 'auth_token', 'add-song-name', 'add-song-artist']);
+        $.post("php/add_music_suggestion.php", formData, function(returnData) {
+            console.log("Add plus one received:");
+            console.log(returnData);
+
+            if(returnData.status){
+                populateMusicSuggestion();
+            }else{
+                populateErrorMessage();
+            }
+        });
+    });
+    $('#plus-one-over-21').selectmenu({
+        change: function(event, data){
+            console.log(data.item.index);
+            console.log(data.item.value);
+        }
     });
 
     //Contact Content
@@ -102,6 +154,15 @@ function init() {
         console.log("Clicked send message");
         sendMessageToEmail();
     });
+}
+function populateErrorMessage(){
+
+}
+function populatePlusOne(){
+
+}
+function populateMusicSuggestion(){
+
 }
 
 function switchContent(newSelectedContent){
@@ -190,7 +251,7 @@ function generatePartyInfo(jsonObject){
         leftInfoDiv.append('<select name="is_attending" id="' + i + '-person-attending" class="centuryGothicFont" disabled>' +  '</select>');
         var isAttending = $('#' + i + '-person-attending');
         if(partyPersonComing == null){
-            isAttending.append('<option selected="selected">Select an Option</option>');
+            isAttending.append('<option selected="selected" disabled>Select an Option</option>');
             isAttending.append('<option value="1">Yes</option>');
             isAttending.append('<option value="0">No</option>');
         }else if(partyPersonComing){

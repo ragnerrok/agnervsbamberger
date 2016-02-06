@@ -22,6 +22,44 @@
     </script>
 </head>
 <body class="larkspur-background">
+    <div id="pop-ups">
+        <div id="add-plus-one-box" style="display: none;" class="pop-up-box larkspur-background">
+            <div class="add-plus-one-label label astrudFont font-size-25 dark-larkspur-text">
+                Add your Plus One!
+            </div>
+            <div id="plus-one-first-name-label" class="label astrudFont font-size-20 dark-larkspur-text">First Name</div>
+            <input name="last_name" type="text" id="plus-one-first-name" class="form-input"/>
+            <div id="plus-one-last-name-label" class="label astrudFont font-size-20 dark-larkspur-text">Last Name</div>
+            <input name="first_name" type="text" id="plus-one-last-name" class="form-input"/>
+            <div id="plus-one-food-label" class="label astrudFont font-size-20 dark-larkspur-text">Food Choice</div>
+            <select name="food_pref" id="plus-one-food" class="select-food centuryGothicFont">
+                <option selected="selected" disabled>Select an Option</option>
+                <option>Choice 1</option>
+                <option>Choice 2</option>
+                <option>Choice 3</option>
+            </select>
+            <div id="plus-one-over-21-label" class="label astrudFont font-size-20 dark-larkspur-text">Over 21?</div>
+            <select name="over_21" id="plus-one-over-21" class="centuryGothicFont">
+                <option selected="selected" value="-1" disabled>Select an Option</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+            <input  type="submit" id="plus-one-add-button" class="form-button form-pop-up-add-button form-add-person" value="add"/>
+            <input  type="submit" id="plus-one-cancel-button" class="form-button form-pop-up-cancel-button form-add-person" value="cancel"/>
+        </div>
+        <div id="add-song-suggestion-box" style="display: none;" class="pop-up-box larkspur-background">
+            <div class="song-suggestion-label label astrudFont font-size-20 dark-larkspur-text">
+                Suggest a song to play at the wedding!
+            </div>
+            <div id="add-name-label" class="label astrudFont font-size-20 dark-larkspur-text">Song Title</div>
+            <input name="song_title" type="text" id="add-song-name" class="form-input"/>
+            <div id="add-artist-label" class="label astrudFont font-size-20 dark-larkspur-text">Artist</div>
+            <input name="artist_name" type="text" id="add-song-artist" class="form-input"/>
+            <input  type="submit" id="song-suggestion-add-button" class="form-button form-pop-up-add-button form-add-song" value="add"/>
+            <input  type="submit" id="song-suggestion-cancel-button" class="form-button form-pop-up-cancel-button form-add-song" value="cancel"/>
+        </div>
+        <div id="hide-everything-else" style="display: none;"></div>
+    </div>
     <div id="title">
         <div id="agner-text" class="astrudFont font-size-60 dark-larkspur-text">
             AGNER
@@ -53,6 +91,7 @@
             Contact
         </button>
     </div>
+
     <div id="home-content" class="content-container">
         <div class="astrudFont font-size-60 dark-larkspur-text">WELCOME!</div>
     </div>
@@ -88,47 +127,11 @@
                 <div id="music-suggestions-title" class="astrudFont font-size-40 dark-larkspur-text">Suggest Music</div>
                 <table id="song-table">
                     <tr>
-                        <td class="song-name font-size-25 astrudFont dark-larkspur-text">NAME</td>
+                        <td class="song-name font-size-25 astrudFont dark-larkspur-text">SONG TITLE</td>
                         <td class="song-band font-size-25 astrudFont dark-larkspur-text">ARTIST</td>
                     </tr>
                 </table>
                 <button id="add-music-button">Add a Music Suggestion</button>
-            </div>
-
-            <div id="pop-up">
-                <div id="add-plus-one-box" style="display: none;" class="pop-up-box larkspur-background">
-                    <div class="add-plus-one-label label astrudFont font-size-25 dark-larkspur-text">
-                        Add your Plus One!
-                    </div>
-                    <div id="plus-one-first-name-label">First Name</div>
-                    <input type="text" id="plus-one-first-name" class="form-input"/>
-                    <div id="plus-one-last-name-label">Last Name</div>
-                    <input type="text" id="plus-one-last-name" class="form-input"/>
-                    <div id="plus-one-food-label">Food Choice</div>
-                    <select name="food_pref" id="plus-one-food" class="select-food centuryGothicFont">
-                        <option>Choice 1</option>
-                        <option>Choice 2</option>
-                        <option>Choice 3</option>
-                    </select>
-                    <div id="plus-one-over-21-label">Over 21?</div>
-                    <select name="over_21" id="plus-one-over-21" class="centuryGothicFont">
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
-                    </select>
-                    <input  type="submit" id="plus-one-save-button" class="form-button form-save-button" value="save"/>
-                    <input  type="submit" id="plus-one-cancel-button" class="form-button form-cancel-button" value="cancel"/>
-                </div>
-                <div id="add-song-suggestion-box" style="display: none;">
-                    <div class="song-suggestion-label label astrudFont font-size-25 dark-larkspur-text">
-                        Suggest a song to play at the wedding!
-                    </div>
-                    <div id="add-name-label">Name</div>
-                    <input type="text" id="song-name" class="form-input"/>
-                    <div id="add-artist-label">Artist</div>
-                    <input type="text" id="song-artist" class="form-input"/>
-                    <input  type="submit" id="song-suggestion-save-button" class="form-button form-save-button" value="save"/>
-                    <input  type="submit" id="song-suggestion-cancel-button" class="form-button form-cancel-button" value="cancel"/>
-                </div>
             </div>
         </div>
     </div>
