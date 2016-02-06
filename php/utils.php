@@ -38,4 +38,40 @@
 		$valid_states = array("AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA","HI","ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR","PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY");
 		return in_array($state, $valid_states);
 	}
+	
+	// Email sanitizing functions come from Zend_Mail via way of this stack overflow question:
+	// http://stackoverflow.com/questions/8071916/escape-string-to-use-in-mail
+	function filterEmail($email) {
+		$rule = array("\r" => '',
+					  "\n" => '',
+					  "\t" => '',
+					  '"'  => '',
+					  ','  => '',
+					  '<'  => '',
+					  '>'  => '',
+		);
+
+		return strtr($email, $rule);
+	}
+
+	function filterName($name) {
+		$rule = array("\r" => '',
+					  "\n" => '',
+					  "\t" => '',
+					  '"'  => "'",
+					  '<'  => '[',
+					  '>'  => ']',
+		);
+
+		return trim(strtr($name, $rule));
+	}
+
+	function filterOther($data) {
+		$rule = array("\r" => '',
+					  "\n" => '',
+					  "\t" => '',
+		);
+
+		return strtr($data, $rule);
+	}
 ?>
