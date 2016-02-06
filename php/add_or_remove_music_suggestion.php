@@ -18,30 +18,39 @@
 			$song_title = $_POST["song_title"];
 			$db_conn = open_db_conn();
 			
-			if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
-				if ($add_or_remove == "add") {
-					$suggestion_count = music_suggestion_count($party_id, $db_conn);
-					if ($suggestion_count >= MAX_MUSIC_SUGGESTIONS) {
-						$return_value["status"] = false;
-						$return_value["reason"] = "Music suggestion limit reached";
-						return $return_value;
+			// Validate client data (just make sure artist and song are non-empty)
+			if ($artist_name.length <= 0) {
+				$return_value["status"] = false;
+				$return_value["reason"] = "Must enter an artist name";
+			} else if ($song_title.length <= 0) {
+				$return_value["status"] = false;
+				$return_value["reason"] = "Must enter a song title";
+			} else {
+				if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
+					if ($add_or_remove == "add") {
+						$suggestion_count = music_suggestion_count($party_id, $db_conn);
+						if ($suggestion_count >= MAX_MUSIC_SUGGESTIONS) {
+							$return_value["status"] = false;
+							$return_value["reason"] = "Music suggestion limit reached";
+							return $return_value;
+						}
 					}
-				}
-				
-				$result = false;
-				if ($add_or_remove == "add") {
-					$result = add_music_suggestion($party_id, $artist_name, $song_title, $db_conn);
-				} else {
-					$result = remove_music_suggestion($party_id, $artist_name, $song_title, $db_conn);
-				}
-				
-				if (!$result) {
-					$return_value["status"] = false;
-					$return_value["reason"] = "Database Error";
-				} else {
-					$return_value["status"] = true;
-					$return_value["artist_name"] = $artist_name;
-					$return_value["song_title"] = $song_title;
+					
+					$result = false;
+					if ($add_or_remove == "add") {
+						$result = add_music_suggestion($party_id, $artist_name, $song_title, $db_conn);
+					} else {
+						$result = remove_music_suggestion($party_id, $artist_name, $song_title, $db_conn);
+					}
+					
+					if (!$result) {
+						$return_value["status"] = false;
+						$return_value["reason"] = "Database Error";
+					} else {
+						$return_value["status"] = true;
+						$return_value["artist_name"] = $artist_name;
+						$return_value["song_title"] = $song_title;
+					}
 				}
 			}
 		}
