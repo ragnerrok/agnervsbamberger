@@ -39,6 +39,11 @@
 		return in_array($state, $valid_states);
 	}
 	
+	function validate_food_choice($food_choice, $db_conn) {
+		$food_choices = get_food_choices($db_conn);
+		return in_array($food_choice, $food_choices);
+	}
+	
 	// Email sanitizing functions come from Zend_Mail via way of this stack overflow question:
 	// http://stackoverflow.com/questions/8071916/escape-string-to-use-in-mail
 	function filterEmail($email) {
