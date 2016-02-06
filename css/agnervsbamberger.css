@@ -48,6 +48,11 @@
 }
 
 /* RSVP Content */
+.pop-up-box{
+    position: absolute;
+    left: 50%;
+    top: 50px;
+}
 #rsvp-content{
 
 }

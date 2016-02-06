@@ -56,10 +56,20 @@ function init() {
         $.post("php/login.php", formData, setUpRSVPContent);
     });
     $("#log-in-button" ).button();
+
+    var addPlusOneBox = $("#add-plus-one-box");
     $("#add-plus-one-button" ).button().click(function() {
+        addPlusOneBox.show();
         console.log("Clicked plus one");
     });
-
+    $("#plus-one-cancel-button").button().click(function(){
+        addPlusOneBox.hide();
+        console.log("Clicked cancel plus one");
+    });
+    $("#plus-one-save-button").button().click(function(){
+        addPlusOneBox.hide();
+        console.log("Clicked save plus one");
+    });
 
     $('#party-info-edit-button').button().click(function(){
 
@@ -73,8 +83,18 @@ function init() {
     });
 
     //Music Suggestion
+    var musicBox = $("#add-song-suggestion-box");
     $("#add-music-button" ).button().click(function() {
+        musicBox.show();
         console.log("Clicked add music");
+    });
+    $("#song-suggestion-cancel-button").button().click(function(){
+        musicBox.hide();
+        console.log("Clicked cancel music");
+    });
+    $("#song-suggestion-save-button").button().click(function(){
+        musicBox.hide();
+        console.log("Clicked save music");
     });
 
     //Contact Content
@@ -317,14 +337,16 @@ function addAllergy(personContainerId, allergyArray){
 function deleteAllergy(personContainerId, allergyId){
     return function(){
         console.log("DELETE");
-        var allergy = $('#' + personContainerId + allergyId +'-allergy-list');
-        allergy.addClass('strike-out');
+        var allergy = $('#' + personContainerId + allergyId +'-allergy-list-box');
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId +''+ allergyId + '-allergy-list']);
         $.post("php/remove_allergy.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(returnData);
+            if(returnData.status){
+                allergy.remove();
+            }
         });
     };
 }
