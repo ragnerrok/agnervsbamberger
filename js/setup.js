@@ -151,8 +151,17 @@ function init() {
 
     //Contact Content
     $("#send-email-button" ).button().click(function() {
-        console.log("Clicked send message");
-        sendMessageToEmail();
+		var formData = serializeFormData(['guest-name', 'guest-email', 'guest-content']);
+        $.post("php/send_question_email.php", formData, function(returnData) {
+			if (returnData.status) {
+				// If the email sent successfully, clear the form fields
+				$('#guest-name').val("");
+				$('#guest-email').val("");
+				$('#guest-content').val("");
+			} else {
+				//TODO: Show error message
+			}
+		});
     });
 }
 function populateErrorMessage(){
@@ -169,11 +178,6 @@ function switchContent(newSelectedContent){
     $("#" + selectedContent).hide();
     selectedContent = newSelectedContent;
     $("#" + newSelectedContent).show();
-}
-
-function sendMessageToEmail(){
-    var guestName = $("#guest-name");
-    var questEmail = $("#")
 }
 
 function setUpRSVPContent(jsonObject){

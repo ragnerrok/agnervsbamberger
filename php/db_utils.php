@@ -1,4 +1,6 @@
 <?php
+	require_once("mail_utils.php");
+
 	function map_to_boolean($value) {
 		if ($value == 1) {
 			return true;
@@ -121,7 +123,13 @@
 		$add_music_query->bindParam(":artist_name", $artist_name);
 		$add_music_query->bindParam(":song_title", $song_title);
 		
-		return $add_music_query->execute();
+		if ($add_music_query->execute()) {
+			// If the update was successful, log it first
+			log_add_music($party_id, $artist_name, $song_title);
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	function remove_music_suggestion($party_id, $artist_name, $song_title, $db_conn) {
@@ -130,36 +138,77 @@
 		$remove_music_query->bindParam(":artist_name", $artist_name);
 		$remove_music_query->bindParam(":song_title", $song_title);
 		
-		return $remove_music_query->execute();
+		if ($remove_music_query->execute()) {
+			// If the update was successful, log it first
+			log_remove_music($party_id, $artist_name, $song_title);
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	function add_allergy($person_id, $allergy, $db_conn) {
-		$add_allergy_query = $db_conn->prepare("CALL add_allergy(:person_id, :allergy)");
-		$add_allergy_query->bindParam(":person_id", $person_id);
-		$add_allergy_query->bindParam(":allergy", $allergy);
-		
-		return $add_allergy_query->execute();
+		// First, get the person info
+		$person_info = get_single_person($person_id, $db_conn);
+		if (is_null($person_info)) {
+			return false;
+		} else {
+			$add_allergy_query = $db_conn->prepare("CALL add_allergy(:person_id, :allergy)");
+			$add_allergy_query->bindParam(":person_id", $person_id);
+			$add_allergy_query->bindParam(":allergy", $allergy);
+			if ($add_allergy_query->execute()) {
+				// If the update was successful, log it first
+				log_add_allergy($person_info, $allergy);
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	function remove_allergy($person_id, $allergy, $db_conn) {
-		$remove_allergy_query = $db_conn->prepare("CALL remove_allergy(:person_id, :allergy)");
-		$remove_allergy_query->bindParam(":person_id", $person_id);
-		$remove_allergy_query->bindParam(":allergy", $allergy);
-		
-		return $remove_allergy_query->execute();
+		// First, get the person info
+		$person_info = get_single_person($person_id, $db_conn);
+		if (is_null($person_info)) {
+			return false;
+		} else {
+			$remove_allergy_query = $db_conn->prepare("CALL remove_allergy(:person_id, :allergy)");
+			$remove_allergy_query->bindParam(":person_id", $person_id);
+			$remove_allergy_query->bindParam(":allergy", $allergy);
+			if ($remove_allergy_query->execute()) {
+				// If the update was successful, log it first
+				log_remove_allergy($person_info, $allergy);
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	function update_address($party_id, $addr_house_num, $addr_street, $addr_apt, $addr_city, $addr_state, $addr_zip, $db_conn) {
-		$update_address_query = $db_conn->prepare("CALL update_address(:party_id, :addr_house_num, :addr_street, :addr_apt, :addr_city, :addr_state, :addr_zip)");
-		$update_address_query->bindParam(":party_id", $party_id);
-		$update_address_query->bindParam(":addr_house_num", $addr_house_num);
-		$update_address_query->bindParam(":addr_street", $addr_street);
-		$update_address_query->bindParam(":addr_apt", $addr_apt);
-		$update_address_query->bindParam(":addr_city", $addr_city);
-		$update_address_query->bindParam(":addr_state", $addr_state);
-		$update_address_query->bindParam(":addr_zip", $addr_zip);
+		// First, get the old info
+		$old_info = get_party_data($party_id, $db_conn);
 		
-		return $update_address_query->execute();
+		if (is_null($old_info)) {
+			return false;
+		} else {
+			$update_address_query = $db_conn->prepare("CALL update_address(:party_id, :addr_house_num, :addr_street, :addr_apt, :addr_city, :addr_state, :addr_zip)");
+			$update_address_query->bindParam(":party_id", $party_id);
+			$update_address_query->bindParam(":addr_house_num", $addr_house_num);
+			$update_address_query->bindParam(":addr_street", $addr_street);
+			$update_address_query->bindParam(":addr_apt", $addr_apt);
+			$update_address_query->bindParam(":addr_city", $addr_city);
+			$update_address_query->bindParam(":addr_state", $addr_state);
+			$update_address_query->bindParam(":addr_zip", $addr_zip);
+			
+			if ($update_address_query->execute()) {
+				// If the update was successful, log it first
+				log_address_update($old_info, $addr_house_num, $addr_street, $addr_apt, $addr_city, $addr_state, $addr_zip);
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	function add_plus_one($first_name, $last_name, $food_pref, $over_21, $is_attending, $party_id, $db_conn) {
@@ -219,6 +268,16 @@
 		return $current_plus_ones_query->fetch(PDO::FETCH_ASSOC)["current_plus_ones"];
 	}
 	
+	function get_single_person($person_id, $db_conn) {
+		$get_single_person_query = $db_conn->prepare("CALL get_single_person(:person_id)");
+		$get_single_person_query->bindParam(":person_id", $person_id);
+		if ($get_single_person_query->execute()) {
+			return $get_single_person_query->fetchAll(PDO::FETCH_ASSOC)[0];
+		} else {
+			return NULL;
+		}
+	}
+	
 	function update_person($person_id, $first_name, $last_name, $food_pref, $over_21, $is_attending, $db_conn) {
 		$update_person_query = $db_conn->prepare("CALL update_person(:person_id, :first_name, :last_name, :food_pref, :over_21, :is_attending)");
 		$update_person_query->bindParam(":person_id", $person_id);
@@ -230,19 +289,44 @@
 	}
 	
 	function update_person_name($person_id, $first_name, $last_name, $db_conn) {
-		$update_person_name_query = $db_conn->prepare("CALL update_person_name(:person_id, :first_name, :last_name)");
-		$update_person_name_query->bindParam(":person_id", $person_id);
-		$update_person_name_query->bindParam(":first_name", $first_name);
-		$update_person_name_query->bindParam(":last_name", $last_name);
-		return $update_person_name_query->execute();
+		// First, get the old info (for logging purposes)
+		$old_info = get_single_person($person_id, $db_conn);
+		if (is_null($old_info)) {
+			return false;
+		} else {
+			$update_person_name_query = $db_conn->prepare("CALL update_person_name(:person_id, :first_name, :last_name)");
+			$update_person_name_query->bindParam(":person_id", $person_id);
+			$update_person_name_query->bindParam(":first_name", $first_name);
+			$update_person_name_query->bindParam(":last_name", $last_name);
+			
+			if ($update_person_name_query->execute()) {
+				// If the update was successful, log it first
+				log_name_update($old_info, $first_name, $last_name);
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	function update_person_info($person_id, $is_attending, $food_pref, $over_21, $db_conn) {
-		$update_person_info_query = $db_conn->prepare("CALL update_person_info(:person_id, :is_attending, :food_pref, :over_21)");
-		$update_person_info_query->bindParam(":person_id", $person_id);
-		$update_person_info_query->bindParam(":is_attending", $is_attending);
-		$update_person_info_query->bindParam(":food_pref", $food_pref);
-		$update_person_info_query->bindParam(":over_21", $over_21);
-		return $update_person_info_query->execute();
+		// First, get the old info (for logging purposes)
+		$old_info = get_single_person($person_id, $db_conn);
+		if (is_null($old_info)) {
+			return false;
+		} else {
+			$update_person_info_query = $db_conn->prepare("CALL update_person_info(:person_id, :is_attending, :food_pref, :over_21)");
+			$update_person_info_query->bindParam(":person_id", $person_id);
+			$update_person_info_query->bindParam(":is_attending", $is_attending);
+			$update_person_info_query->bindParam(":food_pref", $food_pref);
+			$update_person_info_query->bindParam(":over_21", $over_21);
+			if ($update_person_info_query->execute()) {
+				// If update was successful, log it first
+				log_info_update($old_info, $is_attending, $food_pref, $over_21);
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 ?>
