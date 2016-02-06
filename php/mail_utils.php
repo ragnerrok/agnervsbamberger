@@ -1,4 +1,6 @@
 <?php
+	require_once("utils.php");
+
 	function log_add_allergy($person_info, $allergy) {
 		$subject = "[Add Allergy] Person " . $person_info["person_id"] . " (" . $person_info["first_name"] . " " . $person_info["last_name"] . ")";
 		$message = "Person ID " . $person_info["person_id"] . " added an allergy\r\n";
@@ -89,5 +91,28 @@
 	function send_log_email($subject, $message) {
 		$to = "agnervsbamberger@gmail.com";
 		return mail($to, $subject, $message);
+	}
+	
+	function send_question_email($name, $from, $message) {
+		$to = "agnervsbamberger@gmail.com";
+		$name = filterName($name);
+		$from = filterEmail($from);
+		$subject = "[Question] Question from " . $name . " (" . $from . ")";
+		$message = wordwrap(filterOther($message), 70, "\r\n");
+		$message = "A question from " . $name . ":\r\n" . $message;
+		$headers = "From: " . $from . "\r\n" . "Reply-To: " . $from . "\r\n";
+		return mail($to, $subject, $message, $headers);
+	}
+	
+	function send_login_trouble_email($name, $from, $login_code, $message) {
+		$to = "agnervsbamberger@gmail.com";
+		$name = filterName($name);
+		$from = filterEmail($from);
+		$subject = "[Login Trouble] " . $name . " (" . $from . ") is having login trouble";
+		$message = wordwrap(filterOther($message), 70, "\r\n");
+		$login_code = filterOther($login_code);
+		$message = $name . " is having trouble logging in with code " . $login_code . "\r\nMessage:\r\n" . $message;
+		$headers = "From: " . $from . "\r\n" . "Reply-To: " . $from . "\r\n";
+		return mail($to, $subject, $message, $headers);
 	}
 ?>
