@@ -12,7 +12,7 @@
 		$auth_token = $_POST["auth_token"];
 		$addr_house_num = $_POST["addr_house_num"];
 		$addr_street = $_POST["addr_street"];
-		$addr_apt = $_POST["addr_apt"];
+		$addr_apt = ($_POST["addr_apt"] != "") ? $_POST["addr_apt"] : null;
 		$addr_city = $_POST["addr_city"];
 		$addr_state = $_POST["addr_state"];
 		$addr_zip = $_POST["addr_zip"];
