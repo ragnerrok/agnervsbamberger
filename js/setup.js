@@ -105,7 +105,7 @@ function init() {
             if(returnData.status){
                 populatePlusOne();
             }else{
-                populateErrorMessage();
+                populateErrorMessage(returnData.reason);
             }
         });
     });
@@ -132,13 +132,13 @@ function init() {
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', 'add-song-name', 'add-song-artist']);
         $.post("php/add_music_suggestion.php", formData, function(returnData) {
-            console.log("Add plus one received:");
+            console.log("Add music suggestion received:");
             console.log(returnData);
 
             if(returnData.status){
                 populateMusicSuggestion();
             }else{
-                populateErrorMessage();
+                populateErrorMessage(returnData.reason);
             }
         });
     });
@@ -164,14 +164,19 @@ function init() {
 		});
     });
 }
-function populateErrorMessage(){
-
+function populateErrorMessage(whatHappened){
+    console.log('ERROR!!! ' + whatHappened);
 }
 function populatePlusOne(){
-
+    console.log('You added Someone!');
 }
-function populateMusicSuggestion(){
-
+function populateMusicSuggestion(songTitle, artistName){
+    console.log('You added music!');
+    /*var songTable = $('#song-table');
+    songTable.append('<tr id="' + k + '-song">' + '</tr>');
+    var songRow = $('#' + k + '-song');
+    songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text">' + songTitle + '</td>');
+    songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text">' + artistName + '</td>');*/
 }
 
 function switchContent(newSelectedContent){
