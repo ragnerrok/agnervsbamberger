@@ -1,7 +1,7 @@
 <?php
 	require("create_db_conn.php");
 	require_once("db_utils.php");
-	require("utils.php");
+	require_once("utils.php");
 	
 	$return_value = array();
 	if (!check_params(["party_id", "auth_token", "first_name", "last_name", "food_pref", "over_21"])) {
