@@ -224,6 +224,7 @@ function populateErrorMessage(whatHappened){
     console.log('ERROR!!! ' + whatHappened);
     $('#error-box').show();
     $('#error-reason').html(whatHappened);
+
 }
 function populatePlusOne(partyPerson){
     console.log('You added Someone!');
@@ -368,7 +369,9 @@ function setUpRSVPContent(jsonObject){
     console.log(jsonObject);
     if(!jsonObject.login_successful){
         console.log("NOPE!!!");
-        populateErrorMessage(returnData.reason);
+        $('#hide-everything-else').show();
+        $('#pop-ups').addClass('pop-up-on');
+        populateErrorMessage(jsonObject.reason);
     }else{
         if(!userLoggedIn) {
             $("#guest-not-logged-in").hide();
