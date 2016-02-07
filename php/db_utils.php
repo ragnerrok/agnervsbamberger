@@ -221,7 +221,10 @@
 		$add_plus_one_query->bindParam(":party_id", $party_id);
 		if ($db_conn->beginTransaction()) {
 			if ($add_plus_one_query->execute()) {
-				$new_person_id = $db_conn->lastInsertId();
+				$add_plus_one_query->closeCursor();
+				$person_id_query = $db_conn->prepare("SELECT LAST_INSERT_ID() AS new_person_id");
+				$person_id_query->execute();
+				$new_person_id = $person_id_query->fetch(PDO::FETCH_ASSOC)["new_person_id"];
 				if ($new_person_id > 0) {
 					$db_conn->commit();
 					return $new_person_id;
