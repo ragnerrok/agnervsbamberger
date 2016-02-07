@@ -180,8 +180,126 @@ function populateErrorMessage(whatHappened){
     $('#error-box').show();
     $('#error-reason').html(whatHappened);
 }
-function populatePlusOne(){
+function populatePlusOne(partyPerson){
     console.log('You added Someone!');
+    var partyLength = globalPartyInfo.party_people.length;
+    var partyContainer = $('#rsvp-content');
+    partyContainer.append('<input type="hidden" name="person_id" id="'+ partyLength + '_person_id'  +'" value="' + partyPerson.person_id + '" />');
+    var partyAccordion = $('#people-accordion');
+
+    //Party Person Name
+    var partyPersonFirstName = partyPerson.first_name;
+    var partyPersonLastName = partyPerson.last_name;
+    partyAccordion.append('<h3 id="'+ i + '-person-name-container" class="person-label">' + '</h3>');
+    var partyPersonH3 = $('#' + i + '-person-name-container');
+    partyPersonH3.append('<textarea name="first_name" id="'+ partyLength +'-person-first-name" class="person-label first-name larkspur-background" disabled>' + partyPersonFirstName + '</textarea>');
+    partyPersonH3.append('<textarea name="last_name" id="'+ partyLength +'-person-last-name" class="person-label last-name larkspur-background" disabled>' + partyPersonLastName + '</textarea>');
+    partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
+    partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
+    partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
+
+    $('#' + i+ '-person-name-edit-button').button().click(setUpPersonNameEditButton(partyLength, '-person-name'));
+    $('#' + i+ '-person-name-save-button').button().click(setUpPersonNameSaveButton(partyLength, '-person-name'));
+    $('#' + i+ '-person-name-cancel-button').button().click(setUpPersonNameCancelButton(partyLength, '-person-name'));
+
+
+    //Party Person Info Div
+    partyAccordion.append('<div id="' + partyLength + '-person-info" class="person-info">' + '</div>');
+    var partyPersonInfoDiv = $('#' + partyLength + '-person-info');
+    partyPersonInfoDiv.append('<div id="' + partyLength + '-person-info-left" class="left-info-side">' + '</div>');
+    partyPersonInfoDiv.append('<div id="' + partyLength + '-person-info-right" class="right-info-side">' + '</div>');
+    var leftInfoDiv = $('#' + partyLength + '-person-info-left');
+    var rightInfoDiv = $('#' + partyLength + '-person-info-right');
+
+
+    leftInfoDiv.append('<input  type="button" id="' + partyLength + '-info-left-edit-button" class="form-button form-edit-float-button" value="edit"/>');
+    leftInfoDiv.append('<input  type="button" id="' + partyLength + '-info-left-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
+    leftInfoDiv.append('<input  type="button" id="' + partyLength + '-info-left-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
+
+    rightInfoDiv.append('<input  type="button" id="' + partyLength + '-info-right-edit-button" class="form-button form-edit-float-button" value="edit"/>');
+
+    $('#' + partyLength + '-info-left-edit-button').button().click(setUpInfoLeftEditButton(partyLength,'-info-left'));
+    $('#' + partyLength+ '-info-left-save-button').button().click(setUpInfoLeftSaveButton(partyLength, '-info-left'));
+    $('#' + partyLength + '-info-left-cancel-button').button().click(setUpInfoLeftCancelButton(partyLength, '-info-left'));
+
+    $('#' + partyLength + '-info-right-edit-button').button().click(setUpInfoRightEditButton(partyLength, '-info-right'));
+
+    //TODO: Party Person Attending?
+    var partyPersonComing = partyPerson.is_attending;
+    leftInfoDiv.append('<div class="attending-label label">Are you joining us?</div>');
+    //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
+    leftInfoDiv.append('<select name="is_attending" id="' + partyLength + '-person-attending" class="centuryGothicFont" disabled>' +  '</select>');
+    var isAttending = $('#' + partyLength + '-person-attending');
+    if(partyPersonComing){
+        isAttending.append('<option value="1" selected="selected">Yes</option>');
+        isAttending.append('<option value="0">No</option>');
+    }else{
+        isAttending.append('<option value="1">Yes</option>');
+        isAttending.append('<option value="0" selected="selected">No</option>');
+    }
+
+    isAttending.selectmenu({
+        change: function(event, data){
+            console.log(data.item.index);
+            console.log(data.item.value);
+        }
+    });
+
+
+    //Party Person Food Preference
+    var partyPersonFood = partyPerson.selected_food_choice;
+    leftInfoDiv.append('<div class="food-label label">Food Choice' + '</div>');
+    leftInfoDiv.append('<select name="food_pref" id="' + partyLength + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
+    var foodMenu = $('#' + partyLength + '-person-food');
+    var foodArray = jsonObject.food_choices;
+    for(var k = 0; k < foodArray.length; k++){
+        if(k == partyPersonFood){
+            foodMenu.append('<option selected="selected">' + foodArray[k] + '</option>');
+        }else{
+            foodMenu.append('<option>' + foodArray[k] + '</option>');
+        }
+    }
+    foodMenu.selectmenu({
+        change: function(event, data){
+            console.log(data.item.index);
+            console.log(data.item.value);
+        }
+    });
+
+    //Is 21
+    var partyPerson21 = partyPerson.over_21;
+    leftInfoDiv.append('<div class="over-21-label label">Are you over 21?</div>');
+    //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
+    leftInfoDiv.append('<select name="over_21" id="' + partyLength + '-person-over-21" class="centuryGothicFont" disabled></select>');
+    var over21 = $('#' + partyLength + '-person-over-21');
+    if(partyPerson21){
+        over21.append('<option value="1" selected="selected">Yes</option>');
+        over21.append('<option value="0">No</option>');
+    }else{
+        over21.append('<option value="1">Yes</option>');
+        over21.append('<option value="0" selected="selected">No</option>');
+    }
+
+    over21.selectmenu({
+        change: function(event, data){
+            console.log(data.item.index);
+            console.log(data.item.value);
+        }
+    });
+
+    //Allergies
+    rightInfoDiv.append('<div class="allergies-label label">Allergies' + '</div>');
+    rightInfoDiv.append('<ul id="' + partyLength +'-person-allergies" class="centuryGothicFont allergy-list">' + '</ul>');
+    var allergiesList = $('#' + partyLength + '-person-allergies');
+    allergiesList.append('<li id="' + partyLength + '-no-allergies" class="allergy">None</li>');
+
+    rightInfoDiv.append('<input name="allergy" type="text" id="' + partyLength + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
+    rightInfoDiv.append('<input  type="button" id="' + partyLength + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
+    $('#' + i + '-new-allergy-button').button().click(addAllergy(partyLength));
+
+    //Refresh Accordion
+    partyAccordion.accordion("refresh");
+
 }
 function populateMusicSuggestion(songTitle, artistName){
     console.log('You added music!');
@@ -257,7 +375,6 @@ function generatePartyInfo(jsonObject){
         partyPersonInfoDiv.append('<div id="' + i + '-person-info-right" class="right-info-side">' + '</div>');
         var leftInfoDiv = $('#' + i + '-person-info-left');
         var rightInfoDiv = $('#' + i + '-person-info-right');
-        var partyPersonAllergies = partyPerson.allergies;
 
         leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-edit-button" class="form-button form-edit-float-button" value="edit"/>');
         leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
@@ -269,7 +386,7 @@ function generatePartyInfo(jsonObject){
         $('#' + i+ '-info-left-save-button').button().click(setUpInfoLeftSaveButton(i, '-info-left'));
         $('#' + i+ '-info-left-cancel-button').button().click(setUpInfoLeftCancelButton(i, '-info-left'));
 
-        $('#' + i+ '-info-right-edit-button').button().click(setUpInfoRightEditButton(i, '-info-right', partyPersonAllergies));
+        $('#' + i+ '-info-right-edit-button').button().click(setUpInfoRightEditButton(i, '-info-right'));
 
         //TODO: Party Person Attending?
         var partyPersonComing = partyPerson.is_attending;
@@ -343,6 +460,7 @@ function generatePartyInfo(jsonObject){
         });
 
 		//Allergies
+        var partyPersonAllergies = partyPerson.allergies;
         rightInfoDiv.append('<div class="allergies-label label">Allergies' + '</div>');
         rightInfoDiv.append('<ul id="' + i +'-person-allergies" class="centuryGothicFont allergy-list">' + '</ul>');
         var allergiesList = $('#' + i + '-person-allergies');
@@ -357,7 +475,7 @@ function generatePartyInfo(jsonObject){
         }
         rightInfoDiv.append('<input name="allergy" type="text" id="' + i + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
         rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
-        $('#' + i + '-new-allergy-button').button().click(addAllergy(i, partyPersonAllergies));
+        $('#' + i + '-new-allergy-button').button().click(addAllergy(i));
 
     }
 
@@ -412,11 +530,12 @@ function deleteMusicSuggestion(songId){
         });
     };
 }
-function addAllergy(personContainerId, allergyArray){
+function addAllergy(personContainerId){
     return function(){
         console.log("ADD");
         //var allergy = $('#' + personId + '-new-allergy');
         var allergiesList = $('#' + personContainerId + '-person-allergies');
+        var allergyArray = globalPartyInfo.party_people[id].allergies;
         var k = allergyArray.length;
 
         // Serialize all of the form data
@@ -515,7 +634,7 @@ function setUpInfoLeftSaveButton(id, buttonType){
 }
 
 //RIGHT SIDE INFO
-function setUpInfoRightEditButton(id, buttonType, allergies){
+function setUpInfoRightEditButton(id, buttonType){
     return function(){
         disableRightInfo = !disableRightInfo;
         console.log(id + ' editButton');
@@ -533,6 +652,7 @@ function setUpInfoRightEditButton(id, buttonType, allergies){
             newAllergy.show();
         }
 
+        var allergies = globalPartyInfo.party_people[id].allergies;
         console.log(allergies.length);
         //TODO: Grab the current person's allergies. DONT pass it in.
         for(var k = 0; k < allergies.length; k++){
