@@ -1,8 +1,8 @@
 <?php
 	function add_or_remove_music_suggestion($add_or_remove) {
-		include("create_db_conn.php");
-		include_once("db_utils.php");
-		include("utils.php");
+		require("create_db_conn.php");
+		require_once("db_utils.php");
+		require_once("utils.php");
 		
 		define("MAX_MUSIC_SUGGESTIONS", 10);
 		
