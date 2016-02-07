@@ -343,4 +343,60 @@
 			}
 		}
 	}
+	
+	function check_login_attempt_exists($login_ip, $db_conn) {
+		$check_login_attempt_query = $db_conn->prepare("SELECT login_attempt_exists(:login_ip) AS login_attempt_exists");
+		$check_login_attempt_query->bindParam(":login_ip", $login_ip);
+		$check_login_attempt_query->execute();
+		if ($check_login_attempt_query->fetch(PDO::FETCH_ASSOC)["login_attempt_exists"] == 1) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	function get_last_login_attempt($login_ip, $db_conn) {
+		$get_last_login_query = $db_conn->prepare("SELECT last_login_attempt_timestamp(:login_ip) AS last_login_attempt");
+		$get_last_login_query->bindParam(":login_ip", $login_ip);
+		$get_last_login_query->execute();
+		return $get_last_login_query->fetch(PDO::FETCH_ASSOC)["last_login_attempt"];
+	}
+	
+	function add_new_login_attempt($login_ip, $db_conn) {
+		$add_login_attempt_query = $db_conn->prepare("CALL add_new_login_attempt(:login_ip, :login_timestamp)");
+		$add_login_attempt_query->bindParam(":login_ip", $login_ip);
+		$current_time = time();
+		$add_login_attempt_query->bindParam(":login_timestamp", $current_time);
+		return $add_login_attempt_query->execute();
+	}
+	
+	function update_login_attempt($login_ip, $db_conn) {
+		$update_login_attempt_query = $db_conn->prepare("CALL update_login_attempt(:login_ip, :login_timestamp)");
+		$update_login_attempt_query->bindParam(":login_ip", $login_ip);
+		$current_time = time();
+		$update_login_attempt_query->bindParam(":login_timestamp", $current_time);
+		return $update_login_attempt_query->execute();
+	}
+	
+	define("LOGIN_THROTTLE_THRESHOLD_S", 2);
+	
+	function throttle_login_attempts($login_ip, $db_conn) {
+		// First, check if there have been any previous login attempts from this ip address
+		if (!check_login_attempt_exists($login_ip, $db_conn)) {
+			// If there haven't been, add an entry to the database, and return false (meaning don't throttle the login attempt)
+			add_new_login_attempt($login_ip, $db_conn);
+			return false;
+		} else {
+			// If there have been, check what the timestamp of the last login attempt was
+			$last_login_attempt_timestamp = get_last_login_attempt($login_ip, $db_conn);
+			// Update the last login attempt
+			update_login_attempt($login_ip, $db_conn);
+			// Now, check if the last login attempt was too recent and we need to throttle
+			if ((time() - $last_login_attempt_timestamp) < LOGIN_THROTTLE_THRESHOLD_S) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
 ?>
