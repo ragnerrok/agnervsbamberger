@@ -378,7 +378,7 @@
 		return $update_login_attempt_query->execute();
 	}
 	
-	define("LOGIN_THROTTLE_THRESHOLD_S", 10);
+	define("LOGIN_THROTTLE_THRESHOLD_S", 2);
 	
 	function throttle_login_attempts($login_ip, $db_conn) {
 		// First, check if there have been any previous login attempts from this ip address

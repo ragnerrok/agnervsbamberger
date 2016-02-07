@@ -1,5 +1,5 @@
 <?php
-	require("create_db_conn.php");
+	require_once("create_db_conn.php");
 	require_once("db_utils.php");
 	require_once("utils.php");
 	

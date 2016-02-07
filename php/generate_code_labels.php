@@ -1,6 +1,6 @@
 <?php
-	require("fpdf/fpdf.php");
-	require("create_db_conn.php");
+	require_once("fpdf/fpdf.php");
+	require_once("create_db_conn.php");
 	
 	$pdf = new FPDF("P", "in", "Letter");
 	$pdf->AddFont("Astrud", "", "Astrud.php");
