@@ -30,7 +30,7 @@
 			// Make sure they've chosen whether or not they're 21
 			$return_value["status"] = false;
 			$return_value["reason"] = "Must choose over or under 21";
-		} else if (!validate_food_choice($food_pref)) {
+		} else if (!validate_food_choice($food_pref, $db_conn)) {
 			// Make sure they've chosen a valid food choice
 			$return_value["status"] = false;
 			$return_value["reason"] = "Must choose a food preference";
