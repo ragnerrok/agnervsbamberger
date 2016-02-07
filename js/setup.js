@@ -121,9 +121,10 @@ function init() {
 
             if(returnData.status){
                 console.log("added someone!")
-                //populatePlusOne();
+                populatePlusOne(returnData);
                 hideEverythingElseBox.hide();
                 popUpBox.removeClass('pop-up-on');
+                checkForMaxPlusOnes();
             }else{
                 populateErrorMessage(returnData.reason);
             }
@@ -160,6 +161,7 @@ function init() {
                 populateMusicSuggestion(songName, artistName);
                 hideEverythingElseBox.hide();
                 popUpBox.removeClass('pop-up-on');
+                checkForMaxMusicSuggestions();
             }else{
                 populateErrorMessage(returnData.reason);
             }
@@ -231,19 +233,22 @@ function populatePlusOne(partyPerson){
     var partyAccordion = $('#people-accordion');
 
     //Party Person Name
+    console.log('Party Person');
+    console.log(partyPerson);
     var partyPersonFirstName = partyPerson.first_name;
     var partyPersonLastName = partyPerson.last_name;
-    partyAccordion.append('<h3 id="'+ i + '-person-name-container" class="person-label">' + '</h3>');
-    var partyPersonH3 = $('#' + i + '-person-name-container');
+    console.log(partyPersonFirstName + " " + partyPersonLastName);
+    partyAccordion.append('<h3 id="'+ partyLength + '-person-name-container" class="person-label">' + '</h3>');
+    var partyPersonH3 = $('#' + partyLength + '-person-name-container');
     partyPersonH3.append('<textarea name="first_name" id="'+ partyLength +'-person-first-name" class="person-label first-name larkspur-background" disabled>' + partyPersonFirstName + '</textarea>');
     partyPersonH3.append('<textarea name="last_name" id="'+ partyLength +'-person-last-name" class="person-label last-name larkspur-background" disabled>' + partyPersonLastName + '</textarea>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
 
-    $('#' + i+ '-person-name-edit-button').button().click(setUpPersonNameEditButton(partyLength, '-person-name'));
-    $('#' + i+ '-person-name-save-button').button().click(setUpPersonNameSaveButton(partyLength, '-person-name'));
-    $('#' + i+ '-person-name-cancel-button').button().click(setUpPersonNameCancelButton(partyLength, '-person-name'));
+    $('#' + partyLength + '-person-name-edit-button').button().click(setUpPersonNameEditButton(partyLength, '-person-name'));
+    $('#' + partyLength + '-person-name-save-button').button().click(setUpPersonNameSaveButton(partyLength, '-person-name'));
+    $('#' + partyLength + '-person-name-cancel-button').button().click(setUpPersonNameCancelButton(partyLength, '-person-name'));
 
 
     //Party Person Info Div
@@ -268,18 +273,13 @@ function populatePlusOne(partyPerson){
     $('#' + partyLength + '-info-right-edit-button').button().click(setUpInfoRightEditButton(partyLength, '-info-right'));
 
     //TODO: Party Person Attending?
-    var partyPersonComing = partyPerson.is_attending;
     leftInfoDiv.append('<div class="attending-label label">Are you joining us?</div>');
     //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
     leftInfoDiv.append('<select name="is_attending" id="' + partyLength + '-person-attending" class="centuryGothicFont" disabled>' +  '</select>');
     var isAttending = $('#' + partyLength + '-person-attending');
-    if(partyPersonComing){
-        isAttending.append('<option value="1" selected="selected">Yes</option>');
-        isAttending.append('<option value="0">No</option>');
-    }else{
-        isAttending.append('<option value="1">Yes</option>');
-        isAttending.append('<option value="0" selected="selected">No</option>');
-    }
+    isAttending.append('<option value="1" selected="selected">Yes</option>');
+    isAttending.append('<option value="0">No</option>');
+
 
     isAttending.selectmenu({
         change: function(event, data){
@@ -294,7 +294,7 @@ function populatePlusOne(partyPerson){
     leftInfoDiv.append('<div class="food-label label">Food Choice' + '</div>');
     leftInfoDiv.append('<select name="food_pref" id="' + partyLength + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
     var foodMenu = $('#' + partyLength + '-person-food');
-    var foodArray = jsonObject.food_choices;
+    var foodArray = globalPartyInfo.food_choices;
     for(var k = 0; k < foodArray.length; k++){
         if(k == partyPersonFood){
             foodMenu.append('<option selected="selected">' + foodArray[k] + '</option>');
@@ -338,7 +338,7 @@ function populatePlusOne(partyPerson){
 
     rightInfoDiv.append('<input name="allergy" type="text" id="' + partyLength + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
     rightInfoDiv.append('<input  type="button" id="' + partyLength + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
-    $('#' + i + '-new-allergy-button').button().click(addAllergy(partyLength));
+    $('#' + partyLength + '-new-allergy-button').button().click(addAllergy(partyLength));
 
     //Refresh Accordion
     partyAccordion.accordion("refresh");
@@ -349,8 +349,8 @@ function populateMusicSuggestion(songTitle, artistName){
     var songTable = $('#song-table');
     songTable.append('<tr id="' + globalMusicLength + '-song">' + '</tr>');
     var songRow = $('#' + globalMusicLength + '-song');
-    songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text">' + songTitle + '</td>');
-    songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text">' + artistName + '</td>');
+    songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text"><span data-name="song_title" id="' + globalMusicLength +'-song-title">' + songTitle + '</span></td>');
+    songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text"><span data-name="artist_name" id="' + globalMusicLength + '-artist-name">' + artistName + '</span></td>');
     songRow.append('<td><input type="button" id="' + globalMusicLength + '-song-button" class="form-button form-delete-button" value="X"/>');
     $('#' + globalMusicLength + '-song-button').button().click(deleteMusicSuggestion(globalMusicLength));
 
@@ -368,6 +368,7 @@ function setUpRSVPContent(jsonObject){
     console.log(jsonObject);
     if(!jsonObject.login_successful){
         console.log("NOPE!!!");
+        populateErrorMessage(returnData.reason);
     }else{
         if(!userLoggedIn) {
             $("#guest-not-logged-in").hide();
@@ -377,10 +378,28 @@ function setUpRSVPContent(jsonObject){
         }
     }
 }
-
+function checkForMaxPlusOnes(){
+    var currentPlusOnes = globalPartyInfo.party_info.current_plus_ones;
+    var maxPlusOnes = globalPartyInfo.party_info.max_plus_ones;
+    if(currentPlusOnes == maxPlusOnes){
+        $('#add-plus-one-button').hide();
+    }
+}
+function checkForMaxMusicSuggestions(){
+    var currentNumMusicSuggestions = globalPartyInfo.music_suggestions.length;
+    var maxMusicSuggestions = 10;
+    if(currentNumMusicSuggestions == maxMusicSuggestions){
+        $('#add-music-button').hide();
+    }else{
+        $('#add-music-button').show();
+    }
+}
 function generatePartyInfo(jsonObject){
 	globalPartyInfo = jsonObject;
     globalMusicLength = globalPartyInfo.music_suggestions.length;
+
+    checkForMaxPlusOnes();
+    checkForMaxMusicSuggestions();
 	
 	var partyContainer = $('#rsvp-content');
 	partyContainer.append('<input type="hidden" name="party_id" id="party_id" value="' + jsonObject.party_id + '" />');
@@ -569,6 +588,9 @@ function deleteMusicSuggestion(songId){
             console.log(returnData);
             if(returnData.status){
                 songSuggestion.remove();
+                checkForMaxMusicSuggestions();
+            }else{
+                populateErrorMessage(returnData.reason);
             }
         });
     };
@@ -578,7 +600,7 @@ function addAllergy(personContainerId){
         console.log("ADD");
         //var allergy = $('#' + personId + '-new-allergy');
         var allergiesList = $('#' + personContainerId + '-person-allergies');
-        var allergyArray = globalPartyInfo.party_people[id].allergies;
+        var allergyArray = globalPartyInfo.party_people[personContainerId].allergies;
         var k = allergyArray.length;
 
         // Serialize all of the form data
@@ -588,7 +610,7 @@ function addAllergy(personContainerId){
             console.log(returnData);
 
             if(returnData.status){
-                allergiesList.append('<li id="'+ personContainerId + k +'-allergy-list" class="allergy">'+ returnData.allergy +'</li>');
+                allergiesList.append('<li id="'+ personContainerId + k +'-allergy-list-box" class="allergy"><span id="'+ personContainerId + k +'-allergy-list"'+ returnData.allergy +'</li>');
                 var allergy = $('#' + personContainerId + k + '-allergy-list');
                 allergy.append('<input  type="button" id="' + personContainerId + k + '-allergy-button" class="form-button form-delete-button" value="X"/>');
                 $('#' + personContainerId + k + '-allergy-button').button().click(deleteAllergy(personContainerId, k));
@@ -611,9 +633,12 @@ function deleteAllergy(personContainerId, allergyId){
         var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId +''+ allergyId + '-allergy-list']);
         $.post("php/remove_allergy.php", formData, function(returnData) {
             console.log("Update person received:");
+            console.log(formData);
             console.log(returnData);
             if(returnData.status){
                 allergy.remove();
+            }else{
+                populateErrorMessage(returnData.reason);
             }
         });
     };
