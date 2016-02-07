@@ -37,8 +37,8 @@
 		} else {
 			if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
 				// Make sure this party can add more plus ones
-				$party_max_plus_ones = get_max_plus_ones($party_id);
-				$party_current_plus_ones = get_current_plus_ones($party_id);
+				$party_max_plus_ones = get_max_plus_ones($party_id, $db_conn);
+				$party_current_plus_ones = get_current_plus_ones($party_id, $db_conn);
 				if ($party_current_plus_ones >= $party_max_plus_ones) {
 					$return_value["status"] = false;
 					$return_value["reason"] = "Max number of plus ones reached";
