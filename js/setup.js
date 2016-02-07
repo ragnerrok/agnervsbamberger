@@ -120,7 +120,8 @@ function init() {
             console.log(returnData);
 
             if(returnData.status){
-                populatePlusOne();
+                console.log("added someone!")
+                //populatePlusOne();
                 hideEverythingElseBox.hide();
                 popUpBox.removeClass('pop-up-on');
             }else{
