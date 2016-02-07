@@ -26,7 +26,7 @@
 			// And a last name
 			$return_value["status"] = false;
 			$return_value["reason"] = "Must enter a last name";
-		} else if (($over_21 != 0) || ($over_21 != 1)) {
+		} else if (($over_21 != 0) && ($over_21 != 1)) {
 			// Make sure they've chosen whether or not they're 21
 			$return_value["status"] = false;
 			$return_value["reason"] = "Must choose over or under 21";
