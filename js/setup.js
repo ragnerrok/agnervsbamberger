@@ -19,10 +19,27 @@ var disableLeftInfo = true;
 var disableRightInfo = true;
 var userLoggedIn = false;
 
+var redmoorAddress = "The+Redmoor,3187+Linwood+Avenue,Cincinnati+OH+45208";
+var hotelEmbassySuitesAddress = "Embassy+Suites+Cincinnati-RiverCenter,10+E.+RiverCenter+Blvd.,+Covington+KY+41011";
+var hotelMariottAddress = "Mariott-RiverCenter,10+W.+RiverCenter+Blvd.,+Covington+KY+41011";
+var mapsAPIKey = "AIzaSyB4SCh6diwyoIkFRZLRN_n7f_-ftJU27lM";
+
 var globalPartyInfo;
 var globalMusicLength;
 
+function genMapPlaceQueryString(apiKey, address) {
+	return "https://www.google.com/maps/embed/v1/place?key=" + apiKey + "&q=" + address + "&zoom=15";
+}
+
+function genDrivingDirectionsQueryString(apiKey, origin, destination) {
+	return "https://www.google.com/maps/embed/v1/directions?key=" + apiKey + "&origin=" + origin + "&destination=" + destination + "&mode=driving";
+}
+
 function init() {
+	// Set the initial query strings for the maps
+	$("#redmoor-map")[0].src = genMapPlaceQueryString(mapsAPIKey, redmoorAddress);
+	$("#embassy-suites-map")[0].src = genMapPlaceQueryString(mapsAPIKey, hotelEmbassySuitesAddress);
+	$("#mariott-map")[0].src = genMapPlaceQueryString(mapsAPIKey, hotelMariottAddress);
 
     //Side Menu
     $( "#rsvp-button" ).button().click(function() {
@@ -153,6 +170,31 @@ function init() {
             console.log(data.item.value);
         }
     });
+	
+	// Location Content
+	$("#redmoor-map-button").button().click(function() {
+		$("#redmoor-map")[0].src = genMapPlaceQueryString(mapsAPIKey, redmoorAddress);
+	});
+	$("#redmoor-directions-embassy-suites-button").button().click(function() {
+		$("#redmoor-map")[0].src = genDrivingDirectionsQueryString(mapsAPIKey, redmoorAddress, hotelEmbassySuitesAddress);
+	});
+	$("#redmoor-directions-mariott-button").button().click(function() {
+		$("#redmoor-map")[0].src = genDrivingDirectionsQueryString(mapsAPIKey, redmoorAddress, hotelMariottAddress);
+	});
+	
+	// Hotel Content
+	$("#embassy-suites-map-button").button().click(function() {
+		$("#embassy-suites-map")[0].src = genMapPlaceQueryString(mapsAPIKey, hotelEmbassySuitesAddress);
+	});
+	$("#embassy-suites-directions-button").button().click(function() {
+		$("#embassy-suites-map")[0].src = genDrivingDirectionsQueryString(mapsAPIKey, hotelEmbassySuitesAddress, redmoorAddress);
+	});
+	$("#mariott-map-button").button().click(function() {
+		$("#mariott-map")[0].src = genMapPlaceQueryString(mapsAPIKey, hotelMariottAddress);
+	});
+	$("#mariott-directions-button").button().click(function() {
+		$("#mariott-map")[0].src = genDrivingDirectionsQueryString(mapsAPIKey, hotelMariottAddress, redmoorAddress);
+	});
 
     $('#error-button').button().click(function(){
         $('#error-box').hide();
@@ -161,7 +203,7 @@ function init() {
     });
 
     //Contact Content
-    $("#send-email-button" ).button().click(function() {
+    $("#send-email-button").button().click(function() {
 		var formData = serializeFormData(['guest-name', 'guest-email', 'guest-content']);
         $.post("php/send_question_email.php", formData, function(returnData) {
 			if (returnData.status) {

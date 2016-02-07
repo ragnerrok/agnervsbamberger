@@ -219,11 +219,22 @@
 		$add_plus_one_query->bindParam(":over_21", $over_21);
 		$add_plus_one_query->bindParam(":is_attending", $is_attending);
 		$add_plus_one_query->bindParam(":party_id", $party_id);
-		
-		if (!$add_plus_one_query->execute()) {
-			return -1;
+		if ($db_conn->beginTransaction()) {
+			if ($add_plus_one_query->execute()) {
+				$new_person_id = $db_conn->lastInsertId();
+				if ($new_person_id > 0) {
+					$db_conn->commit();
+					return $new_person_id;
+				} else {
+					$db_conn->rollBack();
+					return -1;
+				}
+			} else {
+				$db_conn->rollBack();
+				return -1;
+			}
 		} else {
-			return $db_conn->lastInsertId();
+			return -1;
 		}
 	}
 	
