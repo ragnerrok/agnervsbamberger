@@ -55,6 +55,8 @@
 						$return_value["food_pref"] = $food_pref;
 						$return_value["over_21"] = $over_21;
 						$return_value["is_attending"] = $is_attending;
+						$food_choices = get_food_choices($db_conn);
+						$return_value["selected_food_choice"] = food_choice_index($food_choices, $food_pref);
 					}
 				}
 			}
