@@ -16,7 +16,7 @@
 		switch ($login_status) {
 			case NOT_LOGGED_IN:
 				$results_out["status"] = false;
-				$results_out["reason"] = "Login Error.  Are you logged in somewhere else?";
+				$results_out["reason"] = "Authentication Error.  Are you logged in somewhere else?";
 				return false;
 				
 			case TOKEN_EXPIRED:

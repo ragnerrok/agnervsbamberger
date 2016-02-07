@@ -15,15 +15,20 @@
 		$last_name = $_POST["last_name"];
 		$db_conn = open_db_conn();
 		
-		if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
-			if (!update_person_name($person_id, $first_name, $last_name, $db_conn)) {
-				$return_value["status"] = false;
-				$return_value["reason"] = "Database Error";
-			} else {
-				$return_value["status"] = true;
-				$return_value["person_id"] = $person_id;
-				$return_value["first_name"] = $first_name;
-				$return_value["last_name"] = $last_name;
+		if (is_null($db_conn)) {
+			$return_value["status"] = false;
+			$return_value["reason"] = "Database Error";
+		} else {		
+			if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
+				if (!update_person_name($person_id, $first_name, $last_name, $db_conn)) {
+					$return_value["status"] = false;
+					$return_value["reason"] = "Database Error";
+				} else {
+					$return_value["status"] = true;
+					$return_value["person_id"] = $person_id;
+					$return_value["first_name"] = $first_name;
+					$return_value["last_name"] = $last_name;
+				}
 			}
 		}
 	}

@@ -16,16 +16,21 @@
 		$over_21 = $_POST["over_21"];
 		$db_conn = open_db_conn();
 		
-		if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
-			if (!update_person_info($person_id, $is_attending, $food_pref, $over_21, $db_conn)) {
-				$return_value["status"] = false;
-				$return_value["reason"] = "Database Error";
-			} else {
-				$return_value["status"] = true;
-				$return_value["person_id"] = $person_id;
-				$return_value["is_attending"] = $is_attending;
-				$return_value["food_pref"] = $food_pref;
-				$return_value["over_21"] = $over_21;
+		if (is_null($db_conn)) {
+			$return_value["status"] = false;
+			$return_value["reason"] = "Database Error";
+		} else {
+			if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
+				if (!update_person_info($person_id, $is_attending, $food_pref, $over_21, $db_conn)) {
+					$return_value["status"] = false;
+					$return_value["reason"] = "Database Error";
+				} else {
+					$return_value["status"] = true;
+					$return_value["person_id"] = $person_id;
+					$return_value["is_attending"] = $is_attending;
+					$return_value["food_pref"] = $food_pref;
+					$return_value["over_21"] = $over_21;
+				}
 			}
 		}
 	}

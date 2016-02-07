@@ -18,18 +18,23 @@
 		$is_attending = $_POST["is_attending"];
 		$db_conn = open_db_conn();
 		
-		if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
-			if (!update_person($person_id, $first_name, $last_name, $food_pref, $over_21, $is_attending, $db_conn)) {
-				$return_value["status"] = false;
-				$return_value["reason"] = "Database Error";
-			} else {
-				$return_value["status"] = true;
-				$return_value["person_id"] = $person_id;
-				$return_value["first_name"] = $first_name;
-				$return_value["last_name"] = $last_name;
-				$return_value["food_pref"] = $food_pref;
-				$return_value["over_21"] = $over_21;
-				$return_value["is_attending"] = $is_attending;
+		if (is_null($db_conn)) {
+			$return_value["status"] = false;
+			$return_value["reason"] = "Database Error";
+		} else {		
+			if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
+				if (!update_person($person_id, $first_name, $last_name, $food_pref, $over_21, $is_attending, $db_conn)) {
+					$return_value["status"] = false;
+					$return_value["reason"] = "Database Error";
+				} else {
+					$return_value["status"] = true;
+					$return_value["person_id"] = $person_id;
+					$return_value["first_name"] = $first_name;
+					$return_value["last_name"] = $last_name;
+					$return_value["food_pref"] = $food_pref;
+					$return_value["over_21"] = $over_21;
+					$return_value["is_attending"] = $is_attending;
+				}
 			}
 		}
 	}

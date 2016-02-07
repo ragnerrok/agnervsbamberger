@@ -16,26 +16,31 @@
 			$allergy = $_POST["allergy"];
 			$db_conn = open_db_conn();
 			
-			// Validate client input
-			if (strlen($allergy) <= 0) {
+			if (is_null($db_conn)) {
 				$return_value["status"] = false;
-				$return_value["reason"] = "Must enter an allergy";
+				$return_value["reason"] = "Database Error";
 			} else {
-				if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
-					$result = false;
-					if ($add_or_remove == "add") {
-						$result = add_allergy($person_id, $allergy, $db_conn);
-					} else {
-						$result = remove_allergy($person_id, $allergy, $db_conn);
-					}
-					
-					if (!$result) {
-						$return_value["status"] = false;
-						$return_value["reason"] = "Database Error";
-					} else {
-						$return_value["status"] = true;
-						$return_value["person_id"] = $person_id;
-						$return_value["allergy"] = $allergy;
+				// Validate client input
+				if (strlen($allergy) <= 0) {
+					$return_value["status"] = false;
+					$return_value["reason"] = "Must enter an allergy";
+				} else {
+					if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
+						$result = false;
+						if ($add_or_remove == "add") {
+							$result = add_allergy($person_id, $allergy, $db_conn);
+						} else {
+							$result = remove_allergy($person_id, $allergy, $db_conn);
+						}
+						
+						if (!$result) {
+							$return_value["status"] = false;
+							$return_value["reason"] = "Database Error";
+						} else {
+							$return_value["status"] = true;
+							$return_value["person_id"] = $person_id;
+							$return_value["allergy"] = $allergy;
+						}
 					}
 				}
 			}
