@@ -23,14 +23,19 @@
 </head>
 <body class="larkspur-background">
     <div id="pop-ups">
+        <div id="error-box" style="display: none;" class="pop-up-box light-red-background">
+            <div id="error-label" class="label font-size-25 astrudFont dark-red-text">ERROR!</div>
+            <div id="error-reason" class="label centuryGothicFont dark-red-text"></div>
+            <input  type="submit" id="error-button" class="form-button" value="dang it..."/>
+        </div>
         <div id="add-plus-one-box" style="display: none;" class="pop-up-box larkspur-background">
             <div class="add-plus-one-label label astrudFont font-size-25 dark-larkspur-text">
                 Add your Plus One!
             </div>
             <div id="plus-one-first-name-label" class="label astrudFont font-size-20 dark-larkspur-text">First Name</div>
-            <input name="last_name" type="text" id="plus-one-first-name" class="form-input"/>
+            <input name="first_name" type="text" id="plus-one-first-name" class="form-input"/>
             <div id="plus-one-last-name-label" class="label astrudFont font-size-20 dark-larkspur-text">Last Name</div>
-            <input name="first_name" type="text" id="plus-one-last-name" class="form-input"/>
+            <input name="last_name" type="text" id="plus-one-last-name" class="form-input"/>
             <div id="plus-one-food-label" class="label astrudFont font-size-20 dark-larkspur-text">Food Choice</div>
             <select name="food_pref" id="plus-one-food" class="select-food centuryGothicFont">
                 <option selected="selected" disabled>Select an Option</option>

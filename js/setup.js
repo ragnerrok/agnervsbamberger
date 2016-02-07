@@ -20,6 +20,7 @@ var disableRightInfo = true;
 var userLoggedIn = false;
 
 var globalPartyInfo;
+var globalMusicLength;
 
 function init() {
 
@@ -92,18 +93,19 @@ function init() {
     });
     $("#plus-one-add-button").button().click(function(){
         addPlusOneBox.hide();
-        hideEverythingElseBox.hide();
-        popUpBox.removeClass('pop-up-on');
         console.log("Clicked save plus one");
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', 'plus-one-first-name', 'plus-one-last-name', 'plus-one-food', 'plus-one-over-21']);
         $.post("php/add_plus_one.php", formData, function(returnData) {
+            console.log(formData);
             console.log("Add plus one received:");
             console.log(returnData);
 
             if(returnData.status){
                 populatePlusOne();
+                hideEverythingElseBox.hide();
+                popUpBox.removeClass('pop-up-on');
             }else{
                 populateErrorMessage(returnData.reason);
             }
@@ -126,8 +128,7 @@ function init() {
     });
     $('#song-suggestion-add-button').button().click(function(){
         musicBox.hide();
-        hideEverythingElseBox.hide();
-        popUpBox.removeClass('pop-up-on');
+
         console.log("Clicked save music");
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', 'add-song-name', 'add-song-artist']);
@@ -136,7 +137,11 @@ function init() {
             console.log(returnData);
 
             if(returnData.status){
-                populateMusicSuggestion();
+                var songName = $('#add-song-name').val();
+                var artistName = $('#add-song-artist').val();
+                populateMusicSuggestion(songName, artistName);
+                hideEverythingElseBox.hide();
+                popUpBox.removeClass('pop-up-on');
             }else{
                 populateErrorMessage(returnData.reason);
             }
@@ -147,6 +152,12 @@ function init() {
             console.log(data.item.index);
             console.log(data.item.value);
         }
+    });
+
+    $('#error-button').button().click(function(){
+        $('#error-box').hide();
+        hideEverythingElseBox.hide();
+        popUpBox.removeClass('pop-up-on');
     });
 
     //Contact Content
@@ -166,17 +177,23 @@ function init() {
 }
 function populateErrorMessage(whatHappened){
     console.log('ERROR!!! ' + whatHappened);
+    $('#error-box').show();
+    $('#error-reason').html(whatHappened);
 }
 function populatePlusOne(){
     console.log('You added Someone!');
 }
 function populateMusicSuggestion(songTitle, artistName){
     console.log('You added music!');
-    /*var songTable = $('#song-table');
-    songTable.append('<tr id="' + k + '-song">' + '</tr>');
-    var songRow = $('#' + k + '-song');
+    var songTable = $('#song-table');
+    songTable.append('<tr id="' + globalMusicLength + '-song">' + '</tr>');
+    var songRow = $('#' + globalMusicLength + '-song');
     songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text">' + songTitle + '</td>');
-    songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text">' + artistName + '</td>');*/
+    songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text">' + artistName + '</td>');
+    songRow.append('<td><input type="button" id="' + globalMusicLength + '-song-button" class="form-button form-delete-button" value="X"/>');
+    $('#' + globalMusicLength + '-song-button').button().click(deleteMusicSuggestion(globalMusicLength));
+
+    globalMusicLength++;
 }
 
 function switchContent(newSelectedContent){
@@ -202,6 +219,7 @@ function setUpRSVPContent(jsonObject){
 
 function generatePartyInfo(jsonObject){
 	globalPartyInfo = jsonObject;
+    globalMusicLength = globalPartyInfo.music_suggestions.length;
 	
 	var partyContainer = $('#rsvp-content');
 	partyContainer.append('<input type="hidden" name="party_id" id="party_id" value="' + jsonObject.party_id + '" />');
@@ -371,10 +389,28 @@ function generatePartyInfo(jsonObject){
         console.log(musicSuggestions[k]);
         songTable.append('<tr id="' + k + '-song">' + '</tr>');
         var songRow = $('#' + k + '-song');
-        songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text">' + musicSuggestions[k].song_title + '</td>');
-        songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text">' + musicSuggestions[k].artist_name + '</td>');
+        songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text"><span data-name="song_title" id="' + k +'-song-title">' + musicSuggestions[k].song_title + '</span></td>');
+        songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text"><span data-name="artist_name" id="' + k + '-artist-name">' + musicSuggestions[k].artist_name + '</span></td>');
+        songRow.append('<td><input type="button" id="' + k + '-song-button" class="form-button form-delete-button" value="X"/>');
+        $('#' + k + '-song-button').button().click(deleteMusicSuggestion(k));
     }
 
+}
+function deleteMusicSuggestion(songId){
+    return function(){
+        console.log("DELETE");
+        var songSuggestion = $('#' + songId +'-song');
+
+        // Serialize all of the form data
+        var formData = serializeFormData(['party_id', 'auth_token', songId +'-song-title', songId + '-artist-name']);
+        $.post("php/remove_music_suggestion.php", formData, function(returnData) {
+            console.log("Update person received:");
+            console.log(returnData);
+            if(returnData.status){
+                songSuggestion.remove();
+            }
+        });
+    };
 }
 function addAllergy(personContainerId, allergyArray){
     return function(){

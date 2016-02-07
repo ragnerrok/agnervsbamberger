@@ -101,7 +101,22 @@ input.ui-button.form-add-person{
 input.ui-button.form-add-song{
     top: 160px;
 }
+#error-box{
+    width: 200px;
+    height: 150px;
+    border: solid #992923 2px;
+}
+#error-label{
 
+}
+#error-reason{
+
+}
+#error-button{
+    position: absolute;
+    top: 120px;
+    left: 128px;
+}
 /* RSVP Content */
 #rsvp-content{
 
@@ -368,6 +383,12 @@ input.ui-widget.form-add-button{
 .light-brown-text{
     color: #998b6e;
 }
+.light-red-text{
+    color: #FFB6B2;
+}
+.dark-red-text{
+    color: #992923;
+}
 /* Background Colors */
 .larkspur-background{
     background-color: #6e7e99;
@@ -383,4 +404,10 @@ input.ui-widget.form-add-button{
 }
 .light-brown-background{
     background-color: #998b6e;
+}
+.light-red-background{
+    background-color: #FFB6B2;
+}
+.dark-red-background{
+    background-color: #992923;
 }
