@@ -16,12 +16,12 @@
 		switch ($login_status) {
 			case NOT_LOGGED_IN:
 				$results_out["status"] = false;
-				$results_out["reason"] = "Not logged in";
+				$results_out["reason"] = "Login Error.  Are you logged in somewhere else?";
 				return false;
 				
 			case TOKEN_EXPIRED:
 				$results_out["status"] = false;
-				$results_out["reason"] = "Auth Token Expired";
+				$results_out["reason"] = "Login Expired.  Refresh page and log back in";
 				return false;
 				
 			case LOGGED_IN:
