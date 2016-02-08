@@ -741,6 +741,11 @@ function setUpInfoLeftCancelButton(id, buttonType){
         $('#' + id + '-person-over-21').selectmenu("disable");
 
         setUpSaveOrCancelButton(id, buttonType);
+		
+		// Restore old values
+		$('#' + id + '-person-attending').val(globalPartyInfo.party_people[id].is_attending ? '1' : '0').selectmenu('refresh', true);
+		$('#' + id + '-person-food').val(globalPartyInfo.party_people[id].food_pref).selectmenu('refresh', true);
+		$('#' + id + '-person-over-21').val(globalPartyInfo.party_people[id].over_21 ? '1' : '0').selectmenu('refresh', true);
     };
 }
 function setUpInfoLeftSaveButton(id, buttonType){
@@ -812,6 +817,10 @@ function setUpPersonNameCancelButton(id, buttonType){
         $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
 
         setUpSaveOrCancelButton(id, buttonType);
+		
+		// Restore the old values
+		$('#' + id + '-person-first-name').val(globalPartyInfo.party_people[id].first_name);
+		$('#' + id + '-person-last-name').val(globalPartyInfo.party_people[id].last_name);
     };
 }
 function setUpPersonNameSaveButton(id, buttonType){
@@ -851,6 +860,15 @@ function setUpPartyInfoCancelButton(id, buttonType){
     $("#party-address-zip").prop("disabled", disablePartyInfo);
 
     setUpSaveOrCancelButton(id, buttonType);
+	
+	// Restore previous data
+	console.log(globalPartyInfo);
+	$("#party-address-house-num").val(globalPartyInfo.party_info.addr_house_num);
+	$("#party-address-street").val(globalPartyInfo.party_info.addr_street);
+	$("#party-address-apt").val(globalPartyInfo.party_info.addr_apt);
+	$("#party-address-city").val(globalPartyInfo.party_info.addr_city);
+	$("#party-address-state").val(globalPartyInfo.party_info.addr_state);
+	$("#party-address-zip").val(globalPartyInfo.party_info.addr_zip);
 }
 function setUpPartyInfoSaveButton(id, buttonType){
     disablePartyInfo = !disablePartyInfo;
