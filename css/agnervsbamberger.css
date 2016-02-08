@@ -436,3 +436,17 @@ input.ui-widget.form-add-button{
 .dark-red-background{
     background-color: #992923;
 }
+
+@-moz-keyframes spin { 100% {-moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% {-webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% {-webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+div.loading_animation {
+	background-image: url("../images/gears/png/gear-5-dark-brown.png");
+	background-repeat: no-repeat;
+	background-size: contain;
+	-moz-animation:spin 1.5s linear infinite;
+	-webkit-animation:spin 1.5s linear infinite;
+	animation:spin 1.5s linear infinite;
+	float: right;
+}
