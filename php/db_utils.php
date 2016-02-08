@@ -22,11 +22,11 @@
 		$party_data_query->execute();
 		$results = $party_data_query->fetchAll(PDO::FETCH_ASSOC)[0];
 		// Fixup null apartments to empty string for display
-		//echo("Before fixup: " . var_dump($results));
 		if (is_null($results["addr_apt"])) {
 			$results["addr_apt"] = "";
 		}
-		//echo("After fixup: " . var_dump($results));
+		// Fixup zip codes to always be 5 digits (possibly zero padded)
+		$results["addr_zip"] = sprintf("%05s", $results["addr_zip"]);
 		return $results;
 	}
 	
