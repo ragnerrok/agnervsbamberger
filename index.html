@@ -102,7 +102,7 @@
         <div id="guest-not-logged-in-home">
             <div id="guest-log-in-label-home" class="log-in-label dark-larkspur-text centuryGothicFont">Type in your assigned Log In Code to RSVP or update information</div>
             <!--<input  type="text" id="guest-login-code" class="form-input" name="login_code"/>-->
-            <textarea id="guest-login-code-home" class="login-input form-input" name="login_code"></textarea>
+            <input type="text" id="guest-login-code-home" class="login-input form-input" name="login_code"/>
             <input type="button" id="log-in-button-home" class="login-form-button" value="Log In"/>
         </div>
         <div id="guest-logged-in-home" style="display: none">
@@ -116,8 +116,8 @@
         <div id="guest-not-logged-in">
             <div id="guest-log-in-label" class="log-in-label dark-larkspur-text centuryGothicFont">Type in your assigned RSVP Log In Code</div>
 			<!--<input  type="text" id="guest-login-code" class="form-input" name="login_code"/>-->
-			<textarea id="guest-login-code" class="login-input form-input" name="login_code"></textarea>
-			<input type="button" id="log-in-button" class="login-input login-form-button" value="Log In"/>
+			<input type="text" id="guest-login-code" class="login-input form-input" name="login_code"/>
+			<input type="button" id="log-in-button" class="login-form-button" value="Log In"/>
         </div>
         <div id="guest-logged-in" style="display: none">
             <div id="people-in-party">
@@ -242,7 +242,7 @@
                 <div class="form-label font-size-25 astrudFont dark-larkspur-text">
                     CONTENT
                 </div>
-                <input type="text" name="message" id="guest-content" class="form-input"/>
+                <textarea type="text" name="message" id="guest-content" class="form-input"></textarea>
             </div>
             <button id="send-email-button">SEND MESSAGE</button>
         </div>

@@ -29,6 +29,7 @@ body{
 .content-container{
     overflow: auto;
     margin: 10px 10px 0px 25px;
+    padding-bottom: 150px;
     /*border: #2f3a4c solid;*/
 }
 .label{
@@ -36,12 +37,20 @@ body{
     padding-top: 5px;
     padding-bottom: 5px;
 }
+.form-input{
+    border: 0px;
+    border-radius: 3px;
+    padding: 2px 5px;
+    margin: 2px;
+}
 .log-in-label{
     margin: 15px 0px;
 }
 .login-input{
     float: left;
-    margin: 5px 0px;
+    margin: 10px 0px;
+    padding: 5px 10px;
+    width: 100px;
 }
 .login-form-button{
     float: left;
@@ -81,10 +90,10 @@ body{
     opacity: 0.4;
 }
 #add-plus-one-box{
-    height: 330px;
+    height: 335px;
 }
 #add-song-suggestion-box{
-    height: 180px;
+    height: 185px;
 }
 .pop-up-box{
     position: absolute;
@@ -112,10 +121,10 @@ input.ui-button.form-pop-up-cancel-button{
     right: 10px;
 }
 input.ui-button.form-add-person{
-    top: 308px;
+    top: 315px;
 }
 input.ui-button.form-add-song{
-    top: 160px;
+    top: 165px;
 }
 #error-box{
     width: 320px;
@@ -150,7 +159,7 @@ input.ui-button.form-add-song{
     border-left: #2f3a4c solid 1px;
     padding: 5px 5px 5px 10px;
 }
-.ui-widget textarea.person-label{
+.ui-widget input.person-label{
     font-size: 28px;
 }
 .ui-accordion .ui-accordion-header.person-label{
@@ -203,7 +212,7 @@ ul.allergy-list{
     margin: 5px 13px 0px 13px;
 }
 #party-info-form{
-    margin: 0px 13px 13px 13px;
+    margin: 0px 5px 13px 13px;
 }
 #party-info-box{
     border-bottom: #2f3a4c solid 1px;
@@ -236,7 +245,7 @@ ul.allergy-list{
     top: 125px;
 }
 #party-address-house-num{
-    width: 75px;
+    width: 60px;
 }
 #party-address-street{
     width: 180px;
@@ -245,7 +254,7 @@ ul.allergy-list{
     width: 50px;
 }
 #party-address-city{
-    width: 120px;
+    width: 100px;
 }
 #party-address-state{
     width: 35px;
@@ -283,8 +292,13 @@ input:disabled, textarea:disabled{
 .ui-state-active.person-label{
     outline-color: #2f3a4c;
 }
-.person-label{
-
+.ui-widget input.person-label-input{
+    border: none;
+    border-radius: 3px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    padding-left: 5px;
+    font-size: 30px;
 }
 input.ui-button.form-edit-button{
     padding: 2px 5px;
@@ -334,10 +348,6 @@ input.ui-widget.form-add-button{
     margin-left: 10px;
     font-size: 15px;
     font-family: centuryGothic;
-}
-.form-input{
-    border: 0px;
-    border-radius: 3px;
 }
 #guest-content{
     width: 300px;

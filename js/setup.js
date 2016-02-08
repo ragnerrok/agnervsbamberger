@@ -26,6 +26,7 @@ var hotelMariottAddress = "Mariott-RiverCenter,10+W.+RiverCenter+Blvd.,+Covingto
 var mapsAPIKey = "AIzaSyB4SCh6diwyoIkFRZLRN_n7f_-ftJU27lM";
 
 var globalPartyInfo;
+var globalPartyLength;
 var globalMusicLength = [];
 var globalAllergiesArray = [];
 
@@ -136,6 +137,7 @@ function init() {
                 hideEverythingElseBox.hide();
                 popUpBox.removeClass('pop-up-on');
                 checkForMaxPlusOnes();
+                clearAddPlusOneFields();
             }else{
                 populateErrorMessage(returnData.reason);
             }
@@ -155,6 +157,7 @@ function init() {
         hideEverythingElseBox.hide();
         popUpBox.removeClass('pop-up-on');
         console.log("Clicked cancel music");
+        clearAddMusicFields();
     });
     $('#song-suggestion-add-button').button().click(function(){
         musicBox.hide();
@@ -173,6 +176,7 @@ function init() {
                 hideEverythingElseBox.hide();
                 popUpBox.removeClass('pop-up-on');
                 checkForMaxMusicSuggestions();
+                clearAddMusicFields();
             }else{
                 populateErrorMessage(returnData.reason);
             }
@@ -214,6 +218,7 @@ function init() {
         $('#error-box').hide();
         hideEverythingElseBox.hide();
         popUpBox.removeClass('pop-up-on');
+        clearLoginField();
     });
 
     //Contact Content
@@ -222,9 +227,7 @@ function init() {
         $.post("php/send_question_email.php", formData, function(returnData) {
 			if (returnData.status) {
 				// If the email sent successfully, clear the form fields
-				$('#guest-name').val("");
-				$('#guest-email').val("");
-				$('#guest-content').val("");
+                clearContactFields();
 			} else {
 				//TODO: Show error message
 			}
@@ -252,8 +255,8 @@ function populatePlusOne(partyPerson){
     console.log(partyPersonFirstName + " " + partyPersonLastName);
     partyAccordion.append('<h3 id="'+ partyLength + '-person-name-container" class="person-label">' + '</h3>');
     var partyPersonH3 = $('#' + partyLength + '-person-name-container');
-    partyPersonH3.append('<textarea name="first_name" id="'+ partyLength +'-person-first-name" class="person-label first-name larkspur-background" disabled>' + partyPersonFirstName + '</textarea>');
-    partyPersonH3.append('<textarea name="last_name" id="'+ partyLength +'-person-last-name" class="person-label last-name larkspur-background" disabled>' + partyPersonLastName + '</textarea>');
+    partyPersonH3.append('<input type="text" name="first_name" id="'+ partyLength +'-person-first-name" class="person-label-input first-name larkspur-background" value="' + partyPersonFirstName + '" disabled/>');
+    partyPersonH3.append('<input type="text" name="last_name" id="'+ partyLength +'-person-last-name" class="person-label-input last-name larkspur-background" value="' + partyPersonLastName + '" disabled/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
@@ -356,8 +359,6 @@ function populatePlusOne(partyPerson){
     //Refresh Accordion
     partyAccordion.accordion("refresh");
 
-
-
 }
 function populateMusicSuggestion(songTitle, artistName){
     console.log('You added music!');
@@ -400,11 +401,12 @@ function setUpRSVPContent(jsonObject){
     }
 }
 function checkForMaxPlusOnes(){
-    var currentPlusOnes = globalPartyInfo.party_info.current_plus_ones;
+    var currentPlusOnes = globalPartyLength;
     var maxPlusOnes = globalPartyInfo.party_info.max_plus_ones;
     if(currentPlusOnes == maxPlusOnes){
         $('#add-plus-one-button').hide();
     }
+    globalPartyLength++;
 }
 function checkForMaxMusicSuggestions(){
     var currentNumMusicSuggestions = globalMusicLength[0];
@@ -424,7 +426,7 @@ function clickedPerson(personContainerId){
 function generatePartyInfo(jsonObject){
 	globalPartyInfo = jsonObject;
     globalMusicLength[0] = globalMusicLength[1] = globalPartyInfo.music_suggestions.length;
-
+    globalPartyLength = jsonObject.party_info.current_plus_ones;
     checkForMaxPlusOnes();
     checkForMaxMusicSuggestions();
 	
@@ -446,8 +448,8 @@ function generatePartyInfo(jsonObject){
         var partyPersonLastName = partyPerson.last_name;
         partyAccordion.append('<h3 id="'+ i + '-person-name-container" class="person-label">' + '</h3>');
         var partyPersonH3 = $('#' + i + '-person-name-container');
-        partyPersonH3.append('<textarea name="first_name" id="'+ i +'-person-first-name" class="person-label first-name larkspur-background" disabled>' + partyPersonFirstName + '</textarea>');
-        partyPersonH3.append('<textarea name="last_name" id="'+ i +'-person-last-name" class="person-label last-name larkspur-background" disabled>' + partyPersonLastName + '</textarea>');
+        partyPersonH3.append('<input type="text" name="first_name" id="'+ i +'-person-first-name" class="person-label-input first-name larkspur-background" value="' + partyPersonFirstName + '" disabled/>');
+        partyPersonH3.append('<input type="text" name="last_name" id="'+ i +'-person-last-name" class="person-label-input last-name larkspur-background" value="' + partyPersonLastName + '" disabled/>');
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
@@ -584,12 +586,12 @@ function generatePartyInfo(jsonObject){
 
     partyInfoContainer.append('<form id="party-info-form"><input type="hidden" value="' + partyId +'" />' + '<input type="hidden" value="' + partyId +'" />' + '</form>');
     var partyInfoForm = $('#party-info-form');
-    partyInfoForm.append('<textarea name="addr_house_num" id="party-address-house-num" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_house_num + '</textarea>');
-    partyInfoForm.append('<textarea name="addr_street" id="party-address-street" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_street + '</textarea>');
-    partyInfoForm.append('<textarea name="addr_apt" id="party-address-apt" class="party-info-address party-info-address-second-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_apt + '</textarea>');
-    partyInfoForm.append('<textarea name="addr_city" id="party-address-city" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_city + '</textarea>');
-    partyInfoForm.append('<textarea name="addr_state" id="party-address-state" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_state + '</textarea>');
-    partyInfoForm.append('<textarea name="addr_zip" id="party-address-zip" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" disabled>' + partyInfo.addr_zip + '</textarea>');
+    partyInfoForm.append('<input type="text" name="addr_house_num" id="party-address-house-num" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" value="' + partyInfo.addr_house_num + '" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_street" id="party-address-street" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" value="' + partyInfo.addr_street +'" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_apt" id="party-address-apt" class="party-info-address party-info-address-second-row form-input larkspur-background centuryGothicFont" value="'+ partyInfo.addr_apt + '" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_city" id="party-address-city" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" value="' + partyInfo.addr_city + '" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_state" id="party-address-state" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" value="' + partyInfo.addr_state + '" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_zip" id="party-address-zip" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" value="' + + partyInfo.addr_zip +'" disabled/>');
 
 
     //Music Suggestions
@@ -609,17 +611,25 @@ function generatePartyInfo(jsonObject){
 }
 function clearAddMusicFields(){
     console.log("clear music");
-    $('#plus-one-first-name').val ='';
-    $('#plus-one-last-name').val ='';
+    $('#add-song-name').val('');
+    $('#add-song-artist').val('');
 }
 function clearAddPlusOneFields(){
+    console.log("clear add plus one");
+    $('#plus-one-first-name').val('');
+    $('#plus-one-last-name').val('');
+    $('#plus-one-food').val('Select an Option').selectmenu('refresh', true);
+    $('#plus-one-over-21').val(-1).selectmenu('refresh', true);
 
 }
 function clearLoginField(){
-
+    $('#guest-login-code').val('');
+    $('#guest-login-code-home').val('');
 }
 function clearContactFields(){
-
+    $('#guest-name').val('');
+    $('#guest-email').val('');
+    $('#guest-content').val('');
 }
 function deleteMusicSuggestion(songId){
     return function(){
@@ -668,7 +678,6 @@ function addAllergy(personContainerId){
                     $('#' + personContainerId +'-no-allergies').remove();
                 }
                 globalAllergiesArray[personContainerId]++;
-                clearAddMusicFields();
             }
         });
     };
