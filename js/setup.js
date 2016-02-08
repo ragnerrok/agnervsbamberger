@@ -396,6 +396,7 @@ function setUpRSVPContent(jsonObject){
             $("#guest-not-logged-in-home").hide();
             $("#guest-logged-in-home").show();
             generatePartyInfo(jsonObject);
+            $("#0-person-last-name").click();
             userLoginedIn = true;
         }
     }
@@ -421,6 +422,24 @@ function checkForMaxMusicSuggestions(){
 function clickedPerson(personContainerId){
     return function(){
         console.log(personContainerId + 'person');
+
+        for(var k = 0; k <= globalPartyLength; k++){
+            var firstName = $('#' + k + '-person-first-name');
+            var lastName = $('#' + k + '-person-last-name');
+            if(personContainerId != k){
+                console.log('remove');
+                firstName.removeClass('larkspur-background');
+                lastName.removeClass('larkspur-background');
+                firstName.addClass('light-brown-background');
+                lastName.addClass('light-brown-background');
+            }else{
+                console.log('add')
+                firstName.removeClass('light-brown-background');
+                lastName.removeClass('light-brown-background');
+                firstName.addClass('larkspur-background');
+                lastName.addClass('larkspur-background');
+            }
+        }
     };
 }
 function generatePartyInfo(jsonObject){
