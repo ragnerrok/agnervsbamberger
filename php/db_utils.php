@@ -20,8 +20,14 @@
 		$party_data_query = $db_conn->prepare("CALL get_single_party(:party_id)");
 		$party_data_query->bindParam(":party_id", $party_id);
 		$party_data_query->execute();
-		$results = $party_data_query->fetchAll(PDO::FETCH_ASSOC);
-		return $results[0];
+		$results = $party_data_query->fetchAll(PDO::FETCH_ASSOC)[0];
+		// Fixup null apartments to empty string for display
+		//echo("Before fixup: " . var_dump($results));
+		if (is_null($results["addr_apt"])) {
+			$results["addr_apt"] = "";
+		}
+		//echo("After fixup: " . var_dump($results));
+		return $results;
 	}
 	
 	function get_party_people($party_id, $db_conn) {
