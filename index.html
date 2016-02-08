@@ -65,7 +65,7 @@
         </div>
         <div id="hide-everything-else" style="display: none;"></div>
     </div>
-    <div id="title">
+    <div id="title" class="title">
         <div id="agner-text" class="astrudFont font-size-60 dark-larkspur-text">
             AGNER
         </div>
@@ -99,15 +99,25 @@
 
     <div id="home-content" class="content-container">
         <div class="astrudFont font-size-60 dark-larkspur-text">WELCOME!</div>
+        <div id="guest-not-logged-in-home">
+            <div id="guest-log-in-label-home" class="log-in-label dark-larkspur-text centuryGothicFont">Type in your assigned Log In Code to RSVP or update information</div>
+            <!--<input  type="text" id="guest-login-code" class="form-input" name="login_code"/>-->
+            <textarea id="guest-login-code-home" class="login-input form-input" name="login_code"></textarea>
+            <input type="button" id="log-in-button-home" class="login-form-button" value="Log In"/>
+        </div>
+        <div id="guest-logged-in-home" style="display: none">
+            <div class="astrudFont font-size-25 dark-larkspur-text">Don't know what to wear? Wear a hat! </div>
+            <div class="astrudFont font-size-25 dark-larkspur-text">Hat Links</div>
+        </div>
     </div>
     <div id="rsvp-content" class="content-container" style="display: none">
         <!-- People Accordion -->
         <div class="astrudFont font-size-60 dark-larkspur-text">RSVP</div>
         <div id="guest-not-logged-in">
-            <div id="guest-log-in-label dark-larkspur-text">Type in your assigned RSVP Log In Code</div>
+            <div id="guest-log-in-label" class="log-in-label dark-larkspur-text centuryGothicFont">Type in your assigned RSVP Log In Code</div>
 			<!--<input  type="text" id="guest-login-code" class="form-input" name="login_code"/>-->
-			<textarea id="guest-login-code" class="form-input" name="login_code"></textarea>
-			<input type="button" id="log-in-button" class="form-button" value="Log In"/>
+			<textarea id="guest-login-code" class="login-input form-input" name="login_code"></textarea>
+			<input type="button" id="log-in-button" class="login-input login-form-button" value="Log In"/>
         </div>
         <div id="guest-logged-in" style="display: none">
             <div id="people-in-party">
@@ -117,7 +127,8 @@
                 <button id="add-plus-one-button">Add Plus One</button>
             </div>
             <div id="party-info-content">
-                <div id="party-info-label" class="astrudFont dark-larkspur-text">Your Information
+                <div id="party-info-box" class="astrudFont dark-larkspur-text">
+                    <div id="party-info-label" class="font-size-25">Your Information</div>
                     <input  type="submit" id="party-info-edit-button" class="form-button form-edit-float-button" value="edit"/>
                     <input  type="submit" id="party-info-cancel-button" class="form-button form-cancel-float-button" style="display: none;" value="cancel"/>
                     <input  type="submit" id="party-info-save-button" class="form-button form-save-float-button" style="display: none;" value="save"/>
@@ -141,16 +152,18 @@
         </div>
     </div>
     <div id="location-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60">CEREMONY/RECEPTION LOCATION</div>
-		<div class="centuryGothicFont font-size-25">
+        <div class="astrudFont font-size-60 dark-larkspur-text">CEREMONY/RECEPTION LOCATION</div>
+		<div class="centuryGothicFont font-size-25 dark-larkspur-text">
 			The Redmoor<br />
 			3187 Linwood Avenue<br />
 			Cincinnati OH 45208<br />
 			(513) 871-6789<br />
-			<input id="redmoor-map-button" type="button" value="View Map" />
-			<input id="redmoor-directions-embassy-suites-button" type="button" value="View Directions to Embassy Suites" />
-			<input id="redmoor-directions-mariott-button" type="button" value="View Directions to Mariott" />
-			<iframe
+            <div class="map-buttons">
+                <input id="redmoor-map-button" type="button" value="View Map" />
+                <input id="redmoor-directions-embassy-suites-button" type="button" value="View Directions to Embassy Suites" />
+                <input id="redmoor-directions-mariott-button" type="button" value="View Directions to Mariott" />
+            </div>
+                <iframe
 			  id="redmoor-map"
 			  width="600"
 			  height="450"
@@ -159,16 +172,18 @@
 		</div>
     </div>
     <div id="hotel-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60">HOTEL INFORMATION</div>
-		<div class="astrudFont font-size-40">
+        <div class="astrudFont font-size-60 dark-larkspur-text">HOTEL INFORMATION</div>
+		<div class="astrudFont font-size-40 dark-larkspur-text">
 			Preferred Hotel
-			<div class="centuryGothicFont font-size-25">
+			<div class="centuryGothicFont font-size-25 dark-larkspur-text">
 				Embassy Suites Cincinnati RiverCenter<br />
 				10 E. RiverCenter Blvd.<br />
 				Covington KY 41011<br />
-				<input id="embassy-suites-map-button" type="button" value="View Map" />
-				<input id="embassy-suites-directions-button" type="button" value="View Directions to Ceremony/Reception" />
-				<iframe
+                <div class="map-buttons">
+                    <input id="embassy-suites-map-button" type="button" value="View Map" />
+                    <input id="embassy-suites-directions-button" type="button" value="View Directions to Ceremony/Reception" />
+                </div>
+                <iframe
 				  id="embassy-suites-map"
 				  width="600"
 				  height="450"
@@ -176,15 +191,17 @@
 				</iframe>
 			</div>
 		</div>
-		<div class="astrudFont font-size-40">
+		<div class="astrudFont font-size-40 dark-larkspur-text">
 			Alternate Hotel
-			<div class="centuryGothicFont font-size-25">
+			<div class="centuryGothicFont font-size-25 dark-larkspur-text">
 				Mariott Cincinnati RiverCenter<br />
 				10 W. RiverCenter Blvd.<br />
 				Covington KY 41011<br />
-				<input id="mariott-map-button" type="button" value="View Map" />
-				<input id="mariott-directions-button" type="button" value="View Directions to Ceremony/Reception" />
-				<iframe
+                <div class="map-buttons">
+                    <input id="mariott-map-button" type="button" value="View Map" />
+                    <input id="mariott-directions-button" type="button" value="View Directions to Ceremony/Reception" />
+                </div>
+                <iframe
 				  id="mariott-map"
 				  width="600"
 				  height="450"
@@ -194,35 +211,35 @@
 		</div>
     </div>
     <div id="registry-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60">REGISTRY (Coming Soon!...ish)</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">REGISTRY (Coming Soon!...ish)</div>
     </div>
     <div id="faq-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60">FREQUENTLY ASKED QUESTIONS</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">FREQUENTLY ASKED QUESTIONS</div>
 
         <div id="">
 
         </div>
     </div>
     <div id="contact-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60">CONTACT INFORMATION</div>
-        <div class="contact-label astrudFont">
+        <div class="astrudFont font-size-60 dark-larkspur-text">CONTACT INFORMATION</div>
+        <div class="contact-label astrudFont font-size-20 dark-larkspur-text">
             Have a question? Send us a message!
         </div>
         <div id="contact-form">
             <div id="guest-name-form">
-                <div class="form-label font-size-25 astrudFont">
+                <div class="form-label font-size-25 astrudFont dark-larkspur-text">
                     NAME
                 </div>
                 <input type="text" name="name" id="guest-name" class="form-input"/>
             </div>
             <div id="guest-email-form">
-                <div class="form-label font-size-25 astrudFont">
+                <div class="form-label font-size-25 astrudFont dark-larkspur-text">
                     EMAIL
                 </div>
                 <input type="text" name="from" id="guest-email" class="form-input"/>
             </div>
             <div id="guest-content-form">
-                <div class="form-label font-size-25 astrudFont">
+                <div class="form-label font-size-25 astrudFont dark-larkspur-text">
                     CONTENT
                 </div>
                 <input type="text" name="message" id="guest-content" class="form-input"/>

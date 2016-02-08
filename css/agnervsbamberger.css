@@ -9,7 +9,9 @@ body{
     height: 100px;
     border-bottom: #bccbe5 solid;
     margin: 0px -10px;
+    cursor: pointer;
 }
+
 #agner-text{
     position: absolute;
     left: 5%;
@@ -26,6 +28,7 @@ body{
 }
 .content-container{
     overflow: auto;
+    margin: 10px 10px 0px 25px;
     /*border: #2f3a4c solid;*/
 }
 .label{
@@ -33,9 +36,18 @@ body{
     padding-top: 5px;
     padding-bottom: 5px;
 }
-.address-label{
-    padding-top: 5px;
+.log-in-label{
+    margin: 15px 0px;
 }
+.login-input{
+    float: left;
+    margin: 5px 0px;
+}
+.login-form-button{
+    float: left;
+    margin: 0px 10px;
+}
+
 /* Side Menu */
 #menu-bar{
     width: 100%;
@@ -106,7 +118,7 @@ input.ui-button.form-add-song{
     top: 160px;
 }
 #error-box{
-    width: 200px;
+    width: 320px;
     height: 150px;
     border: solid #992923 2px;
 }
@@ -119,7 +131,7 @@ input.ui-button.form-add-song{
 #error-button{
     position: absolute;
     top: 120px;
-    left: 128px;
+    left: 240px;
 }
 /* RSVP Content */
 #rsvp-content{
@@ -134,7 +146,7 @@ input.ui-button.form-add-song{
 .right-info-side{
     float: right;
     width: 47%;
-    height: 100%;
+    height: 225px;
     border-left: #2f3a4c solid 1px;
     padding: 5px 5px 5px 10px;
 }
@@ -155,6 +167,7 @@ input.ui-button.form-add-song{
 #people-in-party{
     float: left;
     width: 400px;
+    margin: 5px 10px 5px 5px;
 }
 
 .ui-accordion .ui-accordion-content.person-info{
@@ -185,17 +198,30 @@ ul.allergy-list{
     margin-top: 0px;
 }
 /* Group Information */
-#party-info-label{
+.address-label{
+    padding-top: 5px;
+    margin: 5px 13px 0px 13px;
+}
+#party-info-form{
+    margin: 0px 13px 13px 13px;
+}
+#party-info-box{
     border-bottom: #2f3a4c solid 1px;
     height: 40px;
-    padding: 0px 10px;
+    padding: 0px 5px;
+}
+#party-info-label{
+    float: left;
+    margin: 5px 10px 5px 10px;
+    font-weight: bold;
 }
 #party-info-content{
-    width: 300px;
+    width: 350px;
     height: 150px;
     float: left;
     border: #2f3a4c solid 1px;
     border-radius: 3px;
+    margin: 7px 10px;
 }
 .party-info-address{
     height: 20px;
@@ -331,6 +357,10 @@ input.ui-widget.form-add-button{
 }
 .song-band{
 
+}
+/* Maps */
+.map-buttons{
+    margin: 20px 0px;
 }
 /* Fonts and Font Sizes */
 @font-face {

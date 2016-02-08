@@ -13,6 +13,7 @@ var ContentEnum = Object.freeze({
 var selectedContent = ContentEnum.HOME_CONTENT;
 
 var disablePartyInfo = true;
+
 //TODO: Each person needs there own booleans
 var disableNameInfo = true;
 var disableLeftInfo = true;
@@ -25,7 +26,8 @@ var hotelMariottAddress = "Mariott-RiverCenter,10+W.+RiverCenter+Blvd.,+Covingto
 var mapsAPIKey = "AIzaSyB4SCh6diwyoIkFRZLRN_n7f_-ftJU27lM";
 
 var globalPartyInfo;
-var globalMusicLength;
+var globalMusicLength = [];
+var globalAllergiesArray = [];
 
 function genMapPlaceQueryString(apiKey, address) {
 	return "https://www.google.com/maps/embed/v1/place?key=" + apiKey + "&q=" + address + "&zoom=15";
@@ -40,6 +42,12 @@ function init() {
 	$("#redmoor-map")[0].src = genMapPlaceQueryString(mapsAPIKey, redmoorAddress);
 	$("#embassy-suites-map")[0].src = genMapPlaceQueryString(mapsAPIKey, hotelEmbassySuitesAddress);
 	$("#mariott-map")[0].src = genMapPlaceQueryString(mapsAPIKey, hotelMariottAddress);
+
+    //Title to Home
+    $("#title").click(function () {
+        console.log("Clicked Title/Home");
+        switchContent(ContentEnum.HOME_CONTENT);
+    });
 
     //Side Menu
     $( "#rsvp-button" ).button().click(function() {
@@ -67,13 +75,16 @@ function init() {
         switchContent(ContentEnum.CONTACT_CONTENT);
     });
 
+    $("#log-in-button-home").button().click(function(event){
+        var formData = serializeFormData(['guest-login-code-home']);
+        $.post("php/login.php", formData, setUpRSVPContent);
+    });
 
     //RSVP Content
-    $("#log-in-button").click(function(event){
+    $("#log-in-button").button().click(function(event){
 		var formData = serializeFormData(['guest-login-code']);
         $.post("php/login.php", formData, setUpRSVPContent);
     });
-    $("#log-in-button" ).button();
     $('#party-info-edit-button').button().click(function(){
 
         setUpPartyInfoEditButton("", 'party-info');
@@ -246,7 +257,7 @@ function populatePlusOne(partyPerson){
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
-
+    partyPersonH3.click(clickedPerson(partyLength));
     $('#' + partyLength + '-person-name-edit-button').button().click(setUpPersonNameEditButton(partyLength, '-person-name'));
     $('#' + partyLength + '-person-name-save-button').button().click(setUpPersonNameSaveButton(partyLength, '-person-name'));
     $('#' + partyLength + '-person-name-cancel-button').button().click(setUpPersonNameCancelButton(partyLength, '-person-name'));
@@ -340,22 +351,26 @@ function populatePlusOne(partyPerson){
     rightInfoDiv.append('<input name="allergy" type="text" id="' + partyLength + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
     rightInfoDiv.append('<input  type="button" id="' + partyLength + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
     $('#' + partyLength + '-new-allergy-button').button().click(addAllergy(partyLength));
+    globalAllergiesArray[partyLength] = 0;
 
     //Refresh Accordion
     partyAccordion.accordion("refresh");
+
+
 
 }
 function populateMusicSuggestion(songTitle, artistName){
     console.log('You added music!');
     var songTable = $('#song-table');
-    songTable.append('<tr id="' + globalMusicLength + '-song">' + '</tr>');
-    var songRow = $('#' + globalMusicLength + '-song');
-    songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text"><span data-name="song_title" id="' + globalMusicLength +'-song-title">' + songTitle + '</span></td>');
-    songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text"><span data-name="artist_name" id="' + globalMusicLength + '-artist-name">' + artistName + '</span></td>');
-    songRow.append('<td><input type="button" id="' + globalMusicLength + '-song-button" class="form-button form-delete-button" value="X"/>');
-    $('#' + globalMusicLength + '-song-button').button().click(deleteMusicSuggestion(globalMusicLength));
+    songTable.append('<tr id="' + globalMusicLength[1] + '-song">' + '</tr>');
+    var songRow = $('#' + globalMusicLength[1] + '-song');
+    songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text"><span data-name="song_title" id="' + globalMusicLength[1] +'-song-title">' + songTitle + '</span></td>');
+    songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text"><span data-name="artist_name" id="' + globalMusicLength[1] + '-artist-name">' + artistName + '</span></td>');
+    songRow.append('<td><input type="button" id="' + globalMusicLength[1] + '-song-button" class="form-button form-delete-button" value="X"/>');
+    $('#' + globalMusicLength[1] + '-song-button').button().click(deleteMusicSuggestion(globalMusicLength[1]));
 
-    globalMusicLength++;
+    globalMusicLength[0]++;
+    globalMusicLength[1]++;
 }
 
 function switchContent(newSelectedContent){
@@ -374,8 +389,11 @@ function setUpRSVPContent(jsonObject){
         populateErrorMessage(jsonObject.reason);
     }else{
         if(!userLoggedIn) {
+            switchContent(ContentEnum.RSVP_CONTENT);
             $("#guest-not-logged-in").hide();
             $("#guest-logged-in").show();
+            $("#guest-not-logged-in-home").hide();
+            $("#guest-logged-in-home").show();
             generatePartyInfo(jsonObject);
             userLoginedIn = true;
         }
@@ -389,17 +407,23 @@ function checkForMaxPlusOnes(){
     }
 }
 function checkForMaxMusicSuggestions(){
-    var currentNumMusicSuggestions = globalPartyInfo.music_suggestions.length;
+    var currentNumMusicSuggestions = globalMusicLength[0];
     var maxMusicSuggestions = 10;
+
     if(currentNumMusicSuggestions == maxMusicSuggestions){
         $('#add-music-button').hide();
     }else{
         $('#add-music-button').show();
     }
 }
+function clickedPerson(personContainerId){
+    return function(){
+        console.log(personContainerId + 'person');
+    };
+}
 function generatePartyInfo(jsonObject){
 	globalPartyInfo = jsonObject;
-    globalMusicLength = globalPartyInfo.music_suggestions.length;
+    globalMusicLength[0] = globalMusicLength[1] = globalPartyInfo.music_suggestions.length;
 
     checkForMaxPlusOnes();
     checkForMaxMusicSuggestions();
@@ -427,6 +451,7 @@ function generatePartyInfo(jsonObject){
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
+        partyPersonH3.click(clickedPerson(i));
 
         $('#' + i+ '-person-name-edit-button').button().click(setUpPersonNameEditButton(i, '-person-name'));
         $('#' + i+ '-person-name-save-button').button().click(setUpPersonNameSaveButton(i, '-person-name'));
@@ -532,12 +557,15 @@ function generatePartyInfo(jsonObject){
         if(partyPersonAllergies.length == 0){
             allergiesList.append('<li id="' + i + '-no-allergies" class="allergy">None</li>');
         }
+        var allergiesLength = 0;
         for(var k = 0; k < partyPersonAllergies.length; k++){
             allergiesList.append('<li id="'+ i + k +'-allergy-list-box" class="allergy"><span data-name="allergy" id="'+ i + k +'-allergy-list">' + partyPersonAllergies[k] + '</span></li>');
             var allergy = $('#' + i + k + '-allergy-list-box');
             allergy.append('<input  type="button" id="' + i + k + '-allergy-button" class="form-button form-delete-button" value="X" style="display: none;"/>');
             $('#' + i + k + '-allergy-button').button().click(deleteAllergy(i, k));
+            allergiesLength++;
         }
+        globalAllergiesArray[i] = allergiesLength;
         rightInfoDiv.append('<input name="allergy" type="text" id="' + i + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
         rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
         $('#' + i + '-new-allergy-button').button().click(addAllergy(i));
@@ -579,6 +607,20 @@ function generatePartyInfo(jsonObject){
     }
 
 }
+function clearAddMusicFields(){
+    console.log("clear music");
+    $('#plus-one-first-name').val ='';
+    $('#plus-one-last-name').val ='';
+}
+function clearAddPlusOneFields(){
+
+}
+function clearLoginField(){
+
+}
+function clearContactFields(){
+
+}
 function deleteMusicSuggestion(songId){
     return function(){
         console.log("DELETE");
@@ -591,6 +633,7 @@ function deleteMusicSuggestion(songId){
             console.log(returnData);
             if(returnData.status){
                 songSuggestion.remove();
+                globalMusicLength[0]--;
                 checkForMaxMusicSuggestions();
             }else{
                 populateErrorMessage(returnData.reason);
@@ -603,8 +646,8 @@ function addAllergy(personContainerId){
         console.log("ADD");
         //var allergy = $('#' + personId + '-new-allergy');
         var allergiesList = $('#' + personContainerId + '-person-allergies');
-        var allergyArray = globalPartyInfo.party_people[personContainerId].allergies;
-        var k = allergyArray.length;
+        //var allergyArray = globalPartyInfo.party_people[personContainerId].allergies;
+
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId + '-new-allergy']);
@@ -613,8 +656,9 @@ function addAllergy(personContainerId){
             console.log(returnData);
 
             if(returnData.status){
-                allergiesList.append('<li id="'+ personContainerId + k +'-allergy-list-box" class="allergy"><span id="'+ personContainerId + k +'-allergy-list"'+ returnData.allergy +'</li>');
-                var allergy = $('#' + personContainerId + k + '-allergy-list');
+                var k = globalAllergiesArray[personContainerId];
+                allergiesList.append('<li id="'+ personContainerId + k +'-allergy-list-box" class="allergy"><span data-name="allergy" id="'+ personContainerId + k +'-allergy-list">'+ returnData.allergy +'</span></li>');
+                var allergy = $('#' + personContainerId + k + '-allergy-list-box');
                 allergy.append('<input  type="button" id="' + personContainerId + k + '-allergy-button" class="form-button form-delete-button" value="X"/>');
                 $('#' + personContainerId + k + '-allergy-button').button().click(deleteAllergy(personContainerId, k));
 
@@ -623,6 +667,8 @@ function addAllergy(personContainerId){
                 if(k == 0){
                     $('#' + personContainerId +'-no-allergies').remove();
                 }
+                globalAllergiesArray[personContainerId]++;
+                clearAddMusicFields();
             }
         });
     };
@@ -704,8 +750,8 @@ function setUpInfoLeftSaveButton(id, buttonType){
     };
 }
 
-//RIGHT SIDE INFO
-function setUpInfoRightEditButton(id, buttonType){
+//RIGHT SIDE INFO (Allergies)
+function setUpInfoRightEditButton(id){
     return function(){
         disableRightInfo = !disableRightInfo;
         console.log(id + ' editButton');
@@ -723,10 +769,11 @@ function setUpInfoRightEditButton(id, buttonType){
             newAllergy.show();
         }
 
-        var allergies = globalPartyInfo.party_people[id].allergies;
-        console.log(allergies.length);
-        //TODO: Grab the current person's allergies. DONT pass it in.
-        for(var k = 0; k < allergies.length; k++){
+        var allergies = globalAllergiesArray[id];//globalPartyInfo.party_people[id].allergies;
+        console.log(allergies);
+        console.log(globalAllergiesArray);
+
+        for(var k = 0; k < allergies; k++){
             var currentButton = $('#' + id + k + '-allergy-button');
             currentButton.prop("disabled", disableRightInfo);
             if(disableRightInfo){
@@ -735,8 +782,6 @@ function setUpInfoRightEditButton(id, buttonType){
                 currentButton.show();
             }
         }
-
-        //setUpEditButton(id, buttonType);
     };
 }
 
