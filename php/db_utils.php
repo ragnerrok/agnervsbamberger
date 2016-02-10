@@ -59,9 +59,6 @@
 			}
 			$people[$i]["allergies"] = $allergies;
 			$allergy_query->closeCursor();
-			
-			// Determine the index of the selected food choice
-			$people[$i]["selected_food_choice"] = food_choice_index($food_choices, $people[$i]["food_pref"]);
 		}
 		
 		return $people;
@@ -233,6 +230,8 @@
 				$new_person_id = $person_id_query->fetch(PDO::FETCH_ASSOC)["new_person_id"];
 				if ($new_person_id > 0) {
 					$db_conn->commit();
+					// If adding the plus one was successful, log it
+					log_add_plus_one($party_id, $new_person_id, $first_name, $last_name, $food_pref, $over_21);
 					return $new_person_id;
 				} else {
 					$db_conn->rollBack();
@@ -250,28 +249,7 @@
 	function get_food_choices($db_conn) {
 		$food_choices_query = $db_conn->prepare("CALL get_food_choices()");
 		$food_choices_query->execute();
-		$food_choices_string = $food_choices_query->fetch(PDO::FETCH_ASSOC)["Type"];
-		$food_choices = array();
-		preg_match("/enum\((.*)\)/", $food_choices_string, $food_choices);
-		$food_choices_array = explode(",", $food_choices[1]);
-		
-		// Remove the quotes from the array entries
-		for ($i = 0; $i < count($food_choices_array); ++$i) {
-			$food_choices_array[$i] = substr($food_choices_array[$i], 1, -1);
-		}
-		return $food_choices_array;
-	}
-	
-	function food_choice_index($choices, $selected_choice) {
-		$selected_index = -1;
-		for ($i = 0; $i < count($choices); ++$i) {
-			if ($selected_choice == $choices[$i]) {
-				$selected_index = $i;
-				break;
-			}
-		}
-		
-		return $selected_index;
+		return $food_choices_query->fetchAll(PDO::FETCH_NUM);
 	}
 	
 	function get_max_plus_ones($party_id, $db_conn) {
