@@ -2,10 +2,14 @@
 	require_once("mail_utils.php");
 
 	function map_to_boolean($value) {
-		if ($value == 1) {
-			return true;
+		if ($value == null) {
+			return null;
 		} else {
-			return false;
+			if ($value == 1) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -46,6 +50,8 @@
 		for ($i = 0; $i < count($people); ++$i) {
 			// Map all boolean results to actual booleans (for javascript)
 			$people[$i]["is_attending"] = map_to_boolean($people[$i]["is_attending"]);
+			$people[$i]["is_attending_rehearsal"] = map_to_boolean($people[$i]["is_attending_rehearsal"]);
+			$people[$i]["is_attending_movie"] = map_to_boolean($people[$i]["is_attending_movie"]);
 			$people[$i]["is_invited_to_movie"] = map_to_boolean($people[$i]["is_invited_to_movie"]);
 			$people[$i]["is_invited_to_rehearsal"] = map_to_boolean($people[$i]["is_invited_to_rehearsal"]);
 			$people[$i]["is_plus_one"] = map_to_boolean($people[$i]["is_plus_one"]);
