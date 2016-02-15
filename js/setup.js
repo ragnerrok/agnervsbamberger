@@ -437,12 +437,16 @@ function clickedPerson(personContainerId){
                 lastName.removeClass('larkspur-background');
                 firstName.addClass('light-brown-background');
                 lastName.addClass('light-brown-background');
+                firstName.addClass('hover-person-background');
+                lastName.addClass('hover-person-background');
             }else{
                 console.log('add')
                 firstName.removeClass('light-brown-background');
                 lastName.removeClass('light-brown-background');
                 firstName.addClass('larkspur-background');
                 lastName.addClass('larkspur-background');
+                firstName.removeClass('hover-person-background');
+                lastName.removeClass('hover-person-background');
             }
         }
     };

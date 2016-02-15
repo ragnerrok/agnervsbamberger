@@ -6,25 +6,23 @@ body{
     position: relative;
 }
 #title{
+    width: 560px;
     height: 100px;
-    border-bottom: #bccbe5 solid;
     margin: 0px -10px;
     cursor: pointer;
 }
 
 #agner-text{
-    position: absolute;
-    left: 5%;
-    margin-top: 10px;
+    float: left;
+    margin: 10px 45px;
 }
 #vs-text{
-    position: absolute;
-    left: 40%;
+    float: left;
+    margin: 0px 20px;
 }
 #bamberger-text{
-    position: absolute;
-    right: 5%;
-    margin-top: 10px;
+    float: right;
+    margin: 10px 45px;
 }
 .content-container{
     overflow: auto;
@@ -60,6 +58,7 @@ body{
 /* Side Menu */
 #menu-bar{
     width: 100%;
+    border-top: #bccbe5 solid;
     border-right: #4c4128 solid;
     border-bottom: #4c4128 solid;
 }
@@ -208,6 +207,11 @@ ul.allergy-list{
     margin-top: 0px;
 }
 /* Group Information */
+#party-box{
+    float: left;
+    width: 250px;
+    height: 500px;
+}
 .address-label{
     padding-top: 5px;
     margin: 5px 13px 0px 13px;
@@ -360,14 +364,19 @@ input.ui-widget.form-add-button{
 
 /* Music Suggestions*/
 #music-suggestions-content{
-    float: right;
-    width: 250px;
+    float: left;
+    width: 330px;
+    border: #2f3a4c solid 1px;
+    border-radius: 3px;
+    padding: 10px;
+    margin: 7px 10px;
 }
 .song-name{
     padding-right: 12px;
+    width: 150px;
 }
 .song-band{
-
+    width: 150px;
 }
 /* Maps */
 .map-buttons{
@@ -446,6 +455,9 @@ input.ui-widget.form-add-button{
 }
 .dark-red-background{
     background-color: #992923;
+}
+.person-label:hover .hover-person-background{
+    background-color: #bccbe5;
 }
 
 @-moz-keyframes spin { 100% {-moz-transform: rotate(360deg); } }
