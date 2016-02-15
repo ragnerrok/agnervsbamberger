@@ -310,7 +310,7 @@ function populatePlusOne(partyPerson){
 
 
     //Party Person Food Preference
-    var partyPersonFood = partyPerson.selected_food_choice;
+    var partyPersonFood = partyPerson.food_pref;
     leftInfoDiv.append('<div class="food-label label">Food Choice' + '</div>');
     leftInfoDiv.append('<select name="food_pref" id="' + partyLength + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
     var foodMenu = $('#' + partyLength + '-person-food');
@@ -584,7 +584,7 @@ function generatePartyInfo(jsonObject){
         }
 
         //Party Person Food Preference
-        var partyPersonFood = partyPerson.selected_food_choice;
+        var partyPersonFood = partyPerson.food_pref;
         leftInfoDiv.append('<div class="food-label label">Food Choice' + '</div>');
         leftInfoDiv.append('<select name="food_pref" id="' + i + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
         var foodMenu = $('#' + i + '-person-food');
