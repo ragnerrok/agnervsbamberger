@@ -6,6 +6,7 @@ var ContentEnum = Object.freeze({
     LOCATION_CONTENT: "location-content",
     HOTEL_CONTENT: "hotel-content",
     REGISTRY_CONTENT: "registry-content",
+    SCHEDULE_CONTENT: 'schedule-content',
     FAQ_CONTENT: "faq-content",
     CONTACT_CONTENT: "contact-content",
     HOME_CONTENT: "home-content"
@@ -66,6 +67,10 @@ function init() {
     $( "#registry-button" ).button().click(function() {
         console.log("Clicked registry");
         switchContent(ContentEnum.REGISTRY_CONTENT);
+    });
+    $( "#schedule-button" ).button().click(function() {
+        console.log("Clicked schedule");
+        switchContent(ContentEnum.SCHEDULE_CONTENT);
     });
     $( "#faq-button" ).button().click(function() {
         console.log("Clicked faq");
@@ -255,8 +260,8 @@ function populatePlusOne(partyPerson){
     console.log(partyPersonFirstName + " " + partyPersonLastName);
     partyAccordion.append('<h3 id="'+ partyLength + '-person-name-container" class="person-label">' + '</h3>');
     var partyPersonH3 = $('#' + partyLength + '-person-name-container');
-    partyPersonH3.append('<input type="text" name="first_name" id="'+ partyLength +'-person-first-name" class="person-label-input first-name larkspur-background" value="' + partyPersonFirstName + '" disabled/>');
-    partyPersonH3.append('<input type="text" name="last_name" id="'+ partyLength +'-person-last-name" class="person-label-input last-name larkspur-background" value="' + partyPersonLastName + '" disabled/>');
+    partyPersonH3.append('<input type="text" name="first_name" id="'+ partyLength +'-person-first-name" class="person-label-input first-name larkspur-background" maxlength="20" value="' + partyPersonFirstName + '" disabled/>');
+    partyPersonH3.append('<input type="text" name="last_name" id="'+ partyLength +'-person-last-name" class="person-label-input last-name larkspur-background" maxlength="20" value="' + partyPersonLastName + '" disabled/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
     partyPersonH3.append('<input  type="button" id="' + partyLength + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
@@ -351,7 +356,7 @@ function populatePlusOne(partyPerson){
     var allergiesList = $('#' + partyLength + '-person-allergies');
     allergiesList.append('<li id="' + partyLength + '-no-allergies" class="allergy">None</li>');
 
-    rightInfoDiv.append('<input name="allergy" type="text" id="' + partyLength + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
+    rightInfoDiv.append('<input name="allergy" type="text" id="' + partyLength + '-new-allergy" class="form-add-allergy larkspur-background" maxlength="20" style="display: none;"/>');
     rightInfoDiv.append('<input  type="button" id="' + partyLength + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
     $('#' + partyLength + '-new-allergy-button').button().click(addAllergy(partyLength));
     globalAllergiesArray[partyLength] = 0;
@@ -467,8 +472,8 @@ function generatePartyInfo(jsonObject){
         var partyPersonLastName = partyPerson.last_name;
         partyAccordion.append('<h3 id="'+ i + '-person-name-container" class="person-label">' + '</h3>');
         var partyPersonH3 = $('#' + i + '-person-name-container');
-        partyPersonH3.append('<input type="text" name="first_name" id="'+ i +'-person-first-name" class="person-label-input first-name larkspur-background" value="' + partyPersonFirstName + '" disabled/>');
-        partyPersonH3.append('<input type="text" name="last_name" id="'+ i +'-person-last-name" class="person-label-input last-name larkspur-background" value="' + partyPersonLastName + '" disabled/>');
+        partyPersonH3.append('<input type="text" name="first_name" id="'+ i +'-person-first-name" class="person-label-input first-name larkspur-background" maxlength="20" value="' + partyPersonFirstName + '" disabled/>');
+        partyPersonH3.append('<input type="text" name="last_name" id="'+ i +'-person-last-name" class="person-label-input last-name larkspur-background" maxlength="20" value="' + partyPersonLastName + '" disabled/>');
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-edit-button" class="form-button form-edit-button" value="edit"/>');
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-save-button" class="form-button form-save-button" value="save" style="display: none;"/>');
         partyPersonH3.append('<input  type="button" id="' + i + '-person-name-cancel-button" class="form-button form-cancel-button" value="cancel" style="display: none;"/>');
@@ -506,7 +511,7 @@ function generatePartyInfo(jsonObject){
         leftInfoDiv.append('<select name="is_attending" id="' + i + '-person-attending" class="centuryGothicFont" disabled>' +  '</select>');
         var isAttending = $('#' + i + '-person-attending');
         if(partyPersonComing == null){
-            isAttending.append('<option selected="selected" disabled>Select an Option</option>');
+            isAttending.append('<option value="-1" selected="selected" disabled>Select an Option</option>');
             isAttending.append('<option value="1">Yes</option>');
             isAttending.append('<option value="0">No</option>');
         }else if(partyPersonComing){
@@ -524,6 +529,59 @@ function generatePartyInfo(jsonObject){
             }
         });
 
+        //TODO: Party Person Attending Rehearsal?
+        if(partyPerson.is_invited_to_rehearsal != false){
+            var partyPersonRehearsalComing = partyPerson.is_attending_rehearsal;
+            leftInfoDiv.append('<div class="attending-label label">Are you joining us for rehearsal dinner?</div>');
+            //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
+            leftInfoDiv.append('<select name="is_attending_rehearsal" id="' + i + '-person-attending-rehearsal" class="centuryGothicFont" disabled>' +  '</select>');
+            var isAttendingRehearsal = $('#' + i + '-person-attending-rehearsal');
+            if(partyPersonRehearsalComing == null){
+                isAttendingRehearsal.append('<option value="-1" selected="selected" disabled>Select an Option</option>');
+                isAttendingRehearsal.append('<option value="1">Yes</option>');
+                isAttendingRehearsal.append('<option value="0">No</option>');
+            }else if(partyPersonRehearsalComing){
+                isAttendingRehearsal.append('<option value="1" selected="selected">Yes</option>');
+                isAttendingRehearsal.append('<option value="0">No</option>');
+            }else{
+                isAttendingRehearsal.append('<option value="1">Yes</option>');
+                isAttendingRehearsal.append('<option value="0" selected="selected">No</option>');
+            }
+
+            isAttendingRehearsal.selectmenu({
+                change: function(event, data){
+                    console.log(data.item.index);
+                    console.log(data.item.value);
+                }
+            });
+        }
+
+        //TODO: Party Person Attending Movie?
+        if(partyPerson.is_invited_to_movie != false){
+            var partyPersonMovieComing = partyPerson.is_attending_movie;
+            leftInfoDiv.append('<div class="attending-label label">Are you joining us for Warcraft movie?</div>');
+            //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
+            leftInfoDiv.append('<select name="is_attending_movie" id="' + i + '-person-attending-movie" class="centuryGothicFont" disabled>' +  '</select>');
+            var isAttendingMovie = $('#' + i + '-person-attending-movie');
+            if(partyPersonMovieComing == null){
+                isAttendingMovie.append('<option value="-1" selected="selected" disabled>Select an Option</option>');
+                isAttendingMovie.append('<option value="1">Yes</option>');
+                isAttendingMovie.append('<option value="0">No</option>');
+            }else if(partyPersonMovieComing){
+                isAttendingMovie.append('<option value="1" selected="selected">Yes</option>');
+                isAttendingMovie.append('<option value="0">No</option>');
+            }else{
+                isAttendingMovie.append('<option value="1">Yes</option>');
+                isAttendingMovie.append('<option value="0" selected="selected">No</option>');
+            }
+
+            isAttendingMovie.selectmenu({
+                change: function(event, data){
+                    console.log(data.item.index);
+                    console.log(data.item.value);
+                }
+            });
+        }
 
         //Party Person Food Preference
         var partyPersonFood = partyPerson.selected_food_choice;
@@ -532,7 +590,9 @@ function generatePartyInfo(jsonObject){
         var foodMenu = $('#' + i + '-person-food');
         var foodArray = jsonObject.food_choices;
         for(var k = 0; k < foodArray.length; k++){
-            if(k == partyPersonFood){
+            if(partyPersonFood == null){
+                foodMenu.append('<option selected="selected" disabled>Select an Option</option>');
+            }else if(k == partyPersonFood){
                 foodMenu.append('<option selected="selected">' + foodArray[k] + '</option>');
             }else{
                 foodMenu.append('<option>' + foodArray[k] + '</option>');
@@ -552,7 +612,7 @@ function generatePartyInfo(jsonObject){
         leftInfoDiv.append('<select name="over_21" id="' + i + '-person-over-21" class="centuryGothicFont" disabled></select>');
         var over21 = $('#' + i + '-person-over-21');
         if(partyPerson21 == null){
-            over21.append('<option selected="selected" disabled>Select an Option</option>');
+            over21.append('<option value="-1" selected="selected" disabled>Select an Option</option>');
             over21.append('<option value="1">Yes</option>');
             over21.append('<option value="0">No</option>');
         }else if(partyPerson21){
@@ -587,7 +647,7 @@ function generatePartyInfo(jsonObject){
             allergiesLength++;
         }
         globalAllergiesArray[i] = allergiesLength;
-        rightInfoDiv.append('<input name="allergy" type="text" id="' + i + '-new-allergy" class="form-add-allergy larkspur-background" style="display: none;"/>');
+        rightInfoDiv.append('<input name="allergy" type="text" id="' + i + '-new-allergy" class="form-add-allergy larkspur-background" maxlength="20" style="display: none;"/>');
         rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
         $('#' + i + '-new-allergy-button').button().click(addAllergy(i));
 
@@ -605,12 +665,12 @@ function generatePartyInfo(jsonObject){
 
     partyInfoContainer.append('<form id="party-info-form"><input type="hidden" value="' + partyId +'" />' + '<input type="hidden" value="' + partyId +'" />' + '</form>');
     var partyInfoForm = $('#party-info-form');
-    partyInfoForm.append('<input type="text" name="addr_house_num" id="party-address-house-num" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" value="' + partyInfo.addr_house_num + '" disabled/>');
-    partyInfoForm.append('<input type="text" name="addr_street" id="party-address-street" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" value="' + partyInfo.addr_street +'" disabled/>');
-    partyInfoForm.append('<input type="text" name="addr_apt" id="party-address-apt" class="party-info-address party-info-address-second-row form-input larkspur-background centuryGothicFont" value="'+ partyInfo.addr_apt + '" disabled/>');
-    partyInfoForm.append('<input type="text" name="addr_city" id="party-address-city" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" value="' + partyInfo.addr_city + '" disabled/>');
-    partyInfoForm.append('<input type="text" name="addr_state" id="party-address-state" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" value="' + partyInfo.addr_state + '" disabled/>');
-    partyInfoForm.append('<input type="text" name="addr_zip" id="party-address-zip" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" value="' + + partyInfo.addr_zip +'" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_house_num" id="party-address-house-num" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" maxlength="20" value="' + partyInfo.addr_house_num + '" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_street" id="party-address-street" class="party-info-address party-info-address-first-row form-input larkspur-background centuryGothicFont" maxlength="50" value="' + partyInfo.addr_street +'" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_apt" id="party-address-apt" class="party-info-address party-info-address-second-row form-input larkspur-background centuryGothicFont" maxlength="20" value="'+ partyInfo.addr_apt + '" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_city" id="party-address-city" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" maxlength="50" value="' + partyInfo.addr_city + '" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_state" id="party-address-state" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" maxlength="2"value="' + partyInfo.addr_state + '" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_zip" id="party-address-zip" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" maxlength="20" value="' + + partyInfo.addr_zip +'" disabled/>');
 
 
     //Music Suggestions

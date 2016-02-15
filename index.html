@@ -11,7 +11,7 @@
 
     <script src="jquery-ui/external/jquery/jquery.js"></script>
     <script src="jquery-ui/jquery-ui.min.js"></script>
-
+    <link rel="shortcut icon" href="images/gears/png/gear-5-blue.png">
 
 
     <script src="js/setup.js"></script>
@@ -19,6 +19,16 @@
         jQuery(document).ready(function () {
             init();
         });
+    </script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-73384785-1', 'auto');
+        ga('send', 'pageview');
+
     </script>
 </head>
 <body class="larkspur-background">
@@ -33,9 +43,9 @@
                 Add your Plus One!
             </div>
             <div id="plus-one-first-name-label" class="label astrudFont font-size-20 dark-larkspur-text">First Name</div>
-            <input name="first_name" type="text" id="plus-one-first-name" class="form-input"/>
-            <div id="plus-one-last-name-label" class="label astrudFont font-size-20 dark-larkspur-text">Last Name</div>
-            <input name="last_name" type="text" id="plus-one-last-name" class="form-input"/>
+            <input name="first_name" type="text" id="plus-one-first-name" class="form-input" maxlength="10"/>
+            <div id="plus-one-last-name-label" class="label astrudFont font-size-20 dark-larkspur-text" >Last Name</div>
+            <input name="last_name" type="text" id="plus-one-last-name" class="form-input" maxlength="10"/>
             <div id="plus-one-food-label" class="label astrudFont font-size-20 dark-larkspur-text">Food Choice</div>
             <select name="food_pref" id="plus-one-food" class="select-food centuryGothicFont">
                 <option selected="selected" disabled>Select an Option</option>
@@ -57,9 +67,9 @@
                 Suggest a song to play at the wedding!
             </div>
             <div id="add-name-label" class="label astrudFont font-size-20 dark-larkspur-text">Song Title</div>
-            <input name="song_title" type="text" id="add-song-name" class="form-input"/>
+            <input name="song_title" type="text" id="add-song-name" class="form-input" maxlength="20"/>
             <div id="add-artist-label" class="label astrudFont font-size-20 dark-larkspur-text">Artist</div>
-            <input name="artist_name" type="text" id="add-song-artist" class="form-input"/>
+            <input name="artist_name" type="text" id="add-song-artist" class="form-input" maxlength="20"/>
             <input  type="submit" id="song-suggestion-add-button" class="form-button form-pop-up-add-button form-add-song" value="add"/>
             <input  type="submit" id="song-suggestion-cancel-button" class="form-button form-pop-up-cancel-button form-add-song" value="cancel"/>
         </div>
@@ -88,6 +98,9 @@
         </button>
         <button id="registry-button" class="menu-bar-button">
             Registry
+        </button>
+        <button id="schedule-button" class="menu-bar-button">
+            Schedule
         </button>
         <button id="faq-button" class="menu-bar-button">
             FAQ
@@ -213,6 +226,10 @@
     <div id="registry-content" class="content-container" style="display: none">
         <div class="astrudFont font-size-60 dark-larkspur-text">REGISTRY (Coming Soon!...ish)</div>
     </div>
+    <div id="schedule-content" class="content-container" style="display: none">
+        <div class="astrudFont font-size-60 dark-larkspur-text">June 11th Schedule</div>
+
+    </div>
     <div id="faq-content" class="content-container" style="display: none">
         <div class="astrudFont font-size-60 dark-larkspur-text">FREQUENTLY ASKED QUESTIONS</div>
 
@@ -230,19 +247,19 @@
                 <div class="form-label font-size-25 astrudFont dark-larkspur-text">
                     NAME
                 </div>
-                <input type="text" name="name" id="guest-name" class="form-input"/>
+                <input type="text" name="name" id="guest-name" class="form-input" maxlength="20"/>
             </div>
             <div id="guest-email-form">
                 <div class="form-label font-size-25 astrudFont dark-larkspur-text">
                     EMAIL
                 </div>
-                <input type="text" name="from" id="guest-email" class="form-input"/>
+                <input type="text" name="from" id="guest-email" class="form-input" maxlength="20"/>
             </div>
             <div id="guest-content-form">
                 <div class="form-label font-size-25 astrudFont dark-larkspur-text">
                     CONTENT
                 </div>
-                <textarea type="text" name="message" id="guest-content" class="form-input"></textarea>
+                <textarea type="text" name="message" id="guest-content" class="form-input" maxlength="500"></textarea>
             </div>
             <button id="send-email-button">SEND MESSAGE</button>
         </div>
