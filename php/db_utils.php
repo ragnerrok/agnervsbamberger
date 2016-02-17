@@ -313,20 +313,22 @@
 		}
 	}
 	
-	function update_person_info($person_id, $is_attending, $food_pref, $over_21, $db_conn) {
+	function update_person_info($person_id, $is_attending, $food_pref, $over_21, $is_attending_rehearsal, $is_attending_movie, $db_conn) {
 		// First, get the old info (for logging purposes)
 		$old_info = get_single_person($person_id, $db_conn);
 		if (is_null($old_info)) {
 			return false;
 		} else {
-			$update_person_info_query = $db_conn->prepare("CALL update_person_info(:person_id, :is_attending, :food_pref, :over_21)");
+			$update_person_info_query = $db_conn->prepare("CALL update_person_info(:person_id, :is_attending, :food_pref, :over_21, :is_attending_rehearsal, :is_attending_movie)");
 			$update_person_info_query->bindParam(":person_id", $person_id);
 			$update_person_info_query->bindParam(":is_attending", $is_attending);
 			$update_person_info_query->bindParam(":food_pref", $food_pref);
 			$update_person_info_query->bindParam(":over_21", $over_21);
+			$update_person_info_query->bindParam(":is_attending_rehearsal", $is_attending_rehearsal);
+			$update_person_info_query->bindParam(":is_attending_movie", $is_attending_movie);
 			if ($update_person_info_query->execute()) {
 				// If update was successful, log it first
-				log_info_update($old_info, $is_attending, $food_pref, $over_21);
+				log_info_update($old_info, $is_attending, $food_pref, $over_21, $is_attending_rehearsal, $is_attending_movie);
 				return true;
 			} else {
 				return false;

@@ -12,8 +12,8 @@
 		$auth_token = $_POST["auth_token"];
 		$first_name = $_POST["first_name"];
 		$last_name = $_POST["last_name"];
-		$food_pref = $_POST["food_pref"];
 		$over_21 = $_POST["over_21"];
+		$food_pref = $_POST["food_pref"];
 		$is_attending = 1;
 		$db_conn = open_db_conn();
 		
@@ -22,6 +22,7 @@
 			$return_value["reason"] = "Database Error";
 		} else {
 			// Validate data from client
+			
 			if (strlen($first_name) <= 0) {
 				// Make sure they have a first name
 				$return_value["status"] = false;

@@ -534,10 +534,9 @@ function generatePartyInfo(jsonObject){
         });
 
         //TODO: Party Person Attending Rehearsal?
-        if(partyPerson.is_invited_to_rehearsal != false){
+        if(partyPerson.is_invited_to_rehearsal){
             var partyPersonRehearsalComing = partyPerson.is_attending_rehearsal;
             leftInfoDiv.append('<div class="attending-label label">Are you joining us for the rehearsal dinner?</div>');
-            //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
             leftInfoDiv.append('<select name="is_attending_rehearsal" id="' + i + '-person-attending-rehearsal" class="centuryGothicFont" disabled>' +  '</select>');
             var isAttendingRehearsal = $('#' + i + '-person-attending-rehearsal');
             if(partyPersonRehearsalComing == null){
@@ -561,10 +560,9 @@ function generatePartyInfo(jsonObject){
         }
 
         //TODO: Party Person Attending Movie?
-        if(partyPerson.is_invited_to_movie != false){
+        if (partyPerson.is_invited_to_movie) {
             var partyPersonMovieComing = partyPerson.is_attending_movie;
             leftInfoDiv.append('<div class="attending-label label">Are you joining us for the Warcraft movie?</div>');
-            //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
             leftInfoDiv.append('<select name="is_attending_movie" id="' + i + '-person-attending-movie" class="centuryGothicFont" disabled>' +  '</select>');
             var isAttendingMovie = $('#' + i + '-person-attending-movie');
             if(partyPersonMovieComing == null){
@@ -594,13 +592,13 @@ function generatePartyInfo(jsonObject){
         var foodMenu = $('#' + i + '-person-food');
         var foodArray = jsonObject.food_choices;
         if(partyPersonFood == null){
-            foodMenu.append('<option selected="selected" disabled>Select an Option</option>');
+            foodMenu.append('<option selected="selected" value="-1" disabled>Select an Option</option>');
         }
         for(var k = 0; k < foodArray.length; k++){
             if(k == partyPersonFood){
-                foodMenu.append('<option selected="selected">' + foodArray[k] + '</option>');
+                foodMenu.append('<option selected="selected" value="' + k +'">' + foodArray[k] + '</option>');
             }else{
-                foodMenu.append('<option>' + foodArray[k] + '</option>');
+                foodMenu.append('<option value="' + k + '">' + foodArray[k] + '</option>');
             }
         }
         foodMenu.selectmenu({
@@ -811,7 +809,13 @@ function setUpInfoLeftEditButton(id, buttonType){
         console.log(id + ' editButton');
         $('#' + id + '-person-attending').selectmenu("enable");
         $('#' + id + '-person-food').selectmenu("enable");
-        $('#' + id + '-person-over-21').selectmenu("enable");
+        $('#' + id + '-person-over-21').selectmenu("enable");		
+		if (globalPartyInfo.party_people[id].is_invited_to_rehearsal) {
+			$('#' + id + '-person-attending-rehearsal').selectmenu("enable");
+		}
+		if (globalPartyInfo.party_people[id].is_invited_to_movie) {
+			$('#' + id + '-person-attending-movie').selectmenu("enable");
+		}
 
         setUpEditButton(id, buttonType);
     };
@@ -823,6 +827,12 @@ function setUpInfoLeftCancelButton(id, buttonType){
         $('#' + id + '-person-attending').selectmenu("disable");
         $('#' + id + '-person-food').selectmenu("disable");
         $('#' + id + '-person-over-21').selectmenu("disable");
+		if (globalPartyInfo.party_people[id].is_invited_to_rehearsal) {
+			$('#' + id + '-person-attending-rehearsal').selectmenu("disable");
+		}
+		if (globalPartyInfo.party_people[id].is_invited_to_movie) {
+			$('#' + id + '-person-attending-movie').selectmenu("disable");
+		}
 
         setUpSaveOrCancelButton(id, buttonType);
 		
@@ -868,11 +878,25 @@ function setUpInfoLeftSaveButton(id, buttonType){
         $('#' + id + '-person-attending').selectmenu("disable");
         $('#' + id + '-person-food').selectmenu("disable");
         $('#' + id + '-person-over-21').selectmenu("disable");
+		if (globalPartyInfo.party_people[id].is_invited_to_rehearsal) {
+			$('#' + id + '-person-attending-rehearsal').selectmenu("disable");
+		}
+		if (globalPartyInfo.party_people[id].is_invited_to_movie) {
+			$('#' + id + '-person-attending-movie').selectmenu("disable");
+		}
 
         setUpSaveOrCancelButton(id, buttonType);
 
         // Serialize all of the form data
-        var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21']);
+		var formFields = ['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21'];
+		if (globalPartyInfo.party_people[id].is_invited_to_rehearsal) {
+			formFields.push(id + '-person-attending-rehearsal');
+		}
+		if (globalPartyInfo.party_people[id].is_invited_to_movie) {
+			formFields.push(id + '-person-attending-movie');
+		}
+		
+        var formData = serializeFormData(formFields);
         $.post("php/update_person_info.php", formData, createUpdatePersonInfoCallback(globalPartyInfo, id));
     };
 }
@@ -1019,16 +1043,54 @@ function createUpdatePersonInfoCallback(partyInfo, personContainerID) {
 	return function(returnData) {
 		console.log(returnData);
 		if (!returnData.status) {
+			console.log("Joining us old value: " + partyInfo.party_people[personContainerID].is_attending);
 			// Restore the old values
-			$('#' + personContainerID + '-person-attending').val(partyInfo.party_people[personContainerID].is_attending).selectmenu('refresh', true);
-			$('#' + personContainerID + '-person-food').val(partyInfo.party_people[personContainerID].food_pref).selectmenu('refresh', true);
-			$('#' + personContainerID + '-person-over-21').val(partyInfo.party_people[personContainerID].over_21).selectmenu('refresh', true);
+			if (partyInfo.party_people[personContainerID].is_attending === null) {
+				$('#' + personContainerID + '-person-attending').val(-1).selectmenu('refresh', true);
+			} else {
+				$('#' + personContainerID + '-person-attending').val(partyInfo.party_people[personContainerID].is_attending ? "1" : "0").selectmenu('refresh', true);
+			}
+			
+			if (partyInfo.party_people[personContainerID].food_pref === null) {
+				$('#' + personContainerID + '-person-food').val(-1).selectmenu('refresh', true);
+			} else {
+				$('#' + personContainerID + '-person-food').val(partyInfo.party_people[personContainerID].food_pref).selectmenu('refresh', true);
+			}
+			
+			if (partyInfo.party_people[personContainerID].over_21 === null) {
+				$('#' + personContainerID + '-person-over-21').val(-1).selectmenu('refresh', true);
+			} else {
+				$('#' + personContainerID + '-person-over-21').val(partyInfo.party_people[personContainerID].over_21 ? "1" : "0").selectmenu('refresh', true);
+			}
+			
+			if (partyInfo.party_people[personContainerID].is_invited_to_rehearsal) {
+				if (partyInfo.party_people[personContainerID].is_attending_rehearsal === null) {
+					$('#' + personContainerID + '-person-attending-rehearsal').val(-1).selectmenu('refresh', true);
+				} else {
+					$('#' + personContainerID + '-person-attending-rehearsal').val(partyInfo.party_people[personContainerID].is_attending_rehearsal ? "1" : "0").selectmenu('refresh', true);
+				}
+			}
+			
+			if (partyInfo.party_people[personContainerID].is_invited_to_movie) {
+				if (partyInfo.party_people[personContainerID].is_attending_movie === null) {
+					$('#' + personContainerID + '-person-attending-movie').val(-1).selectmenu('refresh', true);
+				} else {
+					$('#' + personContainerID + '-person-attending-movie').val(partyInfo.party_people[personContainerID].is_attending_movie ? "1" : "0").selectmenu('refresh', true);
+				}
+			}
+			
 			// TODO: alert the user to the error
 		} else {
 			// Remember the new values
-			partyInfo.party_people[personContainerID].is_attending = $('#' + personContainerID + '-person-attending').val();
+			partyInfo.party_people[personContainerID].is_attending = ($('#' + personContainerID + '-person-attending').val() == "1") ? true : false;
 			partyInfo.party_people[personContainerID].food_pref = $('#' + personContainerID + '-person-food').val();
-			partyInfo.party_people[personContainerID].over_21 = $('#' + personContainerID + '-person-over-21').val();
+			partyInfo.party_people[personContainerID].over_21 = ($('#' + personContainerID + '-person-over-21').val() == "1") ? true : false;
+			if (partyInfo.party_people[personContainerID].is_invited_to_rehearsal) {
+				partyInfo.party_people[personContainerID].is_attending_rehearsal = ($('#' + personContainerID + '-person-attending-rehearsal').val() == "1") ? true : false;
+			}
+			if (partyInfo.party_people[personContainerID].is_invited_to_movie) {
+				partyInfo.party_people[personContainerID].is_attending_movie = ($('#' + personContainerID + '-person-attending-movie').val() == "1") ? true : false;
+			}
 		}
 	};
 }

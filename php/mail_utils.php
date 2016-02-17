@@ -64,17 +64,21 @@
 		return send_log_email($subject, $message);
 	}
 
-	function log_info_update($old_info, $new_is_attending, $new_food_choice, $new_over_21) {
+	function log_info_update($old_info, $new_is_attending, $new_food_choice, $new_over_21, $new_is_attending_rehearsal, $new_is_attending_movie) {
 		$subject = "[Info Update] Person " . $old_info["person_id"] . " (" . $old_info["first_name"] . " " . $old_info["last_name"] . ")";
 		$message = "Person ID " . $old_info["person_id"] . " updated their info\r\n";
 		$message .= "New Info:\r\n";
 		$message .= "Is attending: " . $new_is_attending . "\r\n";
 		$message .= "Food Choice: " . $new_food_choice . "\r\n";
 		$message .= "Over 21: " . $new_over_21 . "\r\n";
+		$message .= "Attending rehearsal dinner: " . $new_is_attending_rehearsal . "\r\n";
+		$message .= "Attending movie: " . $new_is_attending_movie . "\r\n";
 		$message .= "Old Info:\r\n";
 		$message .= "Is attending: " . $old_info["is_attending"] . "\r\n";
 		$message .= "Food Choice: " . $old_info["food_pref"] . "\r\n";
 		$message .= "Over 21: " . $old_info["over_21"] . "\r\n";
+		$message .= "Attending rehearsal dinner: " . $old_info["is_attending_rehearsal"] . "\r\n";
+		$message .= "Attending movie: " . $old_info["is_attending_movie"] . "\r\n";
 		return send_log_email($subject, $message);
 	}
 

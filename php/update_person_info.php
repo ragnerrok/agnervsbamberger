@@ -38,8 +38,8 @@
 				$food_pref = $_POST["food_pref"];
 				$over_21 = $_POST["over_21"];
 				
-				$is_attending_rehearsal = null;
-				$is_attending_movie = null;
+				$is_attending_rehearsal = 0;
+				$is_attending_movie = 0;
 				if ($person_info["is_invited_to_rehearsal"]) {
 					$is_attending_rehearsal = $_POST["is_attending_rehearsal"];
 				}
@@ -61,7 +61,7 @@
 					$return_value["reason"] = "Must indicate food choice";
 				} else {
 					if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
-						if (!update_person_info($person_id, $is_attending, $food_pref, $over_21, $db_conn)) {
+						if (!update_person_info($person_id, $is_attending, $food_pref, $over_21, $is_attending_rehearsal, $is_attending_movie, $db_conn)) {
 							$return_value["status"] = false;
 							$return_value["reason"] = "Database Error";
 						} else {
