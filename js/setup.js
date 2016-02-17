@@ -536,7 +536,7 @@ function generatePartyInfo(jsonObject){
         //TODO: Party Person Attending Rehearsal?
         if(partyPerson.is_invited_to_rehearsal != false){
             var partyPersonRehearsalComing = partyPerson.is_attending_rehearsal;
-            leftInfoDiv.append('<div class="attending-label label">Are you joining us for rehearsal dinner?</div>');
+            leftInfoDiv.append('<div class="attending-label label">Are you joining us for the rehearsal dinner?</div>');
             //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
             leftInfoDiv.append('<select name="is_attending_rehearsal" id="' + i + '-person-attending-rehearsal" class="centuryGothicFont" disabled>' +  '</select>');
             var isAttendingRehearsal = $('#' + i + '-person-attending-rehearsal');
@@ -563,7 +563,7 @@ function generatePartyInfo(jsonObject){
         //TODO: Party Person Attending Movie?
         if(partyPerson.is_invited_to_movie != false){
             var partyPersonMovieComing = partyPerson.is_attending_movie;
-            leftInfoDiv.append('<div class="attending-label label">Are you joining us for Warcraft movie?</div>');
+            leftInfoDiv.append('<div class="attending-label label">Are you joining us for the Warcraft movie?</div>');
             //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
             leftInfoDiv.append('<select name="is_attending_movie" id="' + i + '-person-attending-movie" class="centuryGothicFont" disabled>' +  '</select>');
             var isAttendingMovie = $('#' + i + '-person-attending-movie');
@@ -593,10 +593,11 @@ function generatePartyInfo(jsonObject){
         leftInfoDiv.append('<select name="food_pref" id="' + i + '-person-food" class="select-food centuryGothicFont" disabled>' +  '</select>');
         var foodMenu = $('#' + i + '-person-food');
         var foodArray = jsonObject.food_choices;
+        if(partyPersonFood == null){
+            foodMenu.append('<option selected="selected" disabled>Select an Option</option>');
+        }
         for(var k = 0; k < foodArray.length; k++){
-            if(partyPersonFood == null){
-                foodMenu.append('<option selected="selected" disabled>Select an Option</option>');
-            }else if(k == partyPersonFood){
+            if(k == partyPersonFood){
                 foodMenu.append('<option selected="selected">' + foodArray[k] + '</option>');
             }else{
                 foodMenu.append('<option>' + foodArray[k] + '</option>');
