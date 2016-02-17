@@ -241,6 +241,8 @@ function init() {
 }
 function populateErrorMessage(whatHappened){
     console.log('ERROR!!! ' + whatHappened);
+	$('#hide-everything-else').show();
+	$('#pop-ups').addClass('pop-up-on');
     $('#error-box').show();
     $('#error-reason').html(whatHappened);
 
@@ -390,8 +392,6 @@ function setUpRSVPContent(jsonObject){
     console.log(jsonObject);
     if(!jsonObject.login_successful){
         console.log("NOPE!!!");
-        $('#hide-everything-else').show();
-        $('#pop-ups').addClass('pop-up-on');
         populateErrorMessage(jsonObject.reason);
     }else{
         if(!userLoggedIn) {
@@ -1078,8 +1078,7 @@ function createUpdatePersonInfoCallback(partyInfo, personContainerID) {
 					$('#' + personContainerID + '-person-attending-movie').val(partyInfo.party_people[personContainerID].is_attending_movie ? "1" : "0").selectmenu('refresh', true);
 				}
 			}
-			
-			// TODO: alert the user to the error
+			populateErrorMessage(returnData.reason);
 		} else {
 			// Remember the new values
 			partyInfo.party_people[personContainerID].is_attending = ($('#' + personContainerID + '-person-attending').val() == "1") ? true : false;
