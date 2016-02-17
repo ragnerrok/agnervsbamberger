@@ -826,9 +826,38 @@ function setUpInfoLeftCancelButton(id, buttonType){
         setUpSaveOrCancelButton(id, buttonType);
 		
 		// Restore old values
-		$('#' + id + '-person-attending').val(globalPartyInfo.party_people[id].is_attending ? '1' : '0').selectmenu('refresh', true);
-		$('#' + id + '-person-food').val(globalPartyInfo.party_people[id].food_pref).selectmenu('refresh', true);
-		$('#' + id + '-person-over-21').val(globalPartyInfo.party_people[id].over_21 ? '1' : '0').selectmenu('refresh', true);
+		if (globalPartyInfo.party_people[id].is_attending === null) {
+			$('#' + id + '-person-attending').val(-1).selectmenu('refresh', true);
+		} else {
+			$('#' + id + '-person-attending').val(globalPartyInfo.party_people[id].is_attending ? '1' : '0').selectmenu('refresh', true);
+		}
+		if (globalPartyInfo.party_people[id].food_pref === null) {
+			$('#' + id + '-person-food').val(-1).selectmenu('refresh', true);
+		} else {
+			$('#' + id + '-person-food').val(globalPartyInfo.party_people[id].food_pref).selectmenu('refresh', true);
+		}
+		
+		if (globalPartyInfo.party_people[id].over_21 === null) {
+			$('#' + id + '-person-over-21').val(-1).selectmenu('refresh', true);
+		} else {
+			$('#' + id + '-person-over-21').val(globalPartyInfo.party_people[id].over_21 ? '1' : '0').selectmenu('refresh', true);
+		}
+		
+		if (globalPartyInfo.party_people[id].is_invited_to_rehearsal) {
+			if (globalPartyInfo.party_people[id].is_attending_rehearsal === null) {
+				$('#' + id + '-person-attending-rehearsal').val(-1).selectmenu('refresh', true);
+			} else {
+				$('#' + id + '-person-attending-rehearsal').val(globalPartyInfo.party_people[id].is_attending_rehearsal ? '1' : '0').selectmenu('refresh', true);
+			}
+		}
+		
+		if (globalPartyInfo.party_people[id].is_invited_to_movie) {
+			if (globalPartyInfo.party_people[id].is_attending_movie === null) {
+				$('#' + id + '-person-attending-movie').val(-1).selectmenu('refresh', true);
+			} else {
+				$('#' + id + '-person-attending-movie').val(globalPartyInfo.party_people[id].is_attending_movie ? '1' : '0').selectmenu('refresh', true);
+			}
+		}
     };
 }
 function setUpInfoLeftSaveButton(id, buttonType){
