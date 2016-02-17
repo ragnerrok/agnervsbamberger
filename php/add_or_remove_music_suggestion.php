@@ -40,20 +40,26 @@
 							}
 						}
 						
-						$result = false;
-						if ($add_or_remove == "add") {
-							$result = add_music_suggestion($party_id, $artist_name, $song_title, $db_conn);
-						} else {
-							$result = remove_music_suggestion($party_id, $artist_name, $song_title, $db_conn);
-						}
-						
-						if (!$result) {
+						// Special case: Make sure Nathan can't remove what's hannenin
+						if (($party_id == 2) && ($artist_name == "Soulja Boy") && ($song_title == "What's Hannenin'")) {
 							$return_value["status"] = false;
-							$return_value["reason"] = "Database Error";
-						} else {
-							$return_value["status"] = true;
-							$return_value["artist_name"] = $artist_name;
-							$return_value["song_title"] = $song_title;
+							$return_value["reason"] = "Sorry Nathan, I can't let you do that";
+						} else {						
+							$result = false;
+							if ($add_or_remove == "add") {
+								$result = add_music_suggestion($party_id, $artist_name, $song_title, $db_conn);
+							} else {
+								$result = remove_music_suggestion($party_id, $artist_name, $song_title, $db_conn);
+							}
+							
+							if (!$result) {
+								$return_value["status"] = false;
+								$return_value["reason"] = "Database Error";
+							} else {
+								$return_value["status"] = true;
+								$return_value["artist_name"] = $artist_name;
+								$return_value["song_title"] = $song_title;
+							}
 						}
 					}
 				}
