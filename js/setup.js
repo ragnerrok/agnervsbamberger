@@ -108,12 +108,7 @@ function init() {
     var hideEverythingElseBox = $('#hide-everything-else');
     var addPlusOneBox = $("#add-plus-one-box");
     var popUpBox = $('#pop-ups');
-    $("#add-plus-one-button" ).button().click(function() {
-        hideEverythingElseBox.show();
-        addPlusOneBox.show();
-        popUpBox.addClass('pop-up-on');
-        console.log("Clicked plus one");
-    });
+    $("#add-plus-one-button" ).button().click(showAddPlusOnePopup);
     $("#plus-one-cancel-button").button().click(function(){
         addPlusOneBox.hide();
         hideEverythingElseBox.hide();
@@ -126,11 +121,13 @@ function init() {
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', 'plus-one-first-name', 'plus-one-last-name', 'plus-one-food', 'plus-one-over-21']);
+		showLoadingWheel();
         $.post("php/add_plus_one.php", formData, function(returnData) {
             console.log(formData);
             console.log("Add plus one received:");
             console.log(returnData);
 
+			hideLoadingWheel();
             if(returnData.status){
                 console.log("added someone!")
                 populatePlusOne(returnData);
@@ -139,7 +136,7 @@ function init() {
                 checkForMaxPlusOnes();
                 clearAddPlusOneFields();
             }else{
-                populateErrorMessage(returnData.reason);
+                populateErrorMessage(returnData.reason, showAddPlusOnePopup);
             }
         });
     });
@@ -180,7 +177,7 @@ function init() {
                 checkForMaxMusicSuggestions();
                 clearAddMusicFields();
             }else{
-                populateErrorMessage(returnData.reason);
+                populateErrorMessage(returnData.reason, null);
             }
         });
     });
@@ -221,6 +218,9 @@ function init() {
         hideEverythingElseBox.hide();
         popUpBox.removeClass('pop-up-on');
         clearLoginField();
+		if ($('#error-box')[0].on_close_function) {
+			$('#error-box')[0].on_close_function();
+		}
     });
 
     //Contact Content
@@ -237,12 +237,20 @@ function init() {
     });
 }
 
-function populateErrorMessage(whatHappened){
+function showAddPlusOnePopup() {
+	$('#hide-everything-else').show();
+	$('#add-plus-one-box').show();
+	$('#pop-ups').addClass('pop-up-on');
+	console.log("Clicked plus one");
+}
+
+function populateErrorMessage(whatHappened, onCloseFunction) {
     console.log('ERROR!!! ' + whatHappened);
 	$('#hide-everything-else').show();
 	$('#pop-ups').addClass('pop-up-on');
     $('#error-box').show();
     $('#error-reason').html(whatHappened);
+	$('#error-box')[0].on_close_function = onCloseFunction;
 }
 
 function showLoadingWheel() {
@@ -296,17 +304,12 @@ function populatePlusOne(partyPerson){
     leftInfoDiv.append('<input  type="button" id="' + partyLength + '-info-left-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
     leftInfoDiv.append('<input  type="button" id="' + partyLength + '-info-left-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
 
-    rightInfoDiv.append('<input  type="button" id="' + partyLength + '-info-right-edit-button" class="form-button form-edit-float-button" value="edit"/>');
-
     $('#' + partyLength + '-info-left-edit-button').button().click(setUpInfoLeftEditButton(partyLength,'-info-left'));
     $('#' + partyLength+ '-info-left-save-button').button().click(setUpInfoLeftSaveButton(partyLength, '-info-left'));
     $('#' + partyLength + '-info-left-cancel-button').button().click(setUpInfoLeftCancelButton(partyLength, '-info-left'));
 
-    $('#' + partyLength + '-info-right-edit-button').button().click(setUpInfoRightEditButton(partyLength, '-info-right'));
-
     //TODO: Party Person Attending?
     leftInfoDiv.append('<div class="attending-label label">Are you joining us?</div>');
-    //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
     leftInfoDiv.append('<select name="is_attending" id="' + partyLength + '-person-attending" class="centuryGothicFont" disabled>' +  '</select>');
     var isAttending = $('#' + partyLength + '-person-attending');
     isAttending.append('<option value="1" selected="selected">Yes</option>');
@@ -344,7 +347,6 @@ function populatePlusOne(partyPerson){
     //Is 21
     var partyPerson21 = partyPerson.over_21;
     leftInfoDiv.append('<div class="over-21-label label">Are you over 21?</div>');
-    //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
     leftInfoDiv.append('<select name="over_21" id="' + partyLength + '-person-over-21" class="centuryGothicFont" disabled></select>');
     var over21 = $('#' + partyLength + '-person-over-21');
     if(partyPerson21){
@@ -368,8 +370,8 @@ function populatePlusOne(partyPerson){
     var allergiesList = $('#' + partyLength + '-person-allergies');
     allergiesList.append('<li id="' + partyLength + '-no-allergies" class="allergy">None</li>');
 
-    rightInfoDiv.append('<input name="allergy" type="text" id="' + partyLength + '-new-allergy" class="form-add-allergy larkspur-background" maxlength="20" style="display: none;"/>');
-    rightInfoDiv.append('<input  type="button" id="' + partyLength + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
+	rightInfoDiv.append('<input name="allergy" type="text" id="' + partyLength + '-new-allergy" placeholder="Add New Allergy" class="form-add-allergy larkspur-background" maxlength="20"/>');
+    rightInfoDiv.append('<input  type="button" id="' + partyLength + '-new-allergy-button" class="form-button form-add-button" value="+"/>');
     $('#' + partyLength + '-new-allergy-button').button().click(addAllergy(partyLength));
     globalAllergiesArray[partyLength] = 0;
 
@@ -382,8 +384,8 @@ function populateMusicSuggestion(songTitle, artistName){
     var songTable = $('#song-table');
     songTable.append('<tr id="' + globalMusicLength[1] + '-song">' + '</tr>');
     var songRow = $('#' + globalMusicLength[1] + '-song');
+	songRow.append('<td class="song-band centuryGothicFont dark-larkspur-text"><span data-name="artist_name" id="' + globalMusicLength[1] + '-artist-name">' + artistName + '</span></td>');
     songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text"><span data-name="song_title" id="' + globalMusicLength[1] +'-song-title">' + songTitle + '</span></td>');
-    songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text"><span data-name="artist_name" id="' + globalMusicLength[1] + '-artist-name">' + artistName + '</span></td>');
     songRow.append('<td><input type="button" id="' + globalMusicLength[1] + '-song-button" class="form-button form-delete-button" value="X"/>');
     $('#' + globalMusicLength[1] + '-song-button').button().click(deleteMusicSuggestion(globalMusicLength[1]));
 
@@ -402,7 +404,7 @@ function setUpRSVPContent(jsonObject){
     console.log(jsonObject);
     if(!jsonObject.login_successful){
         console.log("NOPE!!!");
-        populateErrorMessage(jsonObject.reason);
+        populateErrorMessage(jsonObject.reason, null);
     }else{
         if(!userLoggedIn) {
             switchContent(ContentEnum.RSVP_CONTENT);
@@ -468,6 +470,12 @@ function generatePartyInfo(jsonObject){
     checkForMaxPlusOnes();
     checkForMaxMusicSuggestions();
 	
+	// Populate the add plus one popup with the appropriate food choices
+	var addPlusOneFoodSelect = $('#plus-one-food');
+	for (var i = 0; i < jsonObject.food_choices.length; ++i) {
+		addPlusOneFoodSelect.append('<option value="' + (i + 1) + '">' + jsonObject.food_choices[i] + '</option>');
+	}
+	
 	var partyContainer = $('#rsvp-content');
 	partyContainer.append('<input type="hidden" name="party_id" id="party_id" value="' + jsonObject.party_id + '" />');
 	partyContainer.append('<input type="hidden" name="auth_token" id="auth_token" value="' + jsonObject.auth_token + '" />');
@@ -485,7 +493,6 @@ function generatePartyInfo(jsonObject){
 		// Add some state tracking variables we need to each person
 		partyPerson.disableNameInfo = true;
 		partyPerson.disableLeftInfo = true;
-		partyPerson.disableRightInfo = true;
 		
         //Party Person Name
         var partyPersonFirstName = partyPerson.first_name;
@@ -516,13 +523,9 @@ function generatePartyInfo(jsonObject){
         leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-cancel-button" class="form-button form-cancel-float-button" value="cancel" style="display: none;"/>');
         leftInfoDiv.append('<input  type="button" id="' + i + '-info-left-save-button" class="form-button form-save-float-button" value="save" style="display: none;"/>');
 
-        rightInfoDiv.append('<input  type="button" id="' + i + '-info-right-edit-button" class="form-button form-edit-float-button" value="edit"/>');
-
         $('#' + i+ '-info-left-edit-button').button().click(setUpInfoLeftEditButton(i,'-info-left'));
         $('#' + i+ '-info-left-save-button').button().click(setUpInfoLeftSaveButton(i, '-info-left'));
         $('#' + i+ '-info-left-cancel-button').button().click(setUpInfoLeftCancelButton(i, '-info-left'));
-
-        $('#' + i+ '-info-right-edit-button').button().click(setUpInfoRightEditButton(i, '-info-right'));
 
         //TODO: Party Person Attending?
         var partyPersonComing = partyPerson.is_attending;
@@ -628,7 +631,6 @@ function generatePartyInfo(jsonObject){
         //Is 21
         var partyPerson21 = partyPerson.over_21;
         leftInfoDiv.append('<div class="over-21-label label">Are you over 21?</div>');
-        //leftInfoDiv.append('<div id="' + i + '-person-attending" class="centuryGothicFont">' + partyPersonComing + '</div>');
         leftInfoDiv.append('<select name="over_21" id="' + i + '-person-over-21" class="centuryGothicFont" disabled></select>');
         var over21 = $('#' + i + '-person-over-21');
         if(partyPerson21 == null){
@@ -662,13 +664,13 @@ function generatePartyInfo(jsonObject){
         for(var k = 0; k < partyPersonAllergies.length; k++){
             allergiesList.append('<li id="'+ i + k +'-allergy-list-box" class="allergy"><span data-name="allergy" id="'+ i + k +'-allergy-list">' + partyPersonAllergies[k] + '</span></li>');
             var allergy = $('#' + i + k + '-allergy-list-box');
-            allergy.append('<input  type="button" id="' + i + k + '-allergy-button" class="form-button form-delete-button" value="X" style="display: none;"/>');
+			allergy.append('<input  type="button" id="' + i + k + '-allergy-button" class="form-button form-delete-button" value="X"/>');
             $('#' + i + k + '-allergy-button').button().click(deleteAllergy(i, k));
             allergiesLength++;
         }
         globalAllergiesArray[i] = allergiesLength;
-        rightInfoDiv.append('<input name="allergy" type="text" id="' + i + '-new-allergy" class="form-add-allergy larkspur-background" maxlength="20" style="display: none;"/>');
-        rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+" style="display: none;"/>');
+		rightInfoDiv.append('<input name="allergy" type="text" placeholder="Add New Allergy" id="' + i + '-new-allergy" class="form-add-allergy larkspur-background" maxlength="20"/>');
+        rightInfoDiv.append('<input  type="button" id="' + i + '-new-allergy-button" class="form-button form-add-button" value="+"/>');
         $('#' + i + '-new-allergy-button').button().click(addAllergy(i));
 
     }
@@ -701,8 +703,8 @@ function generatePartyInfo(jsonObject){
         console.log(musicSuggestions[k]);
         songTable.append('<tr id="' + k + '-song">' + '</tr>');
         var songRow = $('#' + k + '-song');
+		songRow.append('<td class="song-band centuryGothicFont dark-larkspur-text"><span data-name="artist_name" id="' + k + '-artist-name">' + musicSuggestions[k].artist_name + '</span></td>');
         songRow.append('<td class="song-name centuryGothicFont dark-larkspur-text"><span data-name="song_title" id="' + k +'-song-title">' + musicSuggestions[k].song_title + '</span></td>');
-        songRow.append('<td class="song-bond centuryGothicFont dark-larkspur-text"><span data-name="artist_name" id="' + k + '-artist-name">' + musicSuggestions[k].artist_name + '</span></td>');
         songRow.append('<td><input type="button" id="' + k + '-song-button" class="form-button form-delete-button" value="X"/>');
         $('#' + k + '-song-button').button().click(deleteMusicSuggestion(k));
     }
@@ -752,7 +754,7 @@ function deleteMusicSuggestion(songId){
                 globalMusicLength[0]--;
                 checkForMaxMusicSuggestions();
             }else{
-                populateErrorMessage(returnData.reason);
+                populateErrorMessage(returnData.reason, null);
             }
         });
     };
@@ -808,7 +810,7 @@ function deleteAllergy(personContainerId, allergyId){
             if(returnData.status){
                 allergy.remove();
             }else{
-                populateErrorMessage(returnData.reason);
+                populateErrorMessage(returnData.reason, null);
             }
         });
     };
@@ -918,41 +920,6 @@ function setUpInfoLeftSaveButton(id, buttonType){
     };
 }
 
-//RIGHT SIDE INFO (Allergies)
-function setUpInfoRightEditButton(id){
-    return function(){
-		globalPartyInfo.party_people[id].disableRightInfo = !globalPartyInfo.party_people[id].disableRightInfo;
-        console.log(id + ' editButton');
-
-        var newAllergy = $('#' + id + '-new-allergy');
-        var newAllergyButton = $('#' + id + '-new-allergy-button');
-        newAllergy.prop("disabled", globalPartyInfo.party_people[id].disableRightInfo);
-        newAllergyButton.prop("disabled", globalPartyInfo.party_people[id].disableRightInfo);
-
-        if(globalPartyInfo.party_people[id].disableRightInfo){
-            newAllergyButton.hide();
-            newAllergy.hide();
-        }else{
-            newAllergyButton.show();
-            newAllergy.show();
-        }
-
-        var allergies = globalAllergiesArray[id];//globalPartyInfo.party_people[id].allergies;
-        console.log(allergies);
-        console.log(globalAllergiesArray);
-
-        for(var k = 0; k < allergies; k++){
-            var currentButton = $('#' + id + k + '-allergy-button');
-            currentButton.prop("disabled", globalPartyInfo.party_people[id].disableRightInfo);
-            if(globalPartyInfo.party_people[id].disableRightInfo){
-                currentButton.hide();
-            }else{
-                currentButton.show();
-            }
-        }
-    };
-}
-
 function setUpPersonNameEditButton(id, buttonType){
     return function(){
 		globalPartyInfo.party_people[id].disableNameInfo = !globalPartyInfo.party_people[id].disableNameInfo;
@@ -1055,7 +1022,7 @@ function createUpdatePersonInfoCallback(partyInfo, personContainerID) {
 		console.log(returnData);
 		hideLoadingWheel();
 		if (!returnData.status) {
-			populateErrorMessage(returnData.reason);
+			populateErrorMessage(returnData.reason, null);
 		} else {
 			// Disable editing
 			partyInfo.party_people[personContainerID].disableLeftInfo = !partyInfo.party_people[personContainerID].disableLeftInfo;
@@ -1090,7 +1057,7 @@ function createUpdateAddressCallback(partyInfo) {
 		console.log(returnData);
 		hideLoadingWheel();
 		if (!returnData.status) {
-			populateErrorMessage(returnData.reason);
+			populateErrorMessage(returnData.reason, null);
 		} else {
 			// Disable edit mode
 			disablePartyInfo = !disablePartyInfo;
