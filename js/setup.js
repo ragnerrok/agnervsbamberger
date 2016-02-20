@@ -692,7 +692,7 @@ function generatePartyInfo(jsonObject){
     partyInfoForm.append('<input type="text" name="addr_apt" id="party-address-apt" class="party-info-address party-info-address-second-row form-input larkspur-background centuryGothicFont" maxlength="20" value="'+ partyInfo.addr_apt + '" disabled/>');
     partyInfoForm.append('<input type="text" name="addr_city" id="party-address-city" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" maxlength="50" value="' + partyInfo.addr_city + '" disabled/>');
     partyInfoForm.append('<input type="text" name="addr_state" id="party-address-state" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" maxlength="2"value="' + partyInfo.addr_state + '" disabled/>');
-    partyInfoForm.append('<input type="text" name="addr_zip" id="party-address-zip" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" maxlength="20" value="' + + partyInfo.addr_zip +'" disabled/>');
+    partyInfoForm.append('<input type="text" name="addr_zip" id="party-address-zip" class="party-info-address party-info-address-third-row form-input larkspur-background centuryGothicFont" maxlength="5" value="' + partyInfo.addr_zip +'" disabled/>');
 
 
     //Music Suggestions

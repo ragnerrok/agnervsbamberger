@@ -24,7 +24,7 @@
 		} else {
 			if (authorize_request($party_id, $auth_token, $db_conn, $return_value)) {
 				// Validate zip code
-				if (!preg_match("/[0-9]{5}/", $addr_zip)) {
+				if ((strlen($addr_zip) != 5) || !preg_match("/[0-9]{5}/", $addr_zip)) {
 					$return_value["status"] = false;
 					$return_value["reason"] = "Invalid ZIP code";
 				} else if (!validate_state($addr_state)) {
