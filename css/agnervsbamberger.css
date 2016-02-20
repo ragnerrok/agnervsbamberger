@@ -464,7 +464,7 @@ input.ui-widget.form-add-button{
 @-webkit-keyframes spin { 100% {-webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% {-webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
-div.loading_animation {
+div.loading-animation {
 	background-image: url("../images/gears/png/gear-5-dark-brown.png");
 	background-repeat: no-repeat;
 	background-size: contain;
@@ -472,4 +472,6 @@ div.loading_animation {
 	-webkit-animation:spin 1.5s linear infinite;
 	animation:spin 1.5s linear infinite;
 	float: right;
+	width: 50px;
+	height: 50px;
 }

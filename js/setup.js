@@ -14,11 +14,6 @@ var ContentEnum = Object.freeze({
 var selectedContent = ContentEnum.HOME_CONTENT;
 
 var disablePartyInfo = true;
-
-//TODO: Each person needs there own booleans
-var disableNameInfo = true;
-var disableLeftInfo = true;
-var disableRightInfo = true;
 var userLoggedIn = false;
 
 var redmoorAddress = "The+Redmoor,3187+Linwood+Avenue,Cincinnati+OH+45208";
@@ -170,10 +165,12 @@ function init() {
         console.log("Clicked save music");
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', 'add-song-name', 'add-song-artist']);
+		showLoadingWheel();
         $.post("php/add_music_suggestion.php", formData, function(returnData) {
             console.log("Add music suggestion received:");
             console.log(returnData);
-
+			
+			hideLoadingWheel();
             if(returnData.status){
                 var songName = $('#add-song-name').val();
                 var artistName = $('#add-song-artist').val();
@@ -239,14 +236,27 @@ function init() {
 		});
     });
 }
+
 function populateErrorMessage(whatHappened){
     console.log('ERROR!!! ' + whatHappened);
 	$('#hide-everything-else').show();
 	$('#pop-ups').addClass('pop-up-on');
     $('#error-box').show();
     $('#error-reason').html(whatHappened);
-
 }
+
+function showLoadingWheel() {
+	$('#hide-everything-else').show();
+	$('#pop-ups').addClass('pop-up-on');
+	$('#loading-wheel-box').show();
+}
+
+function hideLoadingWheel() {
+	$('#loading-wheel-box').hide();
+	$('#hide-everything-else').hide();
+	$('#pop-ups').removeClass('pop-up-on');
+}
+
 function populatePlusOne(partyPerson){
     console.log('You added Someone!');
     var partyLength = globalPartyInfo.party_people.length;
@@ -318,10 +328,10 @@ function populatePlusOne(partyPerson){
     var foodMenu = $('#' + partyLength + '-person-food');
     var foodArray = globalPartyInfo.food_choices;
     for(var k = 0; k < foodArray.length; k++){
-        if(k == partyPersonFood){
-            foodMenu.append('<option selected="selected">' + foodArray[k] + '</option>');
+        if(k == (partyPersonFood - 1)) {
+            foodMenu.append('<option value="' + (k + 1) + '" selected="selected">' + foodArray[k] + '</option>');
         }else{
-            foodMenu.append('<option>' + foodArray[k] + '</option>');
+            foodMenu.append('<option value="' + (k + 1) + '">' + foodArray[k] + '</option>');
         }
     }
     foodMenu.selectmenu({
@@ -471,6 +481,12 @@ function generatePartyInfo(jsonObject){
     for(var i = 0; i < partyPeople.length; i++){
         partyContainer.append('<input type="hidden" name="person_id" id="'+ i + '_person_id'  +'" value="' + partyPeople[i].person_id + '" />');
         var partyPerson = partyPeople[i];
+		
+		// Add some state tracking variables we need to each person
+		partyPerson.disableNameInfo = true;
+		partyPerson.disableLeftInfo = true;
+		partyPerson.disableRightInfo = true;
+		
         //Party Person Name
         var partyPersonFirstName = partyPerson.first_name;
         var partyPersonLastName = partyPerson.last_name;
@@ -594,11 +610,12 @@ function generatePartyInfo(jsonObject){
         if(partyPersonFood == null){
             foodMenu.append('<option selected="selected" value="-1" disabled>Select an Option</option>');
         }
+		
         for(var k = 0; k < foodArray.length; k++){
-            if(k == partyPersonFood){
-                foodMenu.append('<option selected="selected" value="' + k +'">' + foodArray[k] + '</option>');
+            if(k == (partyPersonFood - 1)){
+                foodMenu.append('<option selected="selected" value="' + (k + 1) +'">' + foodArray[k] + '</option>');
             }else{
-                foodMenu.append('<option value="' + k + '">' + foodArray[k] + '</option>');
+                foodMenu.append('<option value="' + (k + 1) + '">' + foodArray[k] + '</option>');
             }
         }
         foodMenu.selectmenu({
@@ -691,11 +708,13 @@ function generatePartyInfo(jsonObject){
     }
 
 }
+
 function clearAddMusicFields(){
     console.log("clear music");
     $('#add-song-name').val('');
     $('#add-song-artist').val('');
 }
+
 function clearAddPlusOneFields(){
     console.log("clear add plus one");
     $('#plus-one-first-name').val('');
@@ -704,15 +723,18 @@ function clearAddPlusOneFields(){
     $('#plus-one-over-21').val(-1).selectmenu('refresh', true);
 
 }
+
 function clearLoginField(){
     $('#guest-login-code').val('');
     $('#guest-login-code-home').val('');
 }
+
 function clearContactFields(){
     $('#guest-name').val('');
     $('#guest-email').val('');
     $('#guest-content').val('');
 }
+
 function deleteMusicSuggestion(songId){
     return function(){
         console.log("DELETE");
@@ -720,9 +742,11 @@ function deleteMusicSuggestion(songId){
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', songId +'-song-title', songId + '-artist-name']);
+		showLoadingWheel();
         $.post("php/remove_music_suggestion.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(returnData);
+			hideLoadingWheel();
             if(returnData.status){
                 songSuggestion.remove();
                 globalMusicLength[0]--;
@@ -733,6 +757,7 @@ function deleteMusicSuggestion(songId){
         });
     };
 }
+
 function addAllergy(personContainerId){
     return function(){
         console.log("ADD");
@@ -743,10 +768,12 @@ function addAllergy(personContainerId){
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId + '-new-allergy']);
+		showLoadingWheel();
         $.post("php/add_allergy.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(returnData);
 
+			hideLoadingWheel();
             if(returnData.status){
                 var k = globalAllergiesArray[personContainerId];
                 allergiesList.append('<li id="'+ personContainerId + k +'-allergy-list-box" class="allergy"><span data-name="allergy" id="'+ personContainerId + k +'-allergy-list">'+ returnData.allergy +'</span></li>');
@@ -771,10 +798,13 @@ function deleteAllergy(personContainerId, allergyId){
 
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', personContainerId + '_person_id', personContainerId +''+ allergyId + '-allergy-list']);
+		showLoadingWheel();
         $.post("php/remove_allergy.php", formData, function(returnData) {
             console.log("Update person received:");
             console.log(formData);
             console.log(returnData);
+			
+			hideLoadingWheel();
             if(returnData.status){
                 allergy.remove();
             }else{
@@ -805,7 +835,7 @@ function setUpSaveOrCancelButton(id, buttonType){
 //Left Side Info
 function setUpInfoLeftEditButton(id, buttonType){
     return function(){
-        disableLeftInfo = !disableLeftInfo;
+		globalPartyInfo.party_people[id].disableLeftInfo = !globalPartyInfo.party_people[id].disableLeftInfo;
         console.log(id + ' editButton');
         $('#' + id + '-person-attending').selectmenu("enable");
         $('#' + id + '-person-food').selectmenu("enable");
@@ -822,7 +852,7 @@ function setUpInfoLeftEditButton(id, buttonType){
 }
 function setUpInfoLeftCancelButton(id, buttonType){
     return function(){
-        disableLeftInfo = !disableLeftInfo;
+        globalPartyInfo.party_people[id].disableLeftInfo = !globalPartyInfo.party_people[id].disableLeftInfo;
         console.log(id + ' editButton');
         $('#' + id + '-person-attending').selectmenu("disable");
         $('#' + id + '-person-food').selectmenu("disable");
@@ -873,20 +903,6 @@ function setUpInfoLeftCancelButton(id, buttonType){
 }
 function setUpInfoLeftSaveButton(id, buttonType){
     return function(){
-        disableLeftInfo = !disableLeftInfo;
-        console.log(id + ' editButton');
-        $('#' + id + '-person-attending').selectmenu("disable");
-        $('#' + id + '-person-food').selectmenu("disable");
-        $('#' + id + '-person-over-21').selectmenu("disable");
-		if (globalPartyInfo.party_people[id].is_invited_to_rehearsal) {
-			$('#' + id + '-person-attending-rehearsal').selectmenu("disable");
-		}
-		if (globalPartyInfo.party_people[id].is_invited_to_movie) {
-			$('#' + id + '-person-attending-movie').selectmenu("disable");
-		}
-
-        setUpSaveOrCancelButton(id, buttonType);
-
         // Serialize all of the form data
 		var formFields = ['party_id', 'auth_token', id + '_person_id', id + '-person-attending', id + '-person-food', id + '-person-over-21'];
 		if (globalPartyInfo.party_people[id].is_invited_to_rehearsal) {
@@ -897,6 +913,7 @@ function setUpInfoLeftSaveButton(id, buttonType){
 		}
 		
         var formData = serializeFormData(formFields);
+		showLoadingWheel();
         $.post("php/update_person_info.php", formData, createUpdatePersonInfoCallback(globalPartyInfo, id));
     };
 }
@@ -904,15 +921,15 @@ function setUpInfoLeftSaveButton(id, buttonType){
 //RIGHT SIDE INFO (Allergies)
 function setUpInfoRightEditButton(id){
     return function(){
-        disableRightInfo = !disableRightInfo;
+		globalPartyInfo.party_people[id].disableRightInfo = !globalPartyInfo.party_people[id].disableRightInfo;
         console.log(id + ' editButton');
 
         var newAllergy = $('#' + id + '-new-allergy');
         var newAllergyButton = $('#' + id + '-new-allergy-button');
-        newAllergy.prop("disabled", disableRightInfo);
-        newAllergyButton.prop("disabled", disableRightInfo);
+        newAllergy.prop("disabled", globalPartyInfo.party_people[id].disableRightInfo);
+        newAllergyButton.prop("disabled", globalPartyInfo.party_people[id].disableRightInfo);
 
-        if(disableRightInfo){
+        if(globalPartyInfo.party_people[id].disableRightInfo){
             newAllergyButton.hide();
             newAllergy.hide();
         }else{
@@ -926,8 +943,8 @@ function setUpInfoRightEditButton(id){
 
         for(var k = 0; k < allergies; k++){
             var currentButton = $('#' + id + k + '-allergy-button');
-            currentButton.prop("disabled", disableRightInfo);
-            if(disableRightInfo){
+            currentButton.prop("disabled", globalPartyInfo.party_people[id].disableRightInfo);
+            if(globalPartyInfo.party_people[id].disableRightInfo){
                 currentButton.hide();
             }else{
                 currentButton.show();
@@ -938,20 +955,20 @@ function setUpInfoRightEditButton(id){
 
 function setUpPersonNameEditButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
+		globalPartyInfo.party_people[id].disableNameInfo = !globalPartyInfo.party_people[id].disableNameInfo;
         console.log(id + ' editButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
+        $('#' + id + '-person-first-name').prop("disabled", globalPartyInfo.party_people[id].disableNameInfo);
+        $('#' + id + '-person-last-name').prop("disabled", globalPartyInfo.party_people[id].disableNameInfo);
 
         setUpEditButton(id, buttonType);
     };
 }
 function setUpPersonNameCancelButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
+		globalPartyInfo.party_people[id].disableNameInfo = !globalPartyInfo.party_people[id].disableNameInfo;
         console.log(id + ' editButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
+        $('#' + id + '-person-first-name').prop("disabled", globalPartyInfo.party_people[id].disableNameInfo);
+        $('#' + id + '-person-last-name').prop("disabled", globalPartyInfo.party_people[id].disableNameInfo);
 
         setUpSaveOrCancelButton(id, buttonType);
 		
@@ -962,15 +979,9 @@ function setUpPersonNameCancelButton(id, buttonType){
 }
 function setUpPersonNameSaveButton(id, buttonType){
     return function(){
-        disableNameInfo = !disableNameInfo;
-        console.log(id + ' saveButton');
-        $('#' + id + '-person-first-name').prop("disabled", disableNameInfo);
-        $('#' + id + '-person-last-name').prop("disabled", disableNameInfo);
-
-        setUpSaveOrCancelButton(id, buttonType);
-
         // Serialize all of the form data
         var formData = serializeFormData(['party_id', 'auth_token', id + '_person_id',id + '-person-first-name', id + '-person-last-name']);
+		showLoadingWheel();
         $.post("php/update_person_name.php", formData, createUpdatePersonNameCallback(globalPartyInfo, id));
     };
 }
@@ -1008,18 +1019,9 @@ function setUpPartyInfoCancelButton(id, buttonType){
 	$("#party-address-zip").val(globalPartyInfo.party_info.addr_zip);
 }
 function setUpPartyInfoSaveButton(id, buttonType){
-    disablePartyInfo = !disablePartyInfo;
-    $("#party-address-house-num").prop("disabled", disablePartyInfo);
-    $("#party-address-street").prop("disabled", disablePartyInfo);
-    $("#party-address-apt").prop("disabled", disablePartyInfo);
-    $("#party-address-city").prop("disabled", disablePartyInfo);
-    $("#party-address-state").prop("disabled", disablePartyInfo);
-    $("#party-address-zip").prop("disabled", disablePartyInfo);
-
-    setUpSaveOrCancelButton(id, buttonType);
-
     // Serialize all of the form data
     var formData = serializeFormData(['party_id', 'auth_token', 'party-address-house-num', 'party-address-street', 'party-address-apt', 'party-address-city', 'party-address-state', 'party-address-zip']);
+	showLoadingWheel();
     $.post("php/update_address.php", formData, createUpdateAddressCallback(globalPartyInfo));
 
 }
@@ -1027,11 +1029,20 @@ function setUpPartyInfoSaveButton(id, buttonType){
 function createUpdatePersonNameCallback(partyInfo, personContainerID) {
 	return function(returnData) {
 		console.log(returnData);
+		hideLoadingWheel();
 		if (!returnData.status) {
 			// Restore the old values
 			$('#' + personContainerID + '-person-first-name').val(partyInfo.party_people[personContainerID].first_name);
 			$('#' + personContainerID + '-person-last-name').val(partyInfo.party_people[personContainerID].last_name);
 		} else {
+			// Exit edit mode
+			partyInfo.party_people[personContainerID].disableNameInfo = !partyInfo.party_people[personContainerID].disableNameInfo;
+			console.log(personContainerID + ' saveButton');
+			$('#' + personContainerID + '-person-first-name').prop("disabled", partyInfo.party_people[personContainerID].disableNameInfo);
+			$('#' + personContainerID + '-person-last-name').prop("disabled", partyInfo.party_people[personContainerID].disableNameInfo);
+
+			setUpSaveOrCancelButton(personContainerID, "-person-name");
+			
 			// Remember the new values
 			partyInfo.party_people[personContainerID].first_name = $('#' + personContainerID + '-person-first_name').val();
 			partyInfo.party_people[personContainerID].last_name = $('#' + personContainerID + '-person-last-name').val();
@@ -1042,44 +1053,24 @@ function createUpdatePersonNameCallback(partyInfo, personContainerID) {
 function createUpdatePersonInfoCallback(partyInfo, personContainerID) {
 	return function(returnData) {
 		console.log(returnData);
+		hideLoadingWheel();
 		if (!returnData.status) {
-			console.log("Joining us old value: " + partyInfo.party_people[personContainerID].is_attending);
-			// Restore the old values
-			if (partyInfo.party_people[personContainerID].is_attending === null) {
-				$('#' + personContainerID + '-person-attending').val(-1).selectmenu('refresh', true);
-			} else {
-				$('#' + personContainerID + '-person-attending').val(partyInfo.party_people[personContainerID].is_attending ? "1" : "0").selectmenu('refresh', true);
-			}
-			
-			if (partyInfo.party_people[personContainerID].food_pref === null) {
-				$('#' + personContainerID + '-person-food').val(-1).selectmenu('refresh', true);
-			} else {
-				$('#' + personContainerID + '-person-food').val(partyInfo.party_people[personContainerID].food_pref).selectmenu('refresh', true);
-			}
-			
-			if (partyInfo.party_people[personContainerID].over_21 === null) {
-				$('#' + personContainerID + '-person-over-21').val(-1).selectmenu('refresh', true);
-			} else {
-				$('#' + personContainerID + '-person-over-21').val(partyInfo.party_people[personContainerID].over_21 ? "1" : "0").selectmenu('refresh', true);
-			}
-			
-			if (partyInfo.party_people[personContainerID].is_invited_to_rehearsal) {
-				if (partyInfo.party_people[personContainerID].is_attending_rehearsal === null) {
-					$('#' + personContainerID + '-person-attending-rehearsal').val(-1).selectmenu('refresh', true);
-				} else {
-					$('#' + personContainerID + '-person-attending-rehearsal').val(partyInfo.party_people[personContainerID].is_attending_rehearsal ? "1" : "0").selectmenu('refresh', true);
-				}
-			}
-			
-			if (partyInfo.party_people[personContainerID].is_invited_to_movie) {
-				if (partyInfo.party_people[personContainerID].is_attending_movie === null) {
-					$('#' + personContainerID + '-person-attending-movie').val(-1).selectmenu('refresh', true);
-				} else {
-					$('#' + personContainerID + '-person-attending-movie').val(partyInfo.party_people[personContainerID].is_attending_movie ? "1" : "0").selectmenu('refresh', true);
-				}
-			}
 			populateErrorMessage(returnData.reason);
 		} else {
+			// Disable editing
+			partyInfo.party_people[personContainerID].disableLeftInfo = !partyInfo.party_people[personContainerID].disableLeftInfo;
+			console.log(personContainerID + ' editButton');
+			$('#' + personContainerID + '-person-attending').selectmenu("disable");
+			$('#' + personContainerID + '-person-food').selectmenu("disable");
+			$('#' + personContainerID + '-person-over-21').selectmenu("disable");
+			if (globalPartyInfo.party_people[personContainerID].is_invited_to_rehearsal) {
+				$('#' + personContainerID + '-person-attending-rehearsal').selectmenu("disable");
+			}
+			if (globalPartyInfo.party_people[personContainerID].is_invited_to_movie) {
+				$('#' + personContainerID + '-person-attending-movie').selectmenu("disable");
+			}
+			setUpSaveOrCancelButton(personContainerID, "-info-left");
+			
 			// Remember the new values
 			partyInfo.party_people[personContainerID].is_attending = ($('#' + personContainerID + '-person-attending').val() == "1") ? true : false;
 			partyInfo.party_people[personContainerID].food_pref = $('#' + personContainerID + '-person-food').val();
@@ -1097,16 +1088,21 @@ function createUpdatePersonInfoCallback(partyInfo, personContainerID) {
 function createUpdateAddressCallback(partyInfo) {
 	return function(returnData) {
 		console.log(returnData);
+		hideLoadingWheel();
 		if (!returnData.status) {
-			// Restore the old values
-			$('#party-address-house-num').val(partyInfo.party_info.addr_house_num);
-			$('#party-address-street').val(partyInfo.party_info.addr_street);
-			$('#party-address-apt').val(partyInfo.party_info.addr_apt);
-			$('#party-address-city').val(partyInfo.party_info.addr_city);
-			$('#party-address-state').val(partyInfo.party_info.addr_state);
-			$('#party-address-zip').val(partyInfo.party_info.addr_zip);
-			// TODO: alert the user to the error
+			populateErrorMessage(returnData.reason);
 		} else {
+			// Disable edit mode
+			disablePartyInfo = !disablePartyInfo;
+			$("#party-address-house-num").prop("disabled", disablePartyInfo);
+			$("#party-address-street").prop("disabled", disablePartyInfo);
+			$("#party-address-apt").prop("disabled", disablePartyInfo);
+			$("#party-address-city").prop("disabled", disablePartyInfo);
+			$("#party-address-state").prop("disabled", disablePartyInfo);
+			$("#party-address-zip").prop("disabled", disablePartyInfo);
+
+			setUpSaveOrCancelButton('', 'party-info');
+			
 			// Remember the new values
 			partyInfo.party_info.addr_house_num = $('#party-address-house-num').val();
 			partyInfo.party_info.addr_street = $('#party-address-street').val();
