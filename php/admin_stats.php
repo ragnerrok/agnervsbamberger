@@ -73,6 +73,26 @@
 		$rehearsal_invitees = get_stat($db_conn, "num_rehearsal_invitees()");
 		echo("Rehearsal Dinner Invitees: " . $rehearsal_invitees);
 		echo("<br />");
+		
+		// Movie invitees
+		$movie_invitees = get_stat($db_conn, "num_movie_invitees()");
+		echo("Movie invitees: " . $movie_invitees);
+		echo("<br />");
+		
+		// Number of wedding invitations to send
+		$wedding_invitations = get_stat($db_conn, "num_invitations()");
+		echo("Wedding invitations: " . $wedding_invitations);
+		echo("<br />");
+		
+		// Number of rehearsal dinner invitations to send
+		$rehearsal_invitations = get_stat($db_conn, "num_rehearsal_invitations()");
+		echo("Rehearsal dinner invitations: " . $rehearsal_invitations);
+		echo("<br />");
+		
+		// Number of movie invitations to send
+		$movie_invitations = get_stat($db_conn, "num_movie_invitations()");
+		echo("Movie invitations: " . $movie_invitations);
+		echo("<br />");
 ?>
 	</body>
 
