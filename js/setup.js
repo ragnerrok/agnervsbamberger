@@ -222,6 +222,8 @@ function init() {
 			$('#error-box')[0].on_close_function();
 		}
     });
+	
+	$('#close-welcome-box').button().click(hideWelcomeBox);
 
     //Contact Content
     $("#send-email-button").button().click(function() {
@@ -263,6 +265,47 @@ function hideLoadingWheel() {
 	$('#loading-wheel-box').hide();
 	$('#hide-everything-else').hide();
 	$('#pop-ups').removeClass('pop-up-on');
+}
+
+function showWelcomeBox() {
+	$('#welcome-box').show();
+	$('#hide-everything-else').show();
+	$('#pop-ups').addClass('pop-up-on');
+}
+
+function hideWelcomeBox() {
+	$('#welcome-box').hide();
+	$('#hide-everything-else').hide();
+	$('#pop-ups').removeClass('pop-up-on');
+}
+
+function shouldShowWelcomeBox(partyInfo) {
+	var people_info = partyInfo.party_people;
+	
+	// We show the welcome box if any of the people in the party still have choices they need to make
+	for (var i = 0; i < people_info.length; ++i) {
+		if (people_info[i].is_attending === null) {
+			return true;
+		}
+		
+		if (people_info[i].food_pref === null) {
+			return true;
+		}
+		
+		if (people_info[i].is_invited_to_rehearsal) {
+			if (people_info[i].is_attending_rehearsal === null) {
+				return true;
+			}
+		}
+		
+		if (people_info[i].is_invited_to_movie) {
+			if (people_info[i].is_attending_movie === null) {
+				return true;
+			}
+		}
+	}
+	
+	return false;
 }
 
 function populatePlusOne(partyPerson){
@@ -469,6 +512,10 @@ function generatePartyInfo(jsonObject){
     globalPartyLength = jsonObject.party_info.current_plus_ones;
     checkForMaxPlusOnes();
     checkForMaxMusicSuggestions();
+	
+	if (shouldShowWelcomeBox(jsonObject)) {
+		showWelcomeBox();
+	}
 	
 	// Populate the add plus one popup with the appropriate food choices
 	var addPlusOneFoodSelect = $('#plus-one-food');

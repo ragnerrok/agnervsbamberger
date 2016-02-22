@@ -5,6 +5,9 @@ html, body{
 body{
     position: relative;
 }
+ul{
+	list-style-image: url('../images/gears/svg/gear-5-dark-brown.svg');
+}
 #title{
     width: 560px;
     height: 100px;
@@ -93,6 +96,9 @@ body{
 }
 #add-song-suggestion-box{
     height: 185px;
+}
+#welcome-box{
+	width: 30%;
 }
 .pop-up-box{
     position: absolute;
@@ -400,6 +406,9 @@ input.ui-widget.form-add-button{
 .font-size-40{
     font-size: 40px;
 }
+.font-size-30{
+	font-size: 30px;
+}
 .font-size-25{
     font-size: 25px;
 }
@@ -458,6 +467,9 @@ input.ui-widget.form-add-button{
 }
 .person-label:hover .hover-person-background{
     background-color: #bccbe5;
+}
+.v-align-top{
+	vertical-align: top;
 }
 
 @-moz-keyframes spin { 100% {-moz-transform: rotate(360deg); } }

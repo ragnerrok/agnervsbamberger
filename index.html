@@ -33,6 +33,17 @@
 </head>
 <body class="larkspur-background">
     <div id="pop-ups">
+		<div id="welcome-box" style="display: none;" class="pop-up-box larkspur-background centuryGothicFont">
+			<h1 class="astrudFont">Welcome!</h1>
+			Please use each person's drop down on the left to RSVP either yes or no, and to indicate your food preference.  To edit these values,
+			click the edit button, change any values you need to, and click save to commit your changes.  If you have any food allergies, please
+			add them to the list on the right for each person.  If you need to update your name or address, this can be done by using the edit
+			buttons next to each name, and your address, respectively.  Additionally, if you have any suggestions for music to play at the reception,
+			you can add them using the box on the right.  If you have any questions or problems with the website, please don't hesitate to contact us
+			using the contact button at the top of the page.
+			<br />
+			<input type="submit" id="close-welcome-box" class="form-button" value="Got it!" />
+		</div>
         <div id="error-box" style="display: none;" class="pop-up-box light-red-background">
             <div id="error-label" class="label font-size-25 astrudFont dark-red-text">ERROR!</div>
             <div id="error-reason" class="label centuryGothicFont dark-red-text"></div>
@@ -231,13 +242,25 @@
     </div>
     <div id="schedule-content" class="content-container" style="display: none">
         <div class="astrudFont font-size-60 dark-larkspur-text">June 11th Schedule</div>
-
+		<ul class="astrudFont font-size-30 dark-larkspur-text">
+			<li>4:30 PM</li>
+			<span class="centuryGothicFont font-size-20 v-align-top">Doors open at The Redmoor</span>
+			<li>5:00 PM</li>
+			<span class="centuryGothicFont font-size-20 v-align-top">Wedding Ceremony</span>
+			<li>5:30 PM</li>
+			<span class="centuryGothicFont font-size-20 v-align-top">Ceremony Finishes</span>
+			<li>5:45 PM-11:00 PM</li>
+			<span class="centuryGothicFont font-size-20 v-align-top">Dinner/Reception</span>
+		</ul>
     </div>
     <div id="faq-content" class="content-container" style="display: none">
         <div class="astrudFont font-size-60 dark-larkspur-text">FREQUENTLY ASKED QUESTIONS</div>
 
         <div id="">
-
+			<ul class="astrudFont font-size-30 dark-larkspur-text">
+				<li>Can I wear a top hat?</li>
+				<span class="centuryGothicFont font-size-20 v-align-top">Yes!  Absolutely!  Top hats are encouraged</span>
+			</ul>
         </div>
     </div>
     <div id="contact-content" class="content-container" style="display: none">
