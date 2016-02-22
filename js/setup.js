@@ -46,6 +46,7 @@ function init() {
         switchContent(ContentEnum.HOME_CONTENT);
     });
 
+
     //Side Menu
     $( "#rsvp-button" ).button().click(function() {
         console.log("Clicked RSVP");

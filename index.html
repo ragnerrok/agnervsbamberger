@@ -86,6 +86,14 @@
         <div id="bamberger-text" class="astrudFont font-size-60 dark-larkspur-text">
             BAMBERGER
         </div>
+        <div id="title-gear-holder">
+            <div id="bride-silhouette"></div>
+            <div id="groom-silhouette"></div>
+            <div id="title-gear-type-5-1" class="light-larkspur-gear-5 gear-animation"></div>
+            <div id="title-gear-type-1" class="light-brown-gear-1 gear-animation"></div>
+            <div id="title-gear-type-2" class="dark-brown-gear-2 gear-animation"></div>
+            <div id="title-gear-type-5-2" class="light-larkspur-gear-5 gear-animation"></div>
+        </div>
     </div>
     <div id="menu-bar" class="dark-brown-background">
         <button id="rsvp-button" class="menu-bar-button">
@@ -123,10 +131,20 @@
             <div class="astrudFont font-size-25 dark-larkspur-text">Don't know what to wear? Wear a hat! </div>
             <div class="astrudFont font-size-25 dark-larkspur-text">Hat Links</div>
         </div>
+        <div id="welcome-image">
+            <div id="bride-groom-image"></div>
+            <div id="gear-background" class="gear-animation"></div>
+        </div>
     </div>
     <div id="rsvp-content" class="content-container" style="display: none">
         <!-- People Accordion -->
-        <div class="astrudFont font-size-60 dark-larkspur-text">RSVP</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">
+            <div class="relative-position">RSVP</div>
+            <div id="rsvp-gear-holder">
+                <div id="rsvp-gear-type-5" class="light-larkspur-gear-5 gear-animation"></div>
+                <div id="rsvp-gear-type-4" class="light-brown-gear-4 gear-animation"></div>
+            </div>
+        </div>
         <div id="guest-not-logged-in">
             <div id="guest-log-in-label" class="log-in-label dark-larkspur-text centuryGothicFont">Type in your assigned RSVP Log In Code</div>
 			<!--<input  type="text" id="guest-login-code" class="form-input" name="login_code"/>-->
@@ -135,13 +153,16 @@
         </div>
         <div id="guest-logged-in" style="display: none">
             <div id="people-in-party">
-                <div id="people-accordion">
+                <div id="people-accordion" class="relative-position">
 
                 </div>
-                <button id="add-plus-one-button">Add Plus One</button>
+                <button id="add-plus-one-button" class="relative-position">Add Plus One</button>
+                <div id="people-in-party-gear-holder">
+                    <div id="people-in-party-gear-type-2" class="dark-brown-gear-2 gear-animation"></div>
+                </div>
             </div>
             <div id="party-box">
-                <div id="party-info-content">
+                <div id="party-info-content" class="relative-position larkspur-background">
                     <div id="party-info-box" class="astrudFont dark-larkspur-text">
                         <div id="party-info-label" class="font-size-25">Your Information</div>
                         <input  type="submit" id="party-info-edit-button" class="form-button form-edit-float-button" value="edit"/>
@@ -151,18 +172,20 @@
                     <div class="address-label label astrudFont font-size-25 dark-larkspur-text">
                         Address
                     </div>
-
                 </div>
-
-                <div id="music-suggestions-content">
+                <div id="music-suggestions-content" class="relative-position larkspur-background">
                     <div id="music-suggestions-title" class="astrudFont font-size-40 dark-larkspur-text">Suggest Music</div>
-                    <table id="song-table">
+                    <table id="song-table" class="relative-position">
                         <tr>
 							<td class="song-band font-size-25 astrudFont dark-larkspur-text">ARTIST</td>
                             <td class="song-name font-size-25 astrudFont dark-larkspur-text">SONG TITLE</td>
                         </tr>
                     </table>
-                    <button id="add-music-button">Add a Music Suggestion</button>
+                    <button id="add-music-button" class="relative-position">Add a Music Suggestion</button>
+                </div>
+                <div id="party-box-gear-holder">
+                    <div id="party-box-gear-type-2-1" class="dark-brown-gear-2 gear-animation"></div>
+                    <div id="party-box-gear-type-2-2" class="dark-brown-gear-2 gear-animation"></div>
                 </div>
             </div>
         </div>

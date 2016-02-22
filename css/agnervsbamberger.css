@@ -6,21 +6,27 @@ body{
     position: relative;
 }
 #title{
-    width: 560px;
+    width: 740px;
     height: 100px;
     margin: 0px -10px;
     cursor: pointer;
 }
 
 #agner-text{
+    position: relative;
+    z-index: 10;
     float: left;
     margin: 10px 45px;
 }
 #vs-text{
+    position: relative;
+    z-index: 10;
     float: left;
-    margin: 0px 20px;
+    margin: 0px 110px;
 }
 #bamberger-text{
+    position: relative;
+    z-index: 10;
     float: right;
     margin: 10px 45px;
 }
@@ -29,6 +35,12 @@ body{
     margin: 10px 10px 0px 25px;
     padding-bottom: 150px;
     /*border: #2f3a4c solid;*/
+}
+.content-title{
+    width: 100%;
+}
+#home-content{
+    height: 600px;
 }
 .label{
     font-weight: bold;
@@ -57,7 +69,7 @@ body{
 
 /* Side Menu */
 #menu-bar{
-    width: 100%;
+
     border-top: #bccbe5 solid;
     border-right: #4c4128 solid;
     border-bottom: #4c4128 solid;
@@ -154,9 +166,17 @@ input.ui-button.form-add-song{
 .right-info-side{
     float: right;
     width: 42%;
-    height: 225px;
     border-left: #2f3a4c solid 1px;
     padding: 5px 5px 5px 10px;
+}
+.one-rsvp{
+    height: 230px;
+}
+.two-rsvp{
+    height: 330px;
+}
+.three-rsvp{
+    height: 430px;
 }
 .ui-widget input.person-label{
     font-size: 28px;
@@ -174,9 +194,13 @@ input.ui-button.form-add-song{
 }
 
 #people-in-party{
+    position: relative;
     float: left;
     width: 400px;
     margin: 5px 10px 5px 5px;
+}
+#people-accordion{
+    width: 400px;
 }
 
 .ui-accordion .ui-accordion-content.person-info{
@@ -194,12 +218,16 @@ input.ui-button.form-add-song{
 .strike-out{
     text-decoration: line-through;
 }
-.form-add-allergy{
+.ui-widget input.form-add-allergy{
     border: none;
     border-radius: 3px;
+    padding: 2px 5px;
+    width: 125px;
+    font-family: centuryGothic;
+    font-size: 15px;
 }
 li.allergy{
-    padding-right: 10px;
+    padding-right: 3px;
     display: block;
 }
 ul.allergy-list{
@@ -209,7 +237,7 @@ ul.allergy-list{
 /* Group Information */
 #party-box{
     float: left;
-    width: 250px;
+    width: 360px;
     height: 500px;
 }
 .address-label{
@@ -350,7 +378,7 @@ input.ui-widget.form-add-button{
     width: 20px;
     height: 20px;
     padding: 0px 0px 0px 0px;
-    margin-left: 10px;
+    margin: 0px 0px 5px 10px;
     font-size: 15px;
     font-family: centuryGothic;
 }
@@ -369,7 +397,7 @@ input.ui-widget.form-add-button{
     border: #2f3a4c solid 1px;
     border-radius: 3px;
     padding: 10px;
-    margin: 7px 10px;
+    margin: 20px 10px;
 }
 .song-name{
     padding-right: 12px;
@@ -474,4 +502,173 @@ div.loading-animation {
 	float: right;
 	width: 50px;
 	height: 50px;
+}
+
+div.gear-animation:hover {
+    -moz-animation:spin 3.5s linear infinite;
+    -webkit-animation:spin 3.5s linear infinite;
+    animation:spin 3.5s linear infinite;
+}
+.light-larkspur-gear-5{
+    background-image: url("../images/gears/png/gear-5-light-blue.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.light-brown-gear-4{
+    background-image: url("../images/gears/png/gear-4-light-brown.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.dark-brown-gear-2{
+    background-image: url("../images/gears/png/gear-2-dark-brown.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.light-brown-gear-1{
+    background-image: url("../images/gears/png/gear-1-light-brown.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.relative-position{
+    position: relative;
+    float: left;
+    z-index: 10;
+}
+/* Title */
+#bride-silhouette{
+    background-image: url("../images/bride.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 690px;
+}
+#groom-silhouette{
+    background-image: url("../images/groom.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 690px;
+}
+#title-gear-holder{
+    position: relative;
+    z-index: 1;
+    width: 400px;
+    height: 100px;
+}
+#title-gear-type-5-1{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: -50px;
+}
+#title-gear-type-5-2{
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    left: 690px;
+}
+#title-gear-type-2{
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    left: 280px;
+    top: 0px;
+}
+#title-gear-type-1{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    left: 320px;
+    top: 40px;
+}
+
+/* RSVP */
+#rsvp-gear-holder{
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100px;
+}
+#rsvp-gear-type-5{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    left: -30px;
+    top: -9px;
+}
+#rsvp-gear-type-4{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    left: 50px;
+    top: 30px;
+}
+/* People Accordion*/
+#people-in-party-gear-holder{
+    position: relative;
+    z-index: 1;
+    width: 400px;
+    height: 100px;
+}
+#people-in-party-gear-type-2{
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    right: -20px;
+    top: -20px;
+}
+/* Party Box */
+#party-box-gear-holder{
+    position: relative;
+    z-index: 1;
+    width:100%;
+    height: 10px;
+}
+#party-box-gear-type-2-1{
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    right: -20px;
+    top: -15px;
+}
+#party-box-gear-type-2-2{
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    right: -20px;
+    top: 165px;
+}
+/* Welcome Page */
+#welcome-image{
+    position: relative;
+    float: left;
+}
+#bride-groom-image:hover + .gear-animation{
+    -moz-animation:spin 3.5s linear infinite;
+    -webkit-animation:spin 3.5s linear infinite;
+    animation:spin 3.5s linear infinite;
+}
+#bride-groom-image{
+    background-image: url("../images/bride-groom.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    top: 20px;
+    left: 90px;
+    width: 333px;
+    height: 466px;
+    z-index: 10;
+}
+#gear-background{
+    background-image: url("../images/gears/svg/gear-background-light-blue.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    width: 550px;
+    height: 550px;
 }
