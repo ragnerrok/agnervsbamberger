@@ -37,14 +37,25 @@
 		$update_query = null;
 	}
 	
+	$people_query = $db_conn->prepare("CALL get_people_in_party(:party_id)");
+	
 	// Output the results as a CSV file
 	header("Content-type: text/csv");
 	header("Content-Disposition: attachment; filename=signin_codes.csv");
 	header("Pragma: no-cache");
 	header("Expires: 0");
 	
-	echo("Party_ID,Sign_In_Code,Sign_In_Hash\n");
+	echo("Party_ID,Sign_In_Code,Sign_In_Hash,Addr_House_Num,Addr_Street,Addr_Apt,Addr_City,Addr_State,Addr_Zip,People\n");
 	for ($i = 0; $i < count($results); ++$i) {
-		echo($results[$i]["party_id"] . "," . $sign_in_codes[$i] . "," . $code_hashes[$i] . "\n");
+		echo($results[$i]["party_id"] . "," . $sign_in_codes[$i] . "," . $code_hashes[$i] . "," . $results[$i]["addr_house_num"] . "," . $results[$i]["addr_street"] . "," . $results[$i]["addr_apt"] . "," . $results[$i]["addr_city"] . "," . $results[$i]["addr_state"] . "," . $results[$i]["addr_zip"]);
+		// Get the people in the party
+		$people_query->bindParam(":party_id", $results[$i]["party_id"]);
+		$people_query->execute();
+		$people_info = $people_query->fetchAll(PDO::FETCH_ASSOC);
+		$people_query->closeCursor();
+		for ($j = 0; $j < count($people_info); ++$j) {
+			echo("," . $people_info[$j]["first_name"] . " " . $people_info[$j]["last_name"]);
+		}
+		echo("\n");
 	}
 ?>
