@@ -563,7 +563,23 @@ function generatePartyInfo(jsonObject){
         partyAccordion.append('<div id="' + i + '-person-info" class="person-info">' + '</div>');
         var partyPersonInfoDiv = $('#' + i + '-person-info');
         partyPersonInfoDiv.append('<div id="' + i + '-person-info-left" class="left-info-side">' + '</div>');
-        partyPersonInfoDiv.append('<div id="' + i + '-person-info-right" class="right-info-side">' + '</div>');
+		
+		var infoBoxHeight = 1;
+		if (partyPerson.is_invited_to_rehearsal) {
+			infoBoxHeight++;
+		}
+		if (partyPerson.is_invited_to_movie) {
+			infoBoxHeight++;
+		}
+		
+		if (infoBoxHeight == 1) {
+			partyPersonInfoDiv.append('<div id="' + i + '-person-info-right" class="right-info-side one-rsvp">' + '</div>');
+		} else if (infoBoxHeight == 2) {
+			partyPersonInfoDiv.append('<div id="' + i + '-person-info-right" class="right-info-side two-rsvp">' + '</div>');
+		} else if (infoBoxHeight == 3) {
+			partyPersonInfoDiv.append('<div id="' + i + '-person-info-right" class="right-info-side three-rsvp">' + '</div>');
+		}
+        
         var leftInfoDiv = $('#' + i + '-person-info-left');
         var rightInfoDiv = $('#' + i + '-person-info-right');
 
