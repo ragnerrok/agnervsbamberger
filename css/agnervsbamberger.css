@@ -45,6 +45,12 @@ ul{
 #home-content{
     height: 600px;
 }
+#guest-not-logged-in-home{
+    float: left;
+}
+#guest-logged-in-home{
+    float: left;
+}
 .label{
     font-weight: bold;
     padding-top: 5px;
@@ -555,7 +561,7 @@ div.gear-animation:hover {
     position: absolute;
     width: 100px;
     height: 100px;
-    left: 690px;
+    left: 175px;
 }
 #groom-silhouette{
     background-image: url("../images/groom.png");
@@ -564,7 +570,7 @@ div.gear-animation:hover {
     position: absolute;
     width: 100px;
     height: 100px;
-    left: 690px;
+    left: 390px;
 }
 #title-gear-holder{
     position: relative;
@@ -608,10 +614,10 @@ div.gear-animation:hover {
 }
 #rsvp-gear-type-5{
     position: absolute;
-    width: 50px;
-    height: 50px;
-    left: -30px;
-    top: -9px;
+    width: 70px;
+    height: 70px;
+    left: 80px;
+    top: 0px;
 }
 #rsvp-gear-type-4{
     position: absolute;
