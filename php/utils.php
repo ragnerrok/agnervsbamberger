@@ -42,7 +42,7 @@
 	function validate_food_choice($food_choice, $db_conn) {
 		$food_choices = get_food_choices($db_conn);
 		
-		return (($food_choice >= 0) && ($food_choice < count($food_choices)));
+		return (($food_choice > 0) && ($food_choice <= count($food_choices)));
 	}
 	
 	// Email sanitizing functions come from Zend_Mail via way of this stack overflow question:
