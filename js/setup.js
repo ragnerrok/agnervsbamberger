@@ -22,7 +22,7 @@ var hotelMariottAddress = "Mariott-RiverCenter,10+W.+RiverCenter+Blvd.,+Covingto
 var mapsAPIKey = "AIzaSyB4SCh6diwyoIkFRZLRN_n7f_-ftJU27lM";
 
 var globalPartyInfo;
-var globalPartyLength;
+var globalPlusOnesLength;
 var globalMusicLength = [];
 var globalAllergiesArray = [];
 
@@ -54,6 +54,11 @@ function init() {
     });
     $("#rsvp-login-trouble").click(function(){
         showLoginTroubleBox();
+    });
+    $("#login-trouble-try-again-button").button().click(function(){
+        $('#login-trouble-box').hide();
+        hideEverythingElseBox.hide();
+        popUpBox.removeClass('pop-up-on');
     });
     $("#login-trouble-button").button().click(function(){
         $('#login-trouble-box').hide();
@@ -482,12 +487,12 @@ function setUpRSVPContent(jsonObject){
     }
 }
 function checkForMaxPlusOnes(){
-    var currentPlusOnes = globalPartyLength;
+    var currentPlusOnes = globalPlusOnesLength;
     var maxPlusOnes = globalPartyInfo.party_info.max_plus_ones;
     if(currentPlusOnes == maxPlusOnes){
         $('#add-plus-one-button').hide();
     }
-    globalPartyLength++;
+    globalPlusOnesLength++;
 }
 function checkForMaxMusicSuggestions(){
     var currentNumMusicSuggestions = globalMusicLength[0];
@@ -503,7 +508,7 @@ function clickedPerson(personContainerId){
     return function(){
         console.log(personContainerId + 'person');
 
-        for(var k = 0; k <= globalPartyLength; k++){
+        for(var k = 0; k <= globalPartyInfo.party_people.length; k++){
             var firstName = $('#' + k + '-person-first-name');
             var lastName = $('#' + k + '-person-last-name');
             if(personContainerId != k){
@@ -529,7 +534,7 @@ function clickedPerson(personContainerId){
 function generatePartyInfo(jsonObject){
 	globalPartyInfo = jsonObject;
     globalMusicLength[0] = globalMusicLength[1] = globalPartyInfo.music_suggestions.length;
-    globalPartyLength = jsonObject.party_info.current_plus_ones;
+    globalPlusOnesLength = jsonObject.party_info.current_plus_ones;
     checkForMaxPlusOnes();
     checkForMaxMusicSuggestions();
 	

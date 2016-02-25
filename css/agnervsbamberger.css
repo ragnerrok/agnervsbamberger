@@ -107,6 +107,9 @@ ul{
 #login-trouble-box{
     width: 350px;
 }
+#login-trouble-try-again-button{
+    float:right;
+}
 #hide-everything-else{
     height: 100%;
     width: 100%;
