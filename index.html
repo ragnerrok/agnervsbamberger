@@ -34,12 +34,19 @@
 <body class="larkspur-background">
     <div id="pop-ups">
 		<div id="welcome-box" style="display: none;" class="pop-up-box larkspur-background centuryGothicFont">
-			<h1 class="astrudFont">Welcome!</h1>
-			Please use each person's drop down on the left to RSVP either yes or no, and to indicate your food preference.  To edit these values,
-			click the edit button, change any values you need to, and click save to commit your changes.  If you have any food allergies, please
-			add them to the list on the right for each person.  If you need to update your name or address, this can be done by using the edit
-			buttons next to each name, and your address, respectively.  Additionally, if you have any suggestions for music to play at the reception,
-			you can add them using the box on the right.  If you have any questions or problems with the website, please don't hesitate to contact us
+			<h1 class="astrudFont dark-larkspur-text">Welcome!</h1>
+			Please use each person's drop down on the left to RSVP either yes or no, and to indicate your food preference.
+            <br><br>To edit these values, click the &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input  type="submit" id="welcome-edit-button" class="form-button form-edit-float-button" value="edit"/>
+            button, change any values you need to, and click &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input  type="submit" id="welcome-save-button" class="form-button form-save-float-button" value="save"/>
+            to commit your changes.
+            <br><br>If you have any food allergies, please add them to the list on the right for each person.
+            <br><br>If you need to update your name or address, this can be done by using the &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input  type="submit" id="welcome-edit-two-button" class="form-button form-edit-float-button" value="edit"/>
+			buttons next to each name, and your address, respectively.
+            <br><br>Additionally, if you have any suggestions for music to play at the reception, you can add them using the box on the right.
+            <br><br>If you have any questions or problems with the website, please don't hesitate to contact us
 			using the contact button at the top of the page.
 			<br />
 			<input type="submit" id="close-welcome-box" class="form-button" value="Got it!" />
@@ -48,6 +55,14 @@
             <div id="error-label" class="label font-size-25 astrudFont dark-red-text">ERROR!</div>
             <div id="error-reason" class="label centuryGothicFont dark-red-text"></div>
             <input  type="submit" id="error-button" class="form-button" value="dang it..."/>
+        </div>
+        <div id="login-trouble-box" style="display: none;" class="pop-up-box light-larkspur-background">
+            <div id="login-trouble-label" class="label font-size-25 astrudFont dark-larkspur-text">Login Code doesn't work?</div>
+            <div id="login-trouble-text" class="label centuryGothicFont dark-larkspur-text">
+                Send us a detailed message with what is happening along with the login code on your invitation.
+                <br>Thank you! Sorry for the trouble!
+            </div>
+            <input  type="submit" id="login-trouble-button" class="form-button" value="Send Us a Message!"/>
         </div>
         <div id="add-plus-one-box" style="display: none;" class="pop-up-box larkspur-background">
             <div class="add-plus-one-label label astrudFont font-size-25 dark-larkspur-text">
@@ -81,8 +96,8 @@
             <input  type="submit" id="song-suggestion-add-button" class="form-button form-pop-up-add-button form-add-song" value="add"/>
             <input  type="submit" id="song-suggestion-cancel-button" class="form-button form-pop-up-cancel-button form-add-song" value="cancel"/>
         </div>
-		<div id="loading-wheel-box" style="display: none;" class="pop-up-box larkspur-background">
-			Loading...
+		<div id="loading-wheel-box" style="display: none;" class="astrudFont font-size-40 dark-larkspur-text pop-up-box larkspur-background">
+			Saving Your Changes...
 			<div id="loading-wheel" class="loading-animation"></div>
 		</div>
         <div id="hide-everything-else" style="display: none;"></div>
@@ -131,12 +146,22 @@
     </div>
 
     <div id="home-content" class="content-container">
-        <div class="astrudFont font-size-60 dark-larkspur-text">WELCOME!</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">
+            <div class="relative-position">WELCOME!</div>
+            <div id="home-gear-holder">
+                <div id="home-gear-type-4" class="light-larkspur-gear-4 gear-animation"></div>
+                <div id="home-gear-type-5" class="light-larkspur-gear-5 gear-animation"></div>
+                <div id="home-gear-type-3" class="light-brown-gear-3 gear-animation"></div>
+                <div id="home-gear-type-1" class="dark-larkspur-gear-1 gear-animation"></div>
+                <div id="home-gear-type-2" class="dark-brown-gear-2 gear-animation"></div>
+            </div>
+        </div>
         <div id="guest-not-logged-in-home">
-            <div id="guest-log-in-label-home" class="log-in-label dark-larkspur-text centuryGothicFont">Type in your assigned Log In Code to RSVP or update information</div>
+            <div id="guest-log-in-label-home" class="log-in-label dark-larkspur-text centuryGothicFont">Type in your assigned Log In Code <br>to RSVP or update information</div>
             <!--<input  type="text" id="guest-login-code" class="form-input" name="login_code"/>-->
             <input type="text" id="guest-login-code-home" class="login-input form-input" name="login_code"/>
             <input type="button" id="log-in-button-home" class="login-form-button" value="Log In"/>
+            <div id="home-login-trouble" class="login-trouble dark-larkspur-text centuryGothicFont">Having trouble logging in?</div>
         </div>
         <div id="guest-logged-in-home" style="display: none">
             <div class="astrudFont font-size-25 dark-larkspur-text">Don't know what to wear? Wear a hat! </div>
@@ -161,6 +186,7 @@
 			<!--<input  type="text" id="guest-login-code" class="form-input" name="login_code"/>-->
 			<input type="text" id="guest-login-code" class="login-input form-input" name="login_code"/>
 			<input type="button" id="log-in-button" class="login-form-button" value="Log In"/>
+            <div id="rsvp-login-trouble" class="login-trouble dark-larkspur-text centuryGothicFont">Having trouble logging in?</div>
         </div>
         <div id="guest-logged-in" style="display: none">
             <div id="people-in-party">
@@ -202,7 +228,16 @@
         </div>
     </div>
     <div id="location-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60 dark-larkspur-text">CEREMONY/RECEPTION LOCATION</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">
+            <div class="relative-position">CEREMONY/RECEPTION LOCATION</div>
+            <div id="location-gear-holder">
+                <div id="location-gear-type-3" class="light-larkspur-gear-3 gear-animation"></div>
+                <div id="location-gear-type-5-1" class="dark-larkspur-gear-5 gear-animation"></div>
+                <div id="location-gear-type-5-2" class="light-larkspur-gear-5 gear-animation"></div>
+                <div id="location-gear-type-4" class="light-brown-gear-4 gear-animation"></div>
+                <div id="location-gear-type-2" class="dark-larkspur-gear-2 gear-animation"></div>
+            </div>
+        </div>
 		<div class="centuryGothicFont font-size-25 dark-larkspur-text">
 			The Redmoor<br />
 			3187 Linwood Avenue<br />
@@ -222,7 +257,16 @@
 		</div>
     </div>
     <div id="hotel-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60 dark-larkspur-text">HOTEL INFORMATION</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">
+            <div class="relative-position">HOTEL INFORMATION</div>
+            <div id="hotel-gear-holder">
+                <div id="hotel-gear-type-3" class="dark-larkspur-gear-3 gear-animation"></div>
+                <div id="hotel-gear-type-5" class="light-larkspur-gear-5 gear-animation"></div>
+                <div id="hotel-gear-type-4" class="light-brown-gear-4 gear-animation"></div>
+
+                <div id="hotel-gear-type-1" class="light-larkspur-gear-1 gear-animation"></div>
+            </div>
+        </div>
 		<div class="astrudFont font-size-40 dark-larkspur-text">
 			Preferred Hotel
 			<div class="centuryGothicFont font-size-25 dark-larkspur-text">
@@ -261,10 +305,22 @@
 		</div>
     </div>
     <div id="registry-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60 dark-larkspur-text">REGISTRY (Coming Soon!...ish)</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">
+            <div class="relative-position">REGISTRY (Coming Soon!...ish)</div>
+            <div id="registry-gear-holder">
+                <div id="registry-gear-type-5" class="light-larkspur-gear-5 gear-animation"></div>
+                <div id="registry-gear-type-4" class="light-brown-gear-4 gear-animation"></div>
+            </div>
+        </div>
     </div>
     <div id="schedule-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60 dark-larkspur-text">June 11th Schedule</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">
+            <div class="relative-position">June 11th Schedule</div>
+            <div id="schedule-gear-holder">
+                <div id="schedule-gear-type-5" class="light-larkspur-gear-5 gear-animation"></div>
+                <div id="schedule-gear-type-4" class="light-brown-gear-4 gear-animation"></div>
+            </div>
+        </div>
 		<ul class="astrudFont font-size-30 dark-larkspur-text">
 			<li>4:30 PM</li>
 			<span class="centuryGothicFont font-size-20 v-align-top">Doors open at The Redmoor</span>
@@ -277,17 +333,31 @@
 		</ul>
     </div>
     <div id="faq-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60 dark-larkspur-text">FREQUENTLY ASKED QUESTIONS</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">
+            <div class="relative-position">FREQUENTLY ASKED QUESTIONS</div>
+            <div id="faq-gear-holder">
+                <div id="faq-gear-type-5" class="light-larkspur-gear-5 gear-animation"></div>
+                <div id="faq-gear-type-4" class="light-brown-gear-4 gear-animation"></div>
+            </div>
+        </div>
 
         <div id="">
 			<ul class="astrudFont font-size-30 dark-larkspur-text">
 				<li>Can I wear a top hat?</li>
 				<span class="centuryGothicFont font-size-20 v-align-top">Yes!  Absolutely!  Top hats are encouraged</span>
-			</ul>
+                <li>So when will you have a registry?</li>
+                <span class="centuryGothicFont font-size-20 v-align-top">We have no idea...</span>
+            </ul>
         </div>
     </div>
     <div id="contact-content" class="content-container" style="display: none">
-        <div class="astrudFont font-size-60 dark-larkspur-text">CONTACT INFORMATION</div>
+        <div class="astrudFont font-size-60 dark-larkspur-text">
+            <div class="relative-position">CONTACT US</div>
+            <div id="contact-gear-holder">
+                <div id="contact-gear-type-5" class="light-larkspur-gear-5 gear-animation"></div>
+                <div id="contact-gear-type-4" class="light-brown-gear-4 gear-animation"></div>
+            </div>
+        </div>
         <div class="contact-label astrudFont font-size-20 dark-larkspur-text">
             Have a question? Send us a message!
         </div>

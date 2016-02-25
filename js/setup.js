@@ -45,8 +45,22 @@ function init() {
         console.log("Clicked Title/Home");
         switchContent(ContentEnum.HOME_CONTENT);
     });
-
-
+    $("#welcome-edit-button").button();
+    $("#welcome-edit-two-button").button();
+    $("#welcome-save-button").button();
+    //Login Trouble
+    $("#home-login-trouble").click(function(){
+        showLoginTroubleBox();
+    });
+    $("#rsvp-login-trouble").click(function(){
+        showLoginTroubleBox();
+    });
+    $("#login-trouble-button").button().click(function(){
+        $('#login-trouble-box').hide();
+        hideEverythingElseBox.hide();
+        popUpBox.removeClass('pop-up-on');
+        $( "#contact-button").click();
+    });
     //Side Menu
     $( "#rsvp-button" ).button().click(function() {
         console.log("Clicked RSVP");
@@ -239,7 +253,12 @@ function init() {
 		});
     });
 }
-
+function showLoginTroubleBox(){
+    console.log("Having Trouble?");
+    $('#hide-everything-else').show();
+    $('#pop-ups').addClass('pop-up-on');
+    $('#login-trouble-box').show();
+}
 function showAddPlusOnePopup() {
 	$('#hide-everything-else').show();
 	$('#add-plus-one-box').show();
