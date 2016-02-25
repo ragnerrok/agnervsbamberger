@@ -132,19 +132,41 @@
 		$row = $page_cell % $cells_per_col;
 		$col = intdiv($page_cell, $cells_per_col);
 	
+		$name_string = create_name_string($people);
+		$address = create_address($parties[$i]);
+	
+		// Figure out what the longest line is
+		$pdf->SetFont("Astrud", "", NAME_SIZE_PTS);
+		$name_width = $pdf->GetStringWidth($name_string);
+		$pdf->SetFont("ufonts.com_century-gothic", "", ADDR_SIZE_PTS);
+		$max_addr_width = $pdf->GetStringWidth($address[0]);
+		for ($j = 1; $j < count($address); ++$j) {
+			$addr_line_width = $pdf->GetStringWidth($address[$j]);
+			if ($addr_line_width > $max_addr_width) {
+				$max_addr_width = $addr_line_width;
+			}
+		}
+		$max_line_width = max($name_width, $max_addr_width);
+		
+		// Center the longest line, and make everything else left justified to that
+		$left_x = $start_x + ($col * ($x_size + $row_sep)) + (($x_size - $max_line_width) / 2);
+		$pdf->SetLeftMargin($left_x);
+	
 		// Draw the name line
 		$pdf->SetFont("Astrud", "", NAME_SIZE_PTS);
-		$name_string = create_name_string($people);
-		$name_width = $pdf->GetStringWidth($name_string);
-		$name_x = $start_x + ($col * ($x_size + $row_sep)) + (($x_size - $name_width) / 2);
+		
+		//$name_width = $pdf->GetStringWidth($name_string);
+		//$name_x = $start_x + ($col * ($x_size + $row_sep)) + (($x_size - $name_width) / 2);
 		$name_y = $start_y + ($row * $y_size) + TOP_MARGIN_IN;
-		$pdf->setXY($name_x, $name_y);
+		//$pdf->setXY($name_x, $name_y);
+		$pdf->setXY($left_x, $name_y);
 		$pdf->write($name_height, $name_string);
 		
 		// Draw the address lines
 		$pdf->SetFont("ufonts.com_century-gothic", "", ADDR_SIZE_PTS);
+		
+		//$address = create_address($parties[$i]);
 		// Determine the max address line width
-		$address = create_address($parties[$i]);
 		/*
 		$max_addr_width = $pdf->GetStringWidth($address[0]);
 		for ($j = 1; $j < count($address); ++$j) {
@@ -155,9 +177,10 @@
 		}
 		$addr_x = $start_x + ($col * ($x_size + $row_sep)) + (($x_size - $max_addr_width) / 2);
 		*/
-		$pdf->SetLeftMargin($name_x);
+		//$pdf->SetLeftMargin($name_x);
 		$addr_y = $start_y + ($row * $y_size) + TOP_MARGIN_IN + PADDING_IN + $name_height;
-		$pdf->setXY($name_x, $addr_y);
+		//$pdf->setXY($name_x, $addr_y);
+		$pdf->setXY($left_x, $addr_y);
 		for ($j = 0; $j < count($address); ++$j) {
 			$pdf->Write($addr_height, $address[$j]);
 			$pdf->Ln();
