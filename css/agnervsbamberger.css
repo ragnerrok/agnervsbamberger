@@ -77,7 +77,7 @@ ul{
     margin: 0px 10px;
 }
 
-/* Side Menu */
+/* Menu */
 #menu-bar{
 
     border-top: #bccbe5 solid;
@@ -90,6 +90,16 @@ ul{
     font-size: 25px;
     outline-color: #2f3a4c;
     margin: 0px -5px 0px 0px;
+}
+#twitter-button{
+    width: 200px;
+    background-image: url('../images/TwitterLogo_white.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: inherit;
+}
+#twitter-name{
+    text-align: right;
 }
 /* Pop Ups */
 .pop-up-on{
@@ -123,22 +133,22 @@ ul{
     height: 185px;
 }
 #welcome-box{
-	width: 550px;
+	width: 590px;
 }
 #welcome-edit-button{
     position: absolute;
-    left: 240px;
-    top: 150px;
+    left: 422px;
+    top: 85px;
 }
 #welcome-edit-two-button{
     position: absolute;
-    left: 84px;
-    top: 298px;
+    left: 10px;
+    top: 280px;
 }
 #welcome-save-button{
     position: absolute;
-    left: 155px;
-    top: 175px;
+    left: 39px;
+    top: 155px;
 }
 #loading-wheel-box{
     width: 280px;
@@ -455,6 +465,7 @@ input.ui-widget.form-add-button{
 .login-trouble{
     float: left;
     width: 150px;
+    margin-top: 15px;
 }
 .login-trouble:hover {
     font-weight: bold;

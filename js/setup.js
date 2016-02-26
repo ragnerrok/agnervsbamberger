@@ -95,6 +95,10 @@ function init() {
         console.log("Clicked contact");
         switchContent(ContentEnum.CONTACT_CONTENT);
     });
+    $("#twitter-button").button().click(function() {
+        console.log("Clicked twitter");
+        window.open('https://twitter.com/AgnerVBamberger', 'AgnerVBamberger Twitter');
+    });
 
     $("#log-in-button-home").button().click(function(event){
         var formData = serializeFormData(['guest-login-code-home']);
