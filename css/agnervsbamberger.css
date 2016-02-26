@@ -684,7 +684,7 @@ div.gear-animation:hover {
 }
 /* Title */
 #bride-silhouette{
-    background-image: url("../images/bride.png");
+    background-image: url("../images/bride-small.png");
     background-repeat: no-repeat;
     background-size: contain;
     position: absolute;
@@ -693,7 +693,7 @@ div.gear-animation:hover {
     left: 175px;
 }
 #groom-silhouette{
-    background-image: url("../images/groom.png");
+    background-image: url("../images/groom-small.png");
     background-repeat: no-repeat;
     background-size: contain;
     position: absolute;
@@ -1003,7 +1003,7 @@ div.gear-animation:hover {
     animation:spin 3.5s linear infinite;
 }
 #bride-groom-image{
-    background-image: url("../images/bride-groom.png");
+    background-image: url("../images/bride-groom-small.png");
     background-repeat: no-repeat;
     background-size: contain;
     position: absolute;
