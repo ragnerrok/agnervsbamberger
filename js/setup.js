@@ -45,9 +45,15 @@ function init() {
         console.log("Clicked Title/Home");
         switchContent(ContentEnum.HOME_CONTENT);
     });
-    $("#welcome-edit-button").button();
-    $("#welcome-edit-two-button").button();
-    $("#welcome-save-button").button();
+    $("#welcome-edit-button").button().click(function(){
+        ga('send', 'event', 'button', 'WelcomeEditOne', 'Guest: ' + globalPartyInfo.party_people[0].first_name + ' Clicked First Edit Button');
+    });
+    $("#welcome-edit-two-button").button().click(function(){
+        ga('send', 'event', 'button', 'WelcomeEditTwo', 'Guest: ' + globalPartyInfo.party_people[0].first_name + ' Clicked Second Edit Button');
+    });
+    $("#welcome-save-button").button().click(function(){
+        ga('send', 'event', 'button', 'WelcomeSave', 'Guest: ' + globalPartyInfo.party_people[0].first_name + ' Clicked Save Button');
+    });
     //Login Trouble
     $("#home-login-trouble").click(function(){
         showLoginTroubleBox();
@@ -487,6 +493,7 @@ function setUpRSVPContent(jsonObject){
             generatePartyInfo(jsonObject);
             $("#0-person-last-name").click();
             userLoginedIn = true;
+            ga('send', 'event', 'button', 'Login', 'Guest: ' + globalPartyInfo.party_people[0].first_name + ' Login: Successful');
         }
     }
 }

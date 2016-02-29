@@ -51,6 +51,7 @@ ul{
 }
 #guest-logged-in-home{
     float: left;
+    padding-top: 20px;
 }
 .label{
     font-weight: bold;
